@@ -4,13 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using RJCP.Core.Datastructures;
+using System.Diagnostics;
 
 namespace RJCP.Core.CommandLine
 {
+    #region Defining arguments, with custom handlers
     /// <summary>
     /// Specifies if an argument is required or not
     /// </summary>
-    public enum ArgRequired
+    public enum OptRequired
     {
         /// <summary>
         /// Argument is optional
@@ -26,7 +28,7 @@ namespace RJCP.Core.CommandLine
     /// <summary>
     /// Specifies if the arguments parameter is required or not
     /// </summary>
-    public enum ArgParameter
+    public enum OptParamRequired
     {
         /// <summary>
         /// No parameters are expected
@@ -47,7 +49,7 @@ namespace RJCP.Core.CommandLine
     /// <summary>
     /// Specifies the type of the arguments parameter if it's provided
     /// </summary>
-    public enum ArgType
+    public enum OptParamType
     {
         /// <summary>
         /// An argument is not required
@@ -73,21 +75,21 @@ namespace RJCP.Core.CommandLine
     /// <summary>
     /// Specifies an argument that doesn't require custom handling
     /// </summary>
-    public class Argument
+    public class Option
     {
         protected char m_ShortOption;
         protected string m_LongOption;
-        protected ArgRequired m_ArgRequired;
-        protected ArgParameter m_ArgParameter;
-        protected ArgType m_ArgType;
+        protected OptRequired m_OptRequired;
+        protected OptParamRequired m_ParamRequired;
+        protected OptParamType m_ParamType;
 
         /// <summary>
         /// Basic argument that can be optionally provided
         /// </summary>
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
-        public Argument(char shortOption, string longOption)
-            : this(shortOption, longOption, ArgRequired.Optional) { }
+        public Option(char shortOption, string longOption)
+            : this(shortOption, longOption, OptRequired.Optional) { }
 
         /// <summary>
         /// Basic argument that can be required or not
@@ -95,8 +97,8 @@ namespace RJCP.Core.CommandLine
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
-        public Argument(char shortOption, string longOption, ArgRequired required)
-            : this(shortOption, longOption, required, ArgParameter.None, ArgType.None) { }
+        public Option(char shortOption, string longOption, OptRequired required)
+            : this(shortOption, longOption, required, OptParamRequired.None, OptParamType.None) { }
 
         /// <summary>
         /// Argument that is either a string or an integer
@@ -104,26 +106,24 @@ namespace RJCP.Core.CommandLine
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
-        /// <param name="argType">Type of the argument</param>
-        public Argument(char shortOption, string longOption, ArgRequired required, ArgParameter param, ArgType argType)
+        /// <param name="paramType">Type of the argument</param>
+        public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamType paramType)
         {
             if (string.IsNullOrEmpty(longOption)) throw new ArgumentException("Must specify a valid argument", "longOption");
-            if (argType != ArgType.Int && argType != ArgType.String)
-                throw new ArgumentException("Must specify an argument type of Int or String", "argType");
             m_ShortOption = shortOption;
             m_LongOption = longOption;
-            m_ArgRequired = required;
-            m_ArgParameter = param;
-            if (param != ArgParameter.None) {
-                if (argType == ArgType.None)
+            m_OptRequired = required;
+            m_ParamRequired = param;
+            if (param != OptParamRequired.None) {
+                if (paramType == OptParamType.None)
                     throw new ArgumentException("param is ArgParameter." + param.ToString() + ", argType may not be ArgType.None", "argType");
-                if (argType == ArgType.Custom)
+                if (paramType == OptParamType.Custom)
                     throw new ArgumentException("param ArgType.Custom is not supported", "argType");
-                m_ArgType = argType;
+                m_ParamType = paramType;
             } else {
-                if (argType != ArgType.None)
+                if (paramType != OptParamType.None)
                     throw new ArgumentException("param is ArgParameter.None, argType must be ArgType.None", "argType");
-                m_ArgType = ArgType.None;
+                m_ParamType = OptParamType.None;
             }
         }
 
@@ -140,27 +140,53 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// If the argument is required to be provided or not
         /// </summary>
-        public ArgRequired Required { get { return m_ArgRequired; } }
+        public OptRequired OptionRequired { get { return m_OptRequired; } }
 
         /// <summary>
         /// If a parameter to the argument must be provided or not
         /// </summary>
-        public ArgParameter Parameter { get { return m_ArgParameter; } }
+        public OptParamRequired ParamRequired { get { return m_ParamRequired; } }
 
         /// <summary>
         /// How to interpret the argument if it's provided
         /// </summary>
-        public ArgType ArgType { get { return m_ArgType; } }
+        public OptParamType ParamType { get { return m_ParamType; } }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (m_OptRequired == OptRequired.Optional) {
+                sb.Append('[');
+            }
+            sb.Append("--");
+            sb.Append(m_LongOption);
+
+            switch (m_ParamRequired) {
+            case OptParamRequired.None:
+                break;
+            case OptParamRequired.Optional:
+                sb.Append("[=parameter]");
+                break;
+            case OptParamRequired.Required:
+                sb.Append("=parameter");
+                break;
+            }
+
+            if (m_OptRequired == OptRequired.Optional) {
+                sb.Append(']');
+            }
+            return sb.ToString();
+        }
     }
 
     /// <summary>
     /// Information about the argument being parsed in the event handler ArgValidateEvents
     /// </summary>
-    public class ArgValidatorArgs<T> : EventArgs where T : class,new()
+    public class OptParamValidatorArgs<T> : EventArgs where T : class,new()
     {
         private string m_LongOption;
         private string m_Param;
-        private T m_Options;
+        private T m_OptionData;
 
         /// <summary>
         /// Constructor
@@ -168,16 +194,16 @@ namespace RJCP.Core.CommandLine
         /// <param name="longOption">The long option being parsed</param>
         /// <param name="arg">The argument provided on the command line</param>
         /// <param name="options">An options object</param>
-        public ArgValidatorArgs(string longOption, string param, T options)
+        public OptParamValidatorArgs(string longOption, string param, T options)
         {
             m_LongOption = longOption;
             m_Param = param;
-            m_Options = options;
+            m_OptionData = options;
         }
 
         public string LongOption { get { return m_LongOption; } }
         public string Parameter { get { return m_Param; } }
-        public T Options { get { return m_Options; } }
+        public T OptionData { get { return m_OptionData; } }
     }
 
     /// <summary>
@@ -185,21 +211,21 @@ namespace RJCP.Core.CommandLine
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>
-    public delegate void ArgValidateEvent<T>(object sender, ArgValidatorArgs<T> args) where T:class,new();
+    public delegate void OptParamValidateEvent<T>(object sender, OptParamValidatorArgs<T> args) where T : class,new();
 
     /// <summary>
     /// Specifies an argument that supports custom handling
     /// </summary>
-    public class Argument<T> : Argument where T:class,new()
+    public class Option<T> : Option where T : class,new()
     {
-        protected ArgValidateEvent<T> m_Validator;
+        protected OptParamValidateEvent<T> m_Validator;
 
         /// <summary>
         /// Basic argument that can be optionally provided
         /// </summary>
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
-        public Argument(char shortOption, string longOption)
+        public Option(char shortOption, string longOption)
             : base(shortOption, longOption)
         {
             m_Validator = null;
@@ -211,7 +237,7 @@ namespace RJCP.Core.CommandLine
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
-        public Argument(char shortOption, string longOption, ArgRequired required)
+        public Option(char shortOption, string longOption, OptRequired required)
             : base(shortOption, longOption, required)
         {
             m_Validator = null;
@@ -224,7 +250,7 @@ namespace RJCP.Core.CommandLine
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
         /// <param name="argType">Type of the argument</param>
-        public Argument(char shortOption, string longOption, ArgRequired required, ArgParameter param, ArgType argType)
+        public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamType argType)
             : base(shortOption, longOption, required, param, argType)
         {
             m_Validator = null;
@@ -237,19 +263,19 @@ namespace RJCP.Core.CommandLine
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
         /// <param name="validator">The callback to check the argument</param>
-        public Argument(char shortOption, string longOption, ArgRequired required, ArgParameter param, ArgValidateEvent<T> validator)
+        public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamValidateEvent<T> validator)
             : base(shortOption, longOption, required)
         {
-            m_ArgParameter = param;
-            if (param != ArgParameter.None) {
+            m_ParamRequired = param;
+            if (param != OptParamRequired.None) {
                 if (validator == null)
                     throw new ArgumentNullException("validator", "validator may not be null for ArgParameter." + param.ToString());
-                m_ArgType = ArgType.Custom;
+                m_ParamType = OptParamType.Custom;
                 m_Validator = validator;
             } else {
                 if (validator != null)
                     throw new ArgumentException("validator must be null for ArgParameter.None", "validator");
-                m_ArgType = ArgType.None;
+                m_ParamType = OptParamType.None;
                 m_Validator = null;
             }
         }
@@ -257,8 +283,196 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Custom event handler for interpreting an argument parameter
         /// </summary>
-        public ArgValidateEvent<T> Validator { get { return m_Validator; } }
+        public OptParamValidateEvent<T> Validator { get { return m_Validator; } }
     }
+    #endregion
+
+    #region CommandLine Option specific Exceptions
+    /// <summary>
+    /// Base class for argument exceptions. This shouldn't be used directly
+    /// </summary>
+    [Serializable]
+    public class BaseArgumentException : System.Exception
+    {
+        private string m_Option;
+
+        protected BaseArgumentException() : base() { }
+        protected BaseArgumentException(string option) : base("Option Exception") 
+        {
+            m_Option = option;
+        }
+
+        protected BaseArgumentException(string option, System.Exception inner) : base("Option Exception", inner) 
+        {
+            m_Option = option;
+        }
+
+        protected BaseArgumentException(string option, string message) : base(message)
+        {
+            m_Option = option;
+        }
+
+        protected BaseArgumentException(string option, string message, System.Exception inner) : base(message, inner)
+        {
+            m_Option = option;
+        }
+
+        // A constructor is needed for serialization when an
+        // exception propagates from a remoting server to the client. 
+        protected BaseArgumentException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base (info, context)
+        {
+            m_Option = info.GetString("option");
+        }
+
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+        {
+            info.AddValue("option", m_Option);
+            base.GetObjectData(info, context);
+        }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrEmpty(m_Option)) {
+                return "Option: " + m_Option + "; " + base.ToString();
+            } else {
+                return base.ToString();
+            }
+        }
+
+        public string Option { get { return m_Option; } }
+    }
+
+    /// <summary>
+    /// A required argument isn't provided on the command line
+    /// </summary>
+    [Serializable]
+    public class MissingOptionException : BaseArgumentException
+    {
+        public MissingOptionException() : base() { }
+        public MissingOptionException(string option) : base(option, "Missing option") { }
+        public MissingOptionException(string option, string message) : base(option, message) { }
+        public MissingOptionException(string option, System.Exception inner) : base(option, "Missing option", inner) { }
+        public MissingOptionException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+
+        // A constructor is needed for serialization when an
+        // exception propagates from a remoting server to the client. 
+        protected MissingOptionException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+    /// <summary>
+    /// An argument is provided but the required parameter is not provided
+    /// </summary>
+    [Serializable]
+    public class MissingOptionParameterException : BaseArgumentException
+    {
+        public MissingOptionParameterException() : base() { }
+        public MissingOptionParameterException(string option) : base(option, "Missing option parameter") { }
+        public MissingOptionParameterException(string option, string message) : base(option, message) { }
+        public MissingOptionParameterException(string option, System.Exception inner) : base(option, "Missing option parameter", inner) { }
+        public MissingOptionParameterException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+        protected MissingOptionParameterException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+    /// <summary>
+    /// Argument parameter is in the wrong format
+    /// </summary>
+    [Serializable]
+    public class OptionParameterException : BaseArgumentException
+    {
+        public OptionParameterException() : base() { }
+        public OptionParameterException(string option) : base(option, "Option parameter format invalid") { }
+        public OptionParameterException(string option, string message) : base(option, message) { }
+        public OptionParameterException(string option, System.Exception inner) : base(option, "Option parameter format invalid", inner) { }
+        public OptionParameterException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+        protected OptionParameterException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+    /// <summary>
+    /// A parameter was given to an option where no parameter is expected
+    /// </summary>
+    [Serializable]
+    public class ParameterNotOptionalException : BaseArgumentException
+    {
+        public ParameterNotOptionalException() : base() { }
+        public ParameterNotOptionalException(string option) : base(option, "Option expects no parameters") { }
+        public ParameterNotOptionalException(string option, string message) : base(option, message) { }
+        public ParameterNotOptionalException(string option, System.Exception inner) : base(option, "Option expects no parameters", inner) { }
+        public ParameterNotOptionalException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+        protected ParameterNotOptionalException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+    /// <summary>
+    /// A parameter was given to an option where no parameter is expected
+    /// </summary>
+    [Serializable]
+    public class OptionNotDefinedException : BaseArgumentException
+    {
+        public OptionNotDefinedException() : base() { }
+        public OptionNotDefinedException(string option) : base(option, "Unknown option") { }
+        public OptionNotDefinedException(string option, string message) : base(option, message) { }
+        public OptionNotDefinedException(string option, System.Exception inner) : base(option, "Unknown option", inner) { }
+        public OptionNotDefinedException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+        protected OptionNotDefinedException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
+    }
+
+    [Serializable]
+    public class OptionParameterAmbiguousException: BaseArgumentException
+    {
+        private string m_Option2;
+
+        public OptionParameterAmbiguousException() : base() { }
+        public OptionParameterAmbiguousException(string option, string option2) : base(option + ", " + option2, "Ambiguous Options provided") 
+        { 
+            m_Option2 = option2;
+        }
+
+        public OptionParameterAmbiguousException(string option, string option2, string message) : base(option + ", " + option2, message) 
+        {
+            m_Option2 = option2;
+        }
+
+        public OptionParameterAmbiguousException(string option, string option2, System.Exception inner) : base(option + ", " + option2, "Unknown option", inner)
+        {
+            m_Option2 = option2;
+        }
+
+        public OptionParameterAmbiguousException(string option, string option2, string message, System.Exception inner) : base(option + ", " + option2, message, inner)
+        {
+            m_Option2 = option2;
+        }
+
+        protected OptionParameterAmbiguousException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) 
+        {
+            m_Option2 = info.GetString("option2");
+        }
+
+        public override void  GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+        {
+            info.AddValue("option2", m_Option2);
+ 	        base.GetObjectData(info, context);
+        }
+
+        public override string  ToString()
+        {
+            if (!string.IsNullOrEmpty(m_Option2)) {
+                return "Option: " + m_Option2 + "; " + base.ToString();
+            } else {
+                return base.ToString();
+            }
+
+ 	        return base.ToString();
+        }
+    }
+    #endregion
 
     /// <summary>
     /// Class for interpreting command line arguments where custom handling is not required
@@ -268,12 +482,12 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Internal mapping from long options to an Argument
         /// </summary>
-        protected Dictionary<string, Argument> m_LongOptions = new Dictionary<string, Argument>();
+        protected Dictionary<string, Option> m_LongOptions = new Dictionary<string, Option>();
 
         /// <summary>
         /// Internal mapping from short options to an Argument
         /// </summary>
-        protected Dictionary<char, Argument> m_ShortOptions = new Dictionary<char, Argument>();
+        protected Dictionary<char, Option> m_ShortOptions = new Dictionary<char, Option>();
 
         /// <summary>
         /// Parsed options
@@ -283,25 +497,201 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// List of all arguments that could not be parsed
         /// </summary>
-        protected List<string> m_Unparsed = null;
+        protected List<string> m_Unparsed = new List<string>();
 
         /// <summary>
         /// Constructor, parsing options from the command line
         /// </summary>
-        /// <param name="arguments">List of arguments defining what's supported</param>
+        /// <param name="options">List of arguments defining what's supported</param>
         /// <param name="args">Options provided by the user on the command line</param>
-        public Options(Argument[] arguments, string[] args)
+        public Options(Option[] options, string[] args)
         {
-            if (arguments == null || arguments.Length == 0)
+            if (options == null || options.Length == 0)
                 throw new ArgumentException("Must provide an array of arguments", "arguments");
 
             // Generate an internal mapping for parsing our arguments
-            foreach (Argument arg in arguments) {
+            foreach (Option arg in options) {
                 m_LongOptions.Add(arg.LongOption, arg);
                 if (arg.ShortOption != (char)0) m_ShortOptions.Add(arg.ShortOption, arg);
+            } 
+
+            ParseOptions(args);
+
+            CheckMissingOptions();
+        }
+
+        private void ParseOptions(string[] args) 
+        {
+            bool parsing = true;
+            Option lastOpt = null;
+
+            foreach (string arg in args) {
+                if (parsing) {
+                    if (lastOpt == null || lastOpt.ParamRequired == OptParamRequired.None || lastOpt.ParamRequired == OptParamRequired.Optional) {
+                        // We expect a new option here, or a parameter for the last option
+                        if (!string.IsNullOrEmpty(arg)) {
+                            if (arg.Length > 1 && arg[0] == '-') {
+                                if (arg[1] == '-') {
+                                    if (arg.Length > 2) {
+                                        // Long option
+                                        LongOptionArgument o = new LongOptionArgument(arg);
+                                        Option opt;
+                                        if (m_LongOptions.TryGetValue(o.LongOption, out opt)) {
+                                            lastOpt = opt;
+                                            if (lastOpt.ParamRequired == OptParamRequired.None) {
+                                                if (o.Parameter != null) {
+                                                    // User provided a parameter for an option that doesn't accept a parameter
+                                                    throw new ParameterNotOptionalException(o.LongOption);
+                                                }
+                                                AddParsed(lastOpt, null);
+                                                lastOpt = null;
+                                            } else {
+                                                if (o.Parameter != null) {
+                                                    AddParsed(opt, o.Parameter);
+                                                    lastOpt = null;
+                                                }
+                                                // else on parsing the next argument the parameter will be provided
+                                            }
+                                        } else {
+                                            // User provided an unsupported long option
+                                            throw new OptionNotDefinedException(o.LongOption);
+                                        }
+                                    } else {
+                                        // End of option parsing. All following options must be unparsed
+                                        if (lastOpt != null) {
+                                            if (lastOpt.ParamRequired == OptParamRequired.Optional) {
+                                                // Parameter not provided, we add it
+                                                AddParsed(lastOpt, null);
+                                            } else if (lastOpt.ParamRequired == OptParamRequired.Required) {
+                                                // Parameter not provided, but we expect one.
+                                                throw new MissingOptionParameterException(lastOpt.LongOption);
+                                            }
+                                        }
+                                        parsing = false;
+                                        lastOpt = null;
+                                    }
+                                } else {
+                                    // Collection of short options
+                                    lastOpt = null;
+                                    for (int i = 1; i < arg.Length; i++) {
+                                        char opt = arg[i];
+                                        Option so;
+                                        if (m_ShortOptions.TryGetValue(opt, out so)) {
+                                            if (so.ParamRequired == OptParamRequired.Required || so.ParamRequired == OptParamRequired.Optional) {
+                                                if (lastOpt != null) {
+                                                    // We only keep lastOpt if it has a required/optional parameter
+                                                    throw new OptionParameterAmbiguousException(so.LongOption, lastOpt.LongOption);
+                                                }
+                                                lastOpt = so;
+                                            } else {
+                                                AddParsed(so, null);
+                                            }
+                                        } else {
+                                            throw new OptionNotDefinedException(opt.ToString());
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Parameter for last option; or unparsed option
+                                if (lastOpt != null && lastOpt.ParamRequired == OptParamRequired.Optional) {
+                                    AddParsed(lastOpt, arg);
+                                } else {
+                                    AddUnparsed(arg);
+                                }
+                                lastOpt = null;
+                            }
+                        } else {
+                            // Empty argument. Parameter for last option; or unparsed option
+                            if (lastOpt != null && lastOpt.ParamRequired == OptParamRequired.Optional) {
+                                AddParsed(lastOpt, arg);
+                            } else {
+                                AddUnparsed(arg);
+                            }
+                            lastOpt = null;
+                        }
+                    } else {
+                        // We expect a parameter here
+                        AddParsed(lastOpt, arg);
+                        lastOpt = null;
+                    }
+                } else {
+                    // We've finishing parsing the commandline options
+                    AddUnparsed(arg);
+                }
             }
 
-            // TODO: Parse the command line, calling "AddParsed" or "AddUnparsed" accordingly
+            // No more arguments to parse. Check if we're expecting a parameter for any outstanding
+            // options.
+            if (lastOpt != null) {
+                if (lastOpt.ParamRequired == OptParamRequired.Optional) {
+                    // Parameter not provided, we add it
+                    AddParsed(lastOpt, null);
+                } else if (lastOpt.ParamRequired == OptParamRequired.Required) {
+                    // Parameter not provided, but we expect one.
+                    throw new MissingOptionParameterException(lastOpt.LongOption);
+                }
+            }
+        }
+
+        private void CheckMissingOptions()
+        {
+            foreach (Option arg in m_LongOptions.Values) {
+                if (arg.OptionRequired == OptRequired.Required) {
+                    if (!m_RawOptions.ContainsKey(arg.LongOption)) {
+                        throw new MissingOptionException(arg.LongOption);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// A simple class to parse a single argument from a long option
+        /// </summary>
+        private class LongOptionArgument
+        {
+            private string m_LongOption;
+            private string m_Parameter;
+
+            /// <summary>
+            /// Construct the constituents of the long option
+            /// </summary>
+            /// <param name="argument">The argument to parse as a long option</param>
+            public LongOptionArgument(string argument)
+            {
+                if (string.IsNullOrEmpty(argument) || argument.Length < 3 ||
+                    argument[0] != '-' || argument[1] != '-') {
+                    // Not a valid option string
+                    m_LongOption = null;
+                    m_Parameter = null;
+                    return;
+                }
+
+                int param = argument.IndexOf('=');
+                if (param != -1) {
+                    // String contains a parameter
+                    if (param < argument.Length - 1) {
+                        m_LongOption = argument.Substring(2, param - 2).TrimEnd();
+                        m_Parameter = argument.Substring(param + 1).Trim();
+                    } else {
+                        m_LongOption = argument.Substring(2, param - 2).TrimEnd();
+                        m_Parameter = "";
+                    }
+                } else {
+                    m_LongOption = argument.Substring(2).TrimEnd();
+                    m_Parameter = null;
+                }
+            }
+
+            /// <summary>
+            /// The long option. Null indicates an invalid argument was provided in the constructor
+            /// </summary>
+            public string LongOption { get { return m_LongOption; } }
+
+            /// <summary>
+            /// The parameter. Null indicates no parameter was provided. An 
+            /// empty string indicates a parameter was provided
+            /// </summary>
+            public string Parameter { get { return m_Parameter; } }
         }
 
         /// <summary>
@@ -309,24 +699,19 @@ namespace RJCP.Core.CommandLine
         /// </summary>
         /// <param name="argument">The long argument that was parsed</param>
         /// <param name="parameter">The (optional) parameter for the argument. Null indicates no parameter was provided</param>
-        protected virtual void AddParsed(string longOption, string parameter)
+        protected virtual void AddParsed(Option option, string parameter)
         {
-            Argument arg;
-            if (m_LongOptions.TryGetValue(longOption, out arg))
-                throw new ApplicationException("Internal exception, handling argument that isn't defined");
-
             int result;
-            if (arg.ArgType == ArgType.Int) {
+            if (option.ParamType == OptParamType.Int) {
                 if (!int.TryParse(parameter, out result)) {
-                    // TODO: This should be our own exception
-                    throw new ArgumentException("Argument: " + longOption + " is not an integer");
+                    throw new OptionParameterException(option.LongOption);
                 }
             }
 
-            if (m_RawOptions.ContainsKey(longOption)) {
-                m_RawOptions[longOption] = parameter;
+            if (m_RawOptions.ContainsKey(option.LongOption)) {
+                m_RawOptions[option.LongOption] = parameter;
             } else {
-                m_RawOptions.Add(longOption, parameter);
+                m_RawOptions.Add(option.LongOption, parameter);
             }
         }
 
@@ -336,9 +721,6 @@ namespace RJCP.Core.CommandLine
         /// <param name="argument">The argument string that wasn't parsed</param>
         protected void AddUnparsed(string argument)
         {
-            if (m_Unparsed == null) {
-                m_Unparsed = new List<string>();
-            }
             m_Unparsed.Add(argument);
         }
 
@@ -360,7 +742,7 @@ namespace RJCP.Core.CommandLine
     /// Class for interpreting command line arguments where custom handling may be required
     /// </summary>
     /// <typeparam name="T">A type that will allow the results of custom handling to be stored</typeparam>
-    public class Options<T>:Options where T : class,new()
+    public class Options<T> : Options where T : class,new()
     {
         /// <summary>
         /// List of options based on custom events
@@ -372,20 +754,16 @@ namespace RJCP.Core.CommandLine
         /// </summary>
         /// <param name="arguments">List of arguments defined for the program</param>
         /// <param name="args">Arguments provided on the command line</param>
-        public Options(Argument[] arguments, string[] args)
-            :base(arguments, args) { }
+        public Options(Option[] options, string[] args)
+            :base(options, args) { }
 
-        protected override void AddParsed(string longOption, string parameter)
+        protected override void AddParsed(Option option, string parameter)
         {
-            Argument arg;
-            if (base.m_LongOptions.TryGetValue(longOption, out arg))
-                throw new ApplicationException("Internal exception, handling argument that isn't defined");
-
-            if (arg.ArgType == ArgType.Custom) {
-                OnArgValidate(longOption, parameter);
+            if (option.ParamType == OptParamType.Custom) {
+                OnArgValidate(option.LongOption, parameter);
             }
 
-            base.AddParsed(longOption, parameter);
+            base.AddParsed(option, parameter);
         }
 
         /// <summary>
@@ -399,12 +777,12 @@ namespace RJCP.Core.CommandLine
                 m_UserOptions = new T();
             }
 
-            Argument arg;
+            Option arg;
             if (!base.m_LongOptions.TryGetValue(longOption, out arg)) 
                 throw new ApplicationException("Internal exception, handling argument that isn't defined");
 
             // The base class only knows about "Argument", but it is actually of type "Argument<T>"
-            ((Argument<T>)arg).Validator(this, new ArgValidatorArgs<T>(longOption, parameter, m_UserOptions));
+            ((Option<T>)arg).Validator(this, new OptParamValidatorArgs<T>(longOption, parameter, m_UserOptions));
         }
 
         /// <summary>
