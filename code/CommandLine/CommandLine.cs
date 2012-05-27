@@ -57,11 +57,6 @@ namespace RJCP.Core.CommandLine
         None,
 
         /// <summary>
-        /// An integer type
-        /// </summary>
-        Int,
-
-        /// <summary>
         /// A generic string
         /// </summary>
         String,
@@ -77,11 +72,22 @@ namespace RJCP.Core.CommandLine
     /// </summary>
     public class Option
     {
-        protected char m_ShortOption;
-        protected string m_LongOption;
-        protected OptRequired m_OptRequired;
-        protected OptParamRequired m_ParamRequired;
-        protected OptParamType m_ParamType;
+        #region Protected Variables
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private char m_ShortOption;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string m_LongOption;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private OptRequired m_OptRequired;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private OptParamRequired m_ParamRequired;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private OptParamType m_ParamType;
+        #endregion
 
         /// <summary>
         /// Basic argument that can be optionally provided
@@ -130,27 +136,47 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// The character used for the short option. May be optional
         /// </summary>
-        public char ShortOption { get { return m_ShortOption; } }
+        public char ShortOption
+        {
+            get { return m_ShortOption; }
+            protected set { m_ShortOption = value; }
+        }
 
         /// <summary>
         /// The string used for the long option. Must always be provided
         /// </summary>
-        public string LongOption { get { return m_LongOption; } }
+        public string LongOption
+        {
+            get { return m_LongOption; }
+            protected set { m_LongOption = value; }
+        }
 
         /// <summary>
         /// If the argument is required to be provided or not
         /// </summary>
-        public OptRequired OptionRequired { get { return m_OptRequired; } }
+        public OptRequired OptionRequired 
+        { 
+            get { return m_OptRequired; }
+            protected set { m_OptRequired = value; }
+        }
 
         /// <summary>
         /// If a parameter to the argument must be provided or not
         /// </summary>
-        public OptParamRequired ParamRequired { get { return m_ParamRequired; } }
+        public OptParamRequired ParamRequired 
+        { 
+            get { return m_ParamRequired; }
+            protected set { m_ParamRequired = value; }
+        }
 
         /// <summary>
         /// How to interpret the argument if it's provided
         /// </summary>
-        public OptParamType ParamType { get { return m_ParamType; } }
+        public OptParamType ParamType
+        {
+            get { return m_ParamType; }
+            protected set { m_ParamType = value; }
+        }
 
         public override string ToString()
         {
@@ -184,7 +210,7 @@ namespace RJCP.Core.CommandLine
     /// </summary>
     public class OptParamValidatorArgs<T> : EventArgs where T : class,new()
     {
-        private string m_LongOption;
+        private Option<T> m_Option;
         private string m_Param;
         private T m_OptionData;
 
@@ -194,14 +220,14 @@ namespace RJCP.Core.CommandLine
         /// <param name="longOption">The long option being parsed</param>
         /// <param name="arg">The argument provided on the command line</param>
         /// <param name="options">An options object</param>
-        public OptParamValidatorArgs(string longOption, string param, T options)
+        public OptParamValidatorArgs(Option<T> option, string param, T options)
         {
-            m_LongOption = longOption;
+            m_Option = option;
             m_Param = param;
             m_OptionData = options;
         }
 
-        public string LongOption { get { return m_LongOption; } }
+        public Option<T> Option { get { return m_Option; } }
         public string Parameter { get { return m_Param; } }
         public T OptionData { get { return m_OptionData; } }
     }
@@ -266,16 +292,16 @@ namespace RJCP.Core.CommandLine
         public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamValidateEvent<T> validator)
             : base(shortOption, longOption, required)
         {
-            m_ParamRequired = param;
+            base.ParamRequired = param;
             if (param != OptParamRequired.None) {
                 if (validator == null)
                     throw new ArgumentNullException("validator", "validator may not be null for ArgParameter." + param.ToString());
-                m_ParamType = OptParamType.Custom;
+                base.ParamType = OptParamType.Custom;
                 m_Validator = validator;
             } else {
                 if (validator != null)
                     throw new ArgumentException("validator must be null for ArgParameter.None", "validator");
-                m_ParamType = OptParamType.None;
+                base.ParamType = OptParamType.None;
                 m_Validator = null;
             }
         }
@@ -468,8 +494,6 @@ namespace RJCP.Core.CommandLine
             } else {
                 return base.ToString();
             }
-
- 	        return base.ToString();
         }
     }
     #endregion
@@ -701,13 +725,6 @@ namespace RJCP.Core.CommandLine
         /// <param name="parameter">The (optional) parameter for the argument. Null indicates no parameter was provided</param>
         protected virtual void AddParsed(Option option, string parameter)
         {
-            int result;
-            if (option.ParamType == OptParamType.Int) {
-                if (!int.TryParse(parameter, out result)) {
-                    throw new OptionParameterException(option.LongOption);
-                }
-            }
-
             if (m_RawOptions.ContainsKey(option.LongOption)) {
                 m_RawOptions[option.LongOption] = parameter;
             } else {
@@ -760,7 +777,7 @@ namespace RJCP.Core.CommandLine
         protected override void AddParsed(Option option, string parameter)
         {
             if (option.ParamType == OptParamType.Custom) {
-                OnArgValidate(option.LongOption, parameter);
+                OnArgValidate((Option<T>)option, parameter);
             }
 
             base.AddParsed(option, parameter);
@@ -771,18 +788,14 @@ namespace RJCP.Core.CommandLine
         /// </summary>
         /// <param name="longOption">The long option</param>
         /// <param name="parameter">The argument provided on the command line</param>
-        protected void OnArgValidate(string longOption, string parameter)
+        protected void OnArgValidate(Option<T> option, string parameter)
         {
             if (m_UserOptions == null) {
                 m_UserOptions = new T();
             }
 
-            Option arg;
-            if (!base.m_LongOptions.TryGetValue(longOption, out arg)) 
-                throw new ApplicationException("Internal exception, handling argument that isn't defined");
-
             // The base class only knows about "Argument", but it is actually of type "Argument<T>"
-            ((Option<T>)arg).Validator(this, new OptParamValidatorArgs<T>(longOption, parameter, m_UserOptions));
+            option.Validator(this, new OptParamValidatorArgs<T>(option, parameter, m_UserOptions));
         }
 
         /// <summary>
