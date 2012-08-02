@@ -112,6 +112,7 @@ namespace RJCP.Core.CommandLine
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
+        /// <param name="param">Indicates if a parameter to the argument is required or not</param>
         /// <param name="paramType">Type of the argument</param>
         public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamType paramType)
         {
@@ -178,6 +179,15 @@ namespace RJCP.Core.CommandLine
             protected set { m_ParamType = value; }
         }
 
+        /// <summary>
+        /// Get a textual representation of this option
+        /// </summary>
+        /// <remarks>
+        /// This method is provided so that you can show the options usage to the user
+        /// based on how it's configured. It also serves a second purpose for identifying
+        /// options easily while debugging with the Visual Studio IDE.
+        /// </remarks>
+        /// <returns>The option and its configuration</returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
