@@ -227,8 +227,8 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="longOption">The long option being parsed</param>
-        /// <param name="arg">The argument provided on the command line</param>
+        /// <param name="option">The option being parsed</param>
+        /// <param name="param">The argument provided on the command line</param>
         /// <param name="options">An options object</param>
         public OptParamValidatorArgs(Option<T> option, string param, T options)
         {
@@ -237,8 +237,19 @@ namespace RJCP.Core.CommandLine
             m_OptionData = options;
         }
 
+        /// <summary>
+        /// The option being parsed
+        /// </summary>
         public Option<T> Option { get { return m_Option; } }
+
+        /// <summary>
+        /// The argument provided on the command line
+        /// </summary>
         public string Parameter { get { return m_Param; } }
+
+        /// <summary>
+        /// Data associated with the object
+        /// </summary>
         public T OptionData { get { return m_OptionData; } }
     }
 
@@ -254,7 +265,7 @@ namespace RJCP.Core.CommandLine
     /// </summary>
     public class Option<T> : Option where T : class,new()
     {
-        protected OptParamValidateEvent<T> m_Validator;
+        private OptParamValidateEvent<T> m_Validator;
 
         /// <summary>
         /// Basic argument that can be optionally provided
@@ -285,6 +296,7 @@ namespace RJCP.Core.CommandLine
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
+        /// <param name="param">If the parameter to the argument is required or not</param>
         /// <param name="argType">Type of the argument</param>
         public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamType argType)
             : base(shortOption, longOption, required, param, argType)
@@ -298,6 +310,7 @@ namespace RJCP.Core.CommandLine
         /// <param name="shortOption">The short option on the command line</param>
         /// <param name="longOption">The long option on the command line</param>
         /// <param name="required">If the argument is required or not</param>
+        /// <param name="param">If the parameter to the argument is required or not</param>
         /// <param name="validator">The callback to check the argument</param>
         public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamValidateEvent<T> validator)
             : base(shortOption, longOption, required)
@@ -332,41 +345,83 @@ namespace RJCP.Core.CommandLine
     {
         private string m_Option;
 
+        /// <summary>
+        /// Default constructor for the exception
+        /// </summary>
         protected BaseArgumentException() : base() { }
+
+        /// <summary>
+        /// Exception constructor providing the name of the option
+        /// </summary>
+        /// <param name="option">Name of the option</param>
         protected BaseArgumentException(string option) : base("Option Exception") 
         {
             m_Option = option;
         }
 
+        /// <summary>
+        /// Exception constructor providing the name of the option and an inner exception
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="inner">Inner exception</param>
         protected BaseArgumentException(string option, System.Exception inner) : base("Option Exception", inner) 
         {
             m_Option = option;
         }
 
+        /// <summary>
+        /// Exception constructor providing the name of the option an an error message
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
         protected BaseArgumentException(string option, string message) : base(message)
         {
             m_Option = option;
         }
 
+        /// <summary>
+        /// Exception constructor
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
         protected BaseArgumentException(string option, string message, System.Exception inner) : base(message, inner)
         {
             m_Option = option;
         }
 
-        // A constructor is needed for serialization when an
-        // exception propagates from a remoting server to the client. 
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected BaseArgumentException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base (info, context)
         {
             m_Option = info.GetString("option");
         }
-
+        
+        /// <summary>
+        /// Serialization
+        /// </summary>
+        /// <param name="info">Serialization Info</param>
+        /// <param name="context">Serialization Context</param>
         public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
         {
             info.AddValue("option", m_Option);
             base.GetObjectData(info, context);
         }
 
+        /// <summary>
+        /// Get the exception as a string
+        /// </summary>
+        /// <returns>
+        /// String representation of the exception
+        /// </returns>
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(m_Option)) {
@@ -376,6 +431,9 @@ namespace RJCP.Core.CommandLine
             }
         }
 
+        /// <summary>
+        /// The option affected. May be null
+        /// </summary>
         public string Option { get { return m_Option; } }
     }
 
@@ -385,14 +443,48 @@ namespace RJCP.Core.CommandLine
     [Serializable]
     public class MissingOptionException : BaseArgumentException
     {
+        /// <summary>
+        /// Argument is missing
+        /// </summary>
         public MissingOptionException() : base() { }
+
+        /// <summary>
+        /// Argument is missing
+        /// </summary>
+        /// <param name="option">Name of the option</param>
         public MissingOptionException(string option) : base(option, "Missing option") { }
+
+        /// <summary>
+        /// Argument is missing
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
         public MissingOptionException(string option, string message) : base(option, message) { }
+
+        /// <summary>
+        /// Argument is missing
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="inner">Inner exception</param>
         public MissingOptionException(string option, System.Exception inner) : base(option, "Missing option", inner) { }
+
+        /// <summary>
+        /// Argument is missing
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
         public MissingOptionException(string option, string message, System.Exception inner) : base(option, message, inner) { }
 
-        // A constructor is needed for serialization when an
-        // exception propagates from a remoting server to the client. 
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected MissingOptionException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
@@ -403,11 +495,48 @@ namespace RJCP.Core.CommandLine
     [Serializable]
     public class MissingOptionParameterException : BaseArgumentException
     {
+        /// <summary>
+        /// Argument is missing parameter
+        /// </summary>
         public MissingOptionParameterException() : base() { }
+
+        /// <summary>
+        /// Argument is missing parameter
+        /// </summary>
+        /// <param name="option">Name of the option</param>
         public MissingOptionParameterException(string option) : base(option, "Missing option parameter") { }
+
+        /// <summary>
+        /// Argument is missing parameter
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
         public MissingOptionParameterException(string option, string message) : base(option, message) { }
+
+        /// <summary>
+        /// Argument is missing parameter
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="inner">Inner exception</param>
         public MissingOptionParameterException(string option, System.Exception inner) : base(option, "Missing option parameter", inner) { }
+
+        /// <summary>
+        /// Argument is missing parameter
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
         public MissingOptionParameterException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected MissingOptionParameterException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
@@ -418,11 +547,48 @@ namespace RJCP.Core.CommandLine
     [Serializable]
     public class OptionParameterException : BaseArgumentException
     {
+        /// <summary>
+        /// Argument parameter is invalid
+        /// </summary>
         public OptionParameterException() : base() { }
+
+        /// <summary>
+        /// Argument parameter is invalid
+        /// </summary>
+        /// <param name="option">Name of the option</param>
         public OptionParameterException(string option) : base(option, "Option parameter format invalid") { }
+        
+        /// <summary>
+        /// Argument parameter is invalid
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
         public OptionParameterException(string option, string message) : base(option, message) { }
+        
+        /// <summary>
+        /// Argument parameter is invalid
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="inner">Inner exception</param>
         public OptionParameterException(string option, System.Exception inner) : base(option, "Option parameter format invalid", inner) { }
+        
+        /// <summary>
+        /// Argument parameter is invalid
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
         public OptionParameterException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected OptionParameterException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
@@ -433,57 +599,180 @@ namespace RJCP.Core.CommandLine
     [Serializable]
     public class ParameterNotOptionalException : BaseArgumentException
     {
+        /// <summary>
+        /// Argument parameter not expected, but one provided
+        /// </summary>
         public ParameterNotOptionalException() : base() { }
+
+        /// <summary>
+        /// Argument parameter not expected, but one provided
+        /// </summary>
+        /// <param name="option">Name of the option</param>
         public ParameterNotOptionalException(string option) : base(option, "Option expects no parameters") { }
+
+        /// <summary>
+        /// Argument parameter not expected, but one provided
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
         public ParameterNotOptionalException(string option, string message) : base(option, message) { }
+
+        /// <summary>
+        /// Argument parameter not expected, but one provided
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="inner">Inner exception</param>
         public ParameterNotOptionalException(string option, System.Exception inner) : base(option, "Option expects no parameters", inner) { }
+
+        /// <summary>
+        /// Argument parameter not expected, but one provided
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
         public ParameterNotOptionalException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected ParameterNotOptionalException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 
     /// <summary>
-    /// A parameter was given to an option where no parameter is expected
+    /// An unknown option was encountered
     /// </summary>
     [Serializable]
     public class OptionNotDefinedException : BaseArgumentException
     {
+        /// <summary>
+        /// Unknown option
+        /// </summary>
         public OptionNotDefinedException() : base() { }
+
+        /// <summary>
+        /// Unknown option
+        /// </summary>
+        /// <param name="option">Name of the option</param>
         public OptionNotDefinedException(string option) : base(option, "Unknown option") { }
+
+        /// <summary>
+        /// Unknown option
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
         public OptionNotDefinedException(string option, string message) : base(option, message) { }
+
+        /// <summary>
+        /// Unknown option
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="inner">Inner exception</param>
         public OptionNotDefinedException(string option, System.Exception inner) : base(option, "Unknown option", inner) { }
+
+        /// <summary>
+        /// Unknown option
+        /// </summary>
+        /// <param name="option">Name of the option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
         public OptionNotDefinedException(string option, string message, System.Exception inner) : base(option, message, inner) { }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected OptionNotDefinedException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }
     }
 
+    /// <summary>
+    /// Option configuration is ambiguous
+    /// </summary>
+    /// <remarks>
+    /// This exception can be raised if the configuration for the option is ambiguous. For example,
+    /// the user provides a list of short options, where two or more are expecting arguments in the
+    /// form "-abc". The user should instead provide "-a -b -c" for it to be non-ambiguous
+    /// </remarks>
     [Serializable]
     public class OptionParameterAmbiguousException: BaseArgumentException
     {
         private string m_Option2;
 
+        /// <summary>
+        /// Option configuration is ambiguous
+        /// </summary>
         public OptionParameterAmbiguousException() : base() { }
-        public OptionParameterAmbiguousException(string option, string option2) : base(option + ", " + option2, "Ambiguous Options provided") 
+
+        /// <summary>
+        /// Option configuration is ambiguous
+        /// </summary>
+        /// <param name="option">Name of the first option</param>
+        /// <param name="option2">Name of the second option</param>
+        public OptionParameterAmbiguousException(string option, string option2)
+            : base(option + ", " + option2, "Ambiguous Options provided") 
         { 
             m_Option2 = option2;
         }
 
-        public OptionParameterAmbiguousException(string option, string option2, string message) : base(option + ", " + option2, message) 
+        /// <summary>
+        /// Option configuration is ambiguous
+        /// </summary>
+        /// <param name="option">Name of the first option</param>
+        /// <param name="option2">Name of the second option</param>
+        /// <param name="message">Message describing the exception</param>
+        public OptionParameterAmbiguousException(string option, string option2, string message)
+            : base(option + ", " + option2, message) 
         {
             m_Option2 = option2;
         }
 
-        public OptionParameterAmbiguousException(string option, string option2, System.Exception inner) : base(option + ", " + option2, "Unknown option", inner)
+        /// <summary>
+        /// Option configuration is ambiguous
+        /// </summary>
+        /// <param name="option">Name of the first option</param>
+        /// <param name="option2">Name of the second option</param>
+        /// <param name="inner">Inner exception</param>
+        public OptionParameterAmbiguousException(string option, string option2, System.Exception inner)
+            : base(option + ", " + option2, "Unknown option", inner)
         {
             m_Option2 = option2;
         }
 
-        public OptionParameterAmbiguousException(string option, string option2, string message, System.Exception inner) : base(option + ", " + option2, message, inner)
+        /// <summary>
+        /// Option configuration is ambiguous
+        /// </summary>
+        /// <param name="option">Name of the first option</param>
+        /// <param name="option2">Name of the second option</param>
+        /// <param name="message">Message describing the exception</param>
+        /// <param name="inner">Inner exception</param>
+        public OptionParameterAmbiguousException(string option, string option2, string message, System.Exception inner)
+            : base(option + ", " + option2, message, inner)
         {
             m_Option2 = option2;
         }
 
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        /// <remarks>
+        /// A constructor is needed for serialization when an
+        /// exception propagates from a remoting server to the client. 
+        /// </remarks>
+        /// <param name="info">Serialization</param>
+        /// <param name="context">Context</param>
         protected OptionParameterAmbiguousException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context)
             : base(info, context) 
@@ -491,13 +780,24 @@ namespace RJCP.Core.CommandLine
             m_Option2 = info.GetString("option2");
         }
 
-        public override void  GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+        /// <summary>
+        /// Serialization
+        /// </summary>
+        /// <param name="info">Serialization Info</param>
+        /// <param name="context">Serialization Context</param>
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
         {
             info.AddValue("option2", m_Option2);
  	        base.GetObjectData(info, context);
         }
 
-        public override string  ToString()
+        /// <summary>
+        /// Get the exception as a string
+        /// </summary>
+        /// <returns>
+        /// String representation of the exception
+        /// </returns>
+        public override string ToString()
         {
             if (!string.IsNullOrEmpty(m_Option2)) {
                 return "Option: " + m_Option2 + "; " + base.ToString();
@@ -731,7 +1031,7 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Used to add a new option to our list of options parsed
         /// </summary>
-        /// <param name="argument">The long argument that was parsed</param>
+        /// <param name="option">The long argument that was parsed</param>
         /// <param name="parameter">The (optional) parameter for the argument. Null indicates no parameter was provided</param>
         protected virtual void AddParsed(Option option, string parameter)
         {
@@ -779,11 +1079,16 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Parse command line arguments given a definition of the arguments we should understand
         /// </summary>
-        /// <param name="arguments">List of arguments defined for the program</param>
+        /// <param name="options">List of arguments defined for the program</param>
         /// <param name="args">Arguments provided on the command line</param>
         public Options(Option[] options, string[] args)
             :base(options, args) { }
 
+        /// <summary>
+        /// Used to add a new option to our list of options parsed
+        /// </summary>
+        /// <param name="option">The long argument that was parsed</param>
+        /// <param name="parameter">The (optional) parameter for the argument. Null indicates no parameter was provided</param>
         protected override void AddParsed(Option option, string parameter)
         {
             if (option.ParamType == OptParamType.Custom) {
@@ -796,7 +1101,7 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Call the user handler for parsing an argument
         /// </summary>
-        /// <param name="longOption">The long option</param>
+        /// <param name="option">The option</param>
         /// <param name="parameter">The argument provided on the command line</param>
         protected void OnArgValidate(Option<T> option, string parameter)
         {
