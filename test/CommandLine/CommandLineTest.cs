@@ -5,9 +5,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using RJCP.Core.CommandLine;
-
-namespace RJCP.Core.CommandLineTest
+namespace RJCP.Core.CommandLine.CommandLineTest
 {
     /// <summary>
     /// Summary description for UnitTest1
