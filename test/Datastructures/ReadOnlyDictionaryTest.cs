@@ -30,8 +30,7 @@ namespace RJCP.Core.Datastructures.ReadOnlyDictionaryTest
         }
 
         [TestMethod]
-        [TestCategory("Datastructures")]
-        [TestCategory("Datastructures/RODictionary")]
+        [TestCategory("Datastructures.ReadOnlyDictionary")]
         public void RODict_Instantiate()
         {
             Dictionary<int, string> dict = GenerateDict();
@@ -49,8 +48,7 @@ namespace RJCP.Core.Datastructures.ReadOnlyDictionaryTest
         }
 
         [TestMethod]
-        [TestCategory("Datastructures")]
-        [TestCategory("Datastructures/RODictionary")]
+        [TestCategory("Datastructures.ReadOnlyDictionary")]
         public void RODict_Methods()
         {
             Dictionary<int, string> dict = GenerateDict();
@@ -79,8 +77,7 @@ namespace RJCP.Core.Datastructures.ReadOnlyDictionaryTest
         }
 
         [TestMethod]
-        [TestCategory("Datastructures")]
-        [TestCategory("Datastructures/RODictionary")]
+        [TestCategory("Datastructures.ReadOnlyDictionary")]
         public void RODict_Keys()
         {
             Dictionary<int, string> dict = GenerateDict();
@@ -106,8 +103,7 @@ namespace RJCP.Core.Datastructures.ReadOnlyDictionaryTest
         }
 
         [TestMethod]
-        [TestCategory("Datastructures")]
-        [TestCategory("Datastructures/RODictionary")]
+        [TestCategory("Datastructures.ReadOnlyDictionary")]
         public void RODict_Values()
         {
             Dictionary<int, string> dict = GenerateDict();
