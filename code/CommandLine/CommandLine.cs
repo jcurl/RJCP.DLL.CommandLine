@@ -949,7 +949,7 @@ namespace RJCP.Core.CommandLine
                         lastOpt = null;
                     }
                 } else {
-                    // We've finishing parsing the commandline options
+                    // We've finishing parsing the command line options
                     AddUnparsed(arg);
                 }
             }

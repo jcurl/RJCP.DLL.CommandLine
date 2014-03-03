@@ -34,7 +34,7 @@ namespace RJCP.Core.Datastructures
         /// <summary>
         /// Constructor. Provide the dictionary to instantiate as read-only
         /// </summary>
-        /// <param name="dict">Dictionary to export as readonly</param>
+        /// <param name="dict">Dictionary to export as read only</param>
         public ReadOnlyDictionary(IDictionary<TKey, TValue> dict) { m_Dict = dict; }
 
         /// <summary>
