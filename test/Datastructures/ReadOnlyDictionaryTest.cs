@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace RJCP.Core.Datastructures.ReadOnlyDictionaryTest
+namespace RJCP.Core.Datastructures
 {
     /// <summary>
     /// Summary description for ReadOnlyDictionary
