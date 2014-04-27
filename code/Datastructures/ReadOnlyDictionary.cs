@@ -1,14 +1,14 @@
 ﻿// $URL$
 // $Id$
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
-
 namespace RJCP.Core.Datastructures
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     /// <summary>
     /// A wrapper class for a Read Only Dictionary
     /// </summary>
