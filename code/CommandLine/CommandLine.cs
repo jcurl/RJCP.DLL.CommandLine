@@ -1,13 +1,13 @@
 ﻿// $URL$
 // $Id$
-using System;
-using System.Collections.Generic;
-using System.Text;
-using RJCP.Core.Datastructures;
-using System.Diagnostics;
-
 namespace RJCP.Core.CommandLine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using RJCP.Core.Datastructures;
+    using System.Diagnostics;
+
     #region Defining arguments, with custom handlers
     /// <summary>
     /// Specifies if an argument is required or not
