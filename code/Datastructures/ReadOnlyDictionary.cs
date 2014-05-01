@@ -34,7 +34,7 @@ namespace RJCP.Core.Datastructures
         /// <summary>
         /// Constructor. Provide the dictionary to instantiate as read-only
         /// </summary>
-        /// <param name="dict">Dictionary to export as read only</param>
+        /// <param name="dict">Dictionary to export as readonly</param>
         public ReadOnlyDictionary(IDictionary<TKey, TValue> dict) { m_Dict = dict; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace RJCP.Core.Datastructures
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Remove(TKey key) { throw new NotSupportedException("Dictionary is read only"); }
+        public bool Remove(TKey key) { throw new NotSupportedException("Dictionary is readonly"); }
 
         /// <summary>
         /// Test if the dictionary contains a value
@@ -84,19 +84,19 @@ namespace RJCP.Core.Datastructures
         public TValue this[TKey key]
         {
             get { return m_Dict[key]; }
-            set { throw new NotSupportedException("Dictionary is read only"); }
+            set { throw new NotSupportedException("Dictionary is readonly"); }
         }
 
         /// <summary>
         /// Add a KeyValuePair to the dictionary - NOT SUPPORTED (Read Only)
         /// </summary>
         /// <param name="item"></param>
-        public void Add(KeyValuePair<TKey, TValue> item) { throw new NotSupportedException("Dictionary is read only"); }
+        public void Add(KeyValuePair<TKey, TValue> item) { throw new NotSupportedException("Dictionary is readonly"); }
 
         /// <summary>
         /// Clear the contents of the dictionary - NOT SUPPORTED (Read Only)
         /// </summary>
-        public void Clear() { throw new NotSupportedException("Dictionary is read only"); }
+        public void Clear() { throw new NotSupportedException("Dictionary is readonly"); }
 
         /// <summary>
         /// Checks if the dictionary contains a KeyValue pair
@@ -118,7 +118,7 @@ namespace RJCP.Core.Datastructures
         public int Count { get { return m_Dict.Count; } }
 
         /// <summary>
-        /// If the Dictionary is read only or not (always true)
+        /// If the Dictionary is readonly or not (always true)
         /// </summary>
         public bool IsReadOnly { get { return true; } }
 
@@ -127,7 +127,7 @@ namespace RJCP.Core.Datastructures
         /// </summary>
         /// <param name="item">Item to remove</param>
         /// <returns>If the key/value pair was in the dictionary</returns>
-        public bool Remove(KeyValuePair<TKey, TValue> item) { throw new NotSupportedException("Dictionary is read only"); }
+        public bool Remove(KeyValuePair<TKey, TValue> item) { throw new NotSupportedException("Dictionary is readonly"); }
 
         /// <summary>
         /// Get the enumerator for KeyValue pairs

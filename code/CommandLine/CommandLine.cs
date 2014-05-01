@@ -4,9 +4,9 @@ namespace RJCP.Core.CommandLine
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Text;
     using RJCP.Core.Datastructures;
-    using System.Diagnostics;
 
     #region Defining arguments, with custom handlers
     /// <summary>
@@ -949,7 +949,7 @@ namespace RJCP.Core.CommandLine
                         lastOpt = null;
                     }
                 } else {
-                    // We've finishing parsing the command line options
+                    // We've finishing parsing the commandline options
                     AddUnparsed(arg);
                 }
             }
