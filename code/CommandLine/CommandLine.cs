@@ -72,7 +72,6 @@ namespace RJCP.Core.CommandLine
     /// </summary>
     public class Option
     {
-        #region Protected Variables
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private char m_ShortOption;
 
@@ -87,7 +86,6 @@ namespace RJCP.Core.CommandLine
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private OptParamType m_ParamType;
-        #endregion
 
         /// <summary>
         /// Basic argument that can be optionally provided.
@@ -262,7 +260,7 @@ namespace RJCP.Core.CommandLine
     /// for parsing results and putting them in an object of type <c>T</c>.</typeparam>
     /// <param name="sender">The sender.</param>
     /// <param name="args">The arguments.</param>
-    public delegate void OptParamValidateEvent<T>(object sender, OptParamValidatorArgs<T> args) where T : class,new();
+    public delegate void OptParamValidateEventHandler<T>(object sender, OptParamValidatorArgs<T> args) where T : class,new();
 
     /// <summary>
     /// Specifies an argument that supports custom handling.
@@ -271,7 +269,7 @@ namespace RJCP.Core.CommandLine
     /// <see cref="OptParamValidateEventHandler{T}"/> delegate event handler.</typeparam>
     public class Option<T> : Option where T : class,new()
     {
-        private OptParamValidateEvent<T> m_Validator;
+        private OptParamValidateEventHandler<T> m_Validator;
 
         /// <summary>
         /// Basic argument that can be optionally provided.
@@ -318,7 +316,7 @@ namespace RJCP.Core.CommandLine
         /// <param name="required">If the argument is required or not.</param>
         /// <param name="param">If the parameter to the argument is required or not.</param>
         /// <param name="validator">The callback to check the argument.</param>
-        public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamValidateEvent<T> validator)
+        public Option(char shortOption, string longOption, OptRequired required, OptParamRequired param, OptParamValidateEventHandler<T> validator)
             : base(shortOption, longOption, required)
         {
             base.ParamRequired = param;
@@ -338,7 +336,7 @@ namespace RJCP.Core.CommandLine
         /// <summary>
         /// Custom event handler for interpreting an argument parameter.
         /// </summary>
-        public OptParamValidateEvent<T> Validator { get { return m_Validator; } }
+        public OptParamValidateEventHandler<T> Validator { get { return m_Validator; } }
     }
     #endregion
 
