@@ -1,6 +1,4 @@
-﻿// $URL$
-// $Id$
-using System;
+﻿using System;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -70,10 +68,8 @@ namespace RJCP.Core.Datastructures
             catch { err = true; }
             Assert.IsTrue(err, "Clear() was successful for a readonly dictionary");
 
-            err = false;
-            try { rdict.Remove(10); }
-            catch { err = true; }
-            Assert.IsTrue(err, "Remove(key) was successful for a readonly dictionary");
+            Assert.IsFalse(rdict.Remove(10), "Remove(key) was successful for a readonly dictionary");
+            Assert.AreEqual(9, rdict.Count);
         }
 
         [TestMethod]
