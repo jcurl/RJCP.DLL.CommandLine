@@ -29,10 +29,43 @@
         private readonly IDictionary<TKey, TValue> m_Dict;
 
         /// <summary>
-        /// Constructor. Provide the dictionary to instantiate as read-only.
+        /// Initializes a new instance of the <see cref="ReadOnlyDictionary{TKey, TValue}"/> class without making a copy.
         /// </summary>
         /// <param name="dict">Dictionary to export as read only.</param>
+        /// <remarks>
+        /// Using this constructor is the same as <see cref="ReadOnlyDictionary{TKey, TValue}(IDictionary{TKey, TValue}, bool)"/>.
+        /// </remarks>
         public ReadOnlyDictionary(IDictionary<TKey, TValue> dict) { m_Dict = dict; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReadOnlyDictionary{TKey, TValue}"/> class allowing an immutable copy.
+        /// </summary>
+        /// <param name="dict">Dictionary to export as read only.</param>
+        /// <param name="copy">if set to <c>true</c> then make a copy of the dictionary; else if set to
+        /// <c>false</c>, the read only dictionary is a direct reference to the object provided.</param>
+        /// <remarks>
+        /// Making a copy of the dictionary only uses the references to the keys and values. While the keys
+        /// of the dictionary can no longer change (which is useful when enumerating over the dictionary
+        /// object, especially if you expect the contents to change during that enumeration which would
+        /// otherwise result in a <see cref="System.InvalidOperationException"/>) if the contents of Value
+        /// do change, this will still be reflected. Thus, only the key collection is immutable.
+        /// <para>You should generally pass <paramref name="copy"/> to be <c>false</c> and try to have
+        /// your code so that the dictionary doesn't change, as this doesn't require a copy of the
+        /// collection and the provided dictionary can be referenced, improving performance when
+        /// constructing this object and reducing the required memory footprint.</para>
+        /// </remarks>
+        public ReadOnlyDictionary(IDictionary<TKey, TValue> dict, bool copy)
+        {
+            if (!copy) {
+                m_Dict = dict;
+            } else {
+                // Make a snapshot of all the elements
+                m_Dict = new Dictionary<TKey, TValue>();
+                foreach (TKey key in dict.Keys) {
+                    m_Dict.Add(key, m_Dict[key]);
+                }
+            }
+        }
 
         /// <summary>
         /// Add a value to the dictionary - NOT SUPPORTED (Read Only).
