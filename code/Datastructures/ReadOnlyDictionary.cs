@@ -62,7 +62,7 @@
                 // Make a snapshot of all the elements
                 m_Dict = new Dictionary<TKey, TValue>();
                 foreach (TKey key in dict.Keys) {
-                    m_Dict.Add(key, m_Dict[key]);
+                    m_Dict.Add(key, dict[key]);
                 }
             }
         }
