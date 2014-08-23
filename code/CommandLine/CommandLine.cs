@@ -815,25 +815,10 @@
     /// </summary>
     public class Options
     {
-        /// <summary>
-        /// Internal mapping from long options to an Argument.
-        /// </summary>
-        protected Dictionary<string, Option> m_LongOptions = new Dictionary<string, Option>();
-
-        /// <summary>
-        /// Internal mapping from short options to an Argument.
-        /// </summary>
-        protected Dictionary<char, Option> m_ShortOptions = new Dictionary<char, Option>();
-
-        /// <summary>
-        /// Parsed options.
-        /// </summary>
-        protected Dictionary<string, string> m_RawOptions = new Dictionary<string, string>();
-
-        /// <summary>
-        /// List of all arguments that could not be parsed.
-        /// </summary>
-        protected List<string> m_Unparsed = new List<string>();
+        private Dictionary<string, Option> m_LongOptions = new Dictionary<string, Option>();
+        private Dictionary<char, Option> m_ShortOptions = new Dictionary<char, Option>();
+        private Dictionary<string, string> m_RawOptions = new Dictionary<string, string>();
+        private List<string> m_Unparsed = new List<string>();
 
         /// <summary>
         /// Constructor, parsing options from the command line.
