@@ -52,8 +52,7 @@ namespace RJCP.Core.Datastructures
             Dictionary<int, string> dict = GenerateDict();
             ReadOnlyDictionary<int, string> rdict = new ReadOnlyDictionary<int, string>(dict);
 
-            bool err;
-            err = false;
+            bool err = false;
             try { rdict.Add(new KeyValuePair<int, string>(90, "Ninety")); }
             catch { err = true; }
             Assert.IsTrue(err, "Add(KVP) was writable for a readonly dictionary");
@@ -79,8 +78,7 @@ namespace RJCP.Core.Datastructures
             Dictionary<int, string> dict = GenerateDict();
             ReadOnlyDictionary<int, string> rdict = new ReadOnlyDictionary<int, string>(dict);
 
-            bool err;
-            err = false;
+            bool err = false;
             try { rdict.Keys.Add(51); }
             catch { err = true; }
             Assert.IsTrue(err, "Keys.Add(Key) was writable for a readonly dictionary");
@@ -105,8 +103,7 @@ namespace RJCP.Core.Datastructures
             Dictionary<int, string> dict = GenerateDict();
             ReadOnlyDictionary<int, string> rdict = new ReadOnlyDictionary<int, string>(dict);
 
-            bool err;
-            err = false;
+            bool err = false;
             try { rdict.Values.Add("Fifty-one"); }
             catch { err = true; }
             Assert.IsTrue(err, "Values.Add(Key) was writable for a readonly dictionary");
