@@ -54,7 +54,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CommandLine\CommandLineTest.cs" />
-    <Compile Include="Datastructures\ReadOnlyDictionaryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

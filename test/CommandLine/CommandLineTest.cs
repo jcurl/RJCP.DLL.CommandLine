@@ -11,281 +11,319 @@ namespace RJCP.Core.CommandLine
     [TestClass]
     public class CommandLineTest
     {
-        [TestMethod]
-        [TestCategory("CommandLine")]
-        public void CmdLine_SingleOption_Optional()
+        private class NoArguments
         {
-            Option[] optlist = {
-                new Option('l', "longoption")
-            };
+            public bool NoOption;
+        }
+        
+        private class OptionalArguments
+        {
+            [Option('a', "along", false)]
+            public bool OptionA;
 
-            // No command line
-            string[] args1 = new string[0];
-            Options options = new Options(optlist, args1);
-            Assert.AreEqual(0, options.RawOptions.Keys.Count);
+            [Option('b', "blong", false)]
+            public bool OptionB;
 
-            // Command line, short option
-            string[] args2 = { "-l" };
-            options = new Options(optlist, args2);
-            Assert.IsNull(options.RawOptions["longoption"]);
+            [Option('c', "clong", false)]
+            public string OptionC;
+        }
 
-            // Command line, long option
-            string[] args3 = { "--longoption" };
-            options = new Options(optlist, args3);
-            Assert.IsNull(options.RawOptions["longoption"]);
+        private class RequiredArguments
+        {
+            [Option('i', "insensitive")]
+            private bool m_CaseInsensitive;
+
+            [Option('f', "printfiles")]
+            private bool m_PrintFiles;
+
+            [Option('s', "search")]
+            private string m_SearchString;
+
+            public bool CaseInsensitive { get { return m_CaseInsensitive; } }
+
+            public bool PrintFiles { get { return m_PrintFiles; } }
+
+            public string SearchString { get { return m_SearchString;  } }
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_SingleOption_Required()
+        public void CmdLineUnix_NullArguments()
         {
-            Options options;
-
-            Option[] optlist = {
-                new Option('l', "longoption", OptRequired.Required)
-            };
-
-            // No command line
-            try {
-                string[] args1 = new string[0];
-                options = new Options(optlist, args1);
-                Assert.Fail("Required Option didn't throw exception");
-            } catch (System.Exception ex) {
-                if (ex is AssertFailedException) throw;
-            }
-
-            // Command line, short option
-            string[] args2 = { "-l" };
-            options = new Options(optlist, args2);
-            Assert.IsNull(options.RawOptions["longoption"]);
-
-            // Command line, long option
-            string[] args3 = { "--longoption" };
-            options = new Options(optlist, args3);
-            Assert.IsNull(options.RawOptions["longoption"]);
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(null);
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_SingleOption_LongOption_NoParameterRequired()
+        public void CmdLineUnix_NoArguments()
         {
-            Option[] optlist = {
-                new Option('l', "longoption", OptRequired.Required)
-            };
-
-            // No parameters
-            string[] args1 = { "--longoption" };
-            Options options = new Options(optlist, args1);
-            Assert.IsNull(options.RawOptions["longoption"]);
-
-            // Empty Parameter
-            try {
-                string[] args2 = { "--longoption=" };
-                options = new Options(optlist, args2);
-                Assert.Fail("Exception expected when passing a parameter for parameterless option");
-            } catch (System.Exception ex) {
-                if (ex is AssertFailedException) throw;
-            }
-
-            // Empty Parameter
-            try {
-                string[] args2 = { "--longoption=foo" };
-                options = new Options(optlist, args2);
-                Assert.Fail("Exception expected when passing a parameter for parameterless option");
-            } catch (System.Exception ex) {
-                if (ex is AssertFailedException) throw;
-            }
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new string[0]);
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_SingleOption_LongOption_ParameterRequired()
+        public void CmdLineUnix_NullArgumentsEmptyOptions()
         {
-            Options options;
-
-            Option[] optlist1 = {
-                new Option('l', "longoption", OptRequired.Required, OptParamRequired.Required, OptParamType.String)
-            };
-
-            // No parameters
-            try {
-                string[] args1 = { "--longoption" };
-                options = new Options(optlist1, args1);
-                Assert.Fail("Exception expected as no parameter provided");
-            } catch (System.Exception ex) {
-                if (ex is AssertFailedException) throw;
-            }
-
-            // Empty Parameter
-            string[] args2 = { "--longoption=" };
-            options = new Options(optlist1, args2);
-            Assert.AreEqual("", options.RawOptions["longoption"]);
-
-            // Full Parameter
-            string[] args3 = { "--longoption=foo" };
-            options = new Options(optlist1, args3);
-            Assert.AreEqual("foo", options.RawOptions["longoption"]);
-
-            // Full Parameter
-            string[] args4 = { "--longoption", "foobar" };
-            options = new Options(optlist1, args4);
-            Assert.AreEqual("foobar", options.RawOptions["longoption"]);
+            NoArguments myOptions = new NoArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(null);
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_SingleOption_LongOption_ParameterOptional()
+        public void CmdLineUnix_NoArgumentsEmptyOptions()
         {
-            Option[] optlist1 = {
-                new Option('l', "longoption", OptRequired.Required, OptParamRequired.Optional, OptParamType.String)
-            };
-
-            // No parameters
-            string[] args1 = { "--longoption" };
-            Options options = new Options(optlist1, args1);
-            Assert.IsNull(options.RawOptions["longoption"]);
-
-            // Empty Parameter
-            string[] args2 = { "--longoption=" };
-            options = new Options(optlist1, args2);
-            Assert.AreEqual("", options.RawOptions["longoption"]);
-
-            // Full Parameter
-            string[] args3 = { "--longoption=foo" };
-            options = new Options(optlist1, args3);
-            Assert.AreEqual("foo", options.RawOptions["longoption"]);
-
-            // Full Parameter
-            string[] args4 = { "--longoption", "foobar" };
-            options = new Options(optlist1, args4);
-            Assert.AreEqual("foobar", options.RawOptions["longoption"]);
+            NoArguments myOptions = new NoArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new string[0]);
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_UnsupportedOption()
+        public void CmdLineUnix_SingleShortOption()
         {
-            Option[] optlist1 = {
-                new Option('l', "longoption", OptRequired.Optional, OptParamRequired.Optional, OptParamType.String)
-            };
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] {"-a"});
 
-            // No parameters
-            string[] args1 = { "--longoption" };
-            Options options = new Options(optlist1, args1);
-            Assert.IsNull(options.RawOptions["longoption"]);
-
-            // Unknown Option
-            // No parameters
-            try {
-                string[] args2 = { "--verylongtoption" };
-                options = new Options(optlist1, args2);
-                Assert.Fail("Unknown option didn't raise an exception");
-            } catch (System.Exception ex) {
-                if (ex is AssertFailedException) throw;
-            }
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.IsNull(myOptions.OptionC);
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_RemainingArguments()
+        public void CmdLineUnix_ShortOptionsJoined()
         {
-            Option[] optlist1 = {
-                new Option('l', "longoption", OptRequired.Optional, OptParamRequired.Optional, OptParamType.String)
-            };
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-ab" });
 
-            // No parameters
-            string[] args1 = { "--longoption" };
-            Options options = new Options(optlist1, args1);
-            Assert.IsNull(options.RawOptions["longoption"]);
-            Assert.AreEqual(0, options.RemainingArguments.Length);
-
-            // No parameters, remaining arguments
-            string[] args2 = { "--longoption", "--", "File1" };
-            options = new Options(optlist1, args2);
-            Assert.IsNull(options.RawOptions["longoption"]);
-            Assert.AreEqual(1, options.RemainingArguments.Length);
-
-            // No parameters, remaining arguments
-            string[] args3 = { "--longoption", "--" };
-            options = new Options(optlist1, args3);
-            Assert.IsNull(options.RawOptions["longoption"]);
-            Assert.AreEqual(0, options.RemainingArguments.Length);
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.IsNull(myOptions.OptionC);
         }
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLine_MultipleShortOptions()
+        public void CmdLineUnix_ShortOptionsSeparated()
         {
-            Option[] optlist = {
-                new Option('a', "optiona", OptRequired.Optional, OptParamRequired.Optional, OptParamType.String),
-                new Option('b', "optionb", OptRequired.Optional, OptParamRequired.None, OptParamType.None),
-                new Option('c', "optionc", OptRequired.Optional, OptParamRequired.Optional, OptParamType.String),
-                new Option('d', "optiond", OptRequired.Optional, OptParamRequired.None, OptParamType.None),
-                new Option('e', "optione", OptRequired.Optional, OptParamRequired.Optional, OptParamType.String),
-                new Option('f', "optionf", OptRequired.Optional, OptParamRequired.None, OptParamType.None)
-            };
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-a", "-b" });
 
-            // No options, just normal arguments
-            string[] args1 = { "file1", "file2" };
-            Options options = new Options(optlist, args1);
-            Assert.AreEqual(0, options.RawOptions.Count);
-            Assert.AreEqual(2, options.RemainingArguments.Length);
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.IsNull(myOptions.OptionC);
+        }
 
-            // All optional arguments without parameters
-            string[] args2 = { "-bdf" };
-            options = new Options(optlist, args2);
-            Assert.AreEqual(3, options.RawOptions.Count);
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsStringOneArg()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-cfoo" });
 
-            // All optional arguments without parameters
-            string[] args3 = { "-bdf", "file1" };
-            options = new Options(optlist, args3);
-            Assert.AreEqual(3, options.RawOptions.Count);
-            Assert.AreEqual(1, options.RemainingArguments.Length);
+            Assert.IsFalse(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.AreEqual("foo", myOptions.OptionC);
+        }
 
-            // All optional arguments without parameters
-            string[] args4 = { "-bdf", "--", "-ace", "file1" };
-            options = new Options(optlist, args4);
-            Assert.AreEqual(3, options.RawOptions.Count);
-            Assert.AreEqual(2, options.RemainingArguments.Length);
-            Assert.AreEqual("-ace", options.RemainingArguments[0]);
-            Assert.AreEqual("file1", options.RemainingArguments[1]);
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsStringTwoArgs()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-c", "foo" });
 
-            // A single option that requires an optional argument
-            string[] args5 = { "-abd", "--", "arg1" };
-            options = new Options(optlist, args5);
-            Assert.AreEqual(3, options.RawOptions.Count);
-            Assert.IsNull(options.RawOptions["optiona"]);
-            Assert.IsNull(options.RawOptions["optionb"]);
-            Assert.IsNull(options.RawOptions["optiond"]);
-            Assert.AreEqual(1, options.RemainingArguments.Length);
-            Assert.AreEqual("arg1", options.RemainingArguments[0]);
+            Assert.IsFalse(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.AreEqual("foo", myOptions.OptionC);
+        }
 
-            // A single option that requires an optional argument
-            string[] args6 = { "-abd", "arg1" };
-            options = new Options(optlist, args6);
-            Assert.AreEqual(3, options.RawOptions.Count);
-            Assert.AreEqual("arg1", options.RawOptions["optiona"]);
-            Assert.IsNull(options.RawOptions["optionb"]);
-            Assert.IsNull(options.RawOptions["optiond"]);
-            Assert.AreEqual(0, options.RemainingArguments.Length);
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsStringOneArgJoined()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-abcfoo" });
 
-            // Ambiguous options
-            try {
-                string[] args7 = { "-adc", "arg1", "arg2" };
-                options = new Options(optlist, args7);
-                Assert.Fail("Ambiguous options accepted");
-            } catch (System.Exception e) {
-                if (e is AssertFailedException) throw;
-            }
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("foo", myOptions.OptionC);
+        }
 
-            // Undefined option
-            try {
-                string[] args7 = { "-adx", "arg1", "arg2" };
-                options = new Options(optlist, args7);
-                Assert.Fail("Undefined options -x accepted");
-            } catch (System.Exception e) {
-                if (e is AssertFailedException) throw;
-            }
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsStringTwoArgsJoined1()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-abc", "foo" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("foo", myOptions.OptionC);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsStringTwoArgsJoined2()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-cab", "foo" });
+
+            Assert.IsFalse(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.AreEqual("ab", myOptions.OptionC);
+            Assert.AreEqual(1, options.Arguments.Count);
+            Assert.AreEqual("foo", options.Arguments[0]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsRequired()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-ifs", "string" });
+
+            Assert.IsTrue(myOptions.CaseInsensitive);
+            Assert.IsTrue(myOptions.PrintFiles);
+            Assert.AreEqual("string", myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsRequiredOneArgument1()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-ifsstring" });
+
+            Assert.IsTrue(myOptions.CaseInsensitive);
+            Assert.IsTrue(myOptions.PrintFiles);
+            Assert.AreEqual("string", myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsRequiredOneArgument2()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-if", "-sstring" });
+
+            Assert.IsTrue(myOptions.CaseInsensitive);
+            Assert.IsTrue(myOptions.PrintFiles);
+            Assert.AreEqual("string", myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsRequiredOneArgument3()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-if", "-s=string" });
+
+            Assert.IsTrue(myOptions.CaseInsensitive);
+            Assert.IsTrue(myOptions.PrintFiles);
+            Assert.AreEqual("string", myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionMissingArgumentException))]
+        public void CmdLineUnix_ShortOptionsRequiredMissingArgument()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-ifs" });
+
+            Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_LongOptionOneArgument()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "--search=string" });
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("string", myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_LongOptionTwoArguments()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "--search", "string" });
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("string", myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionUnknownException))]
+        public void CmdLineUnix_UnknownOption1()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "--search", "string", "-ab", "-c" });
+
+            Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionUnknownException))]
+        public void CmdLineUnix_UnknownOption2()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-dabc" });
+
+            Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionUnknownException))]
+        public void CmdLineUnix_UnknownLongOption()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "--foobar" });
+
+            Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionException))]
+        public void CmdLineUnix_ExtraArgument()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(myOptions);
+            options.ParseCommandLine(new[] { "-ab", "argument", "-c" });
+
+            Assert.Fail("Exception not thrown");
         }
     }
 }
