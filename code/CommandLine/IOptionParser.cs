@@ -17,5 +17,11 @@
         /// </summary>
         /// <value><c>true</c> if long options are case insensitive; otherwise, <c>false</c>.</value>
         bool LongOptionCaseInsenstive { get; }
+
+        /// <summary>
+        /// Gets the list separator character when assigning to lists.
+        /// </summary>
+        /// <value>The list separator character.</value>
+        char ListSeparator { get; }
     }
 }

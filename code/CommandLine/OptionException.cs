@@ -324,4 +324,88 @@
         /// <value>The option that was unknown.</value>
         public string Options { get; private set; }
     }
+
+    /// <summary>
+    /// An option was specified on the command line multiple times and it's not a list type.
+    /// </summary>
+    [Serializable]
+    public class OptionAssignedException : OptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAssignedException"/> class.
+        /// </summary>
+        public OptionAssignedException() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAssignedException" /> class with a specified error message.
+        /// </summary>
+        /// <param name="options">The options missing.</param>
+        public OptionAssignedException(string option)
+            : base("Option '" + option + "' provided multiple times")
+        {
+            Option = option;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAssignedException" /> class with a specified error
+        ///  message and a reference to the inner exception that is the cause of this exception.
+        /// </summary>
+        /// <param name="options">The options missing.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception,
+        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        public OptionAssignedException(string option, Exception innerException)
+            : base("Option '" + option + "' provided multiple times", innerException)
+        {
+            Option = option;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAssignedException"/> class.
+        /// </summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="options">The options missing.</param>
+        public OptionAssignedException(string option, string message)
+            : base(message)
+        {
+            Option = option;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAssignedException" /> class with serialized data.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        ///  that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        ///  that contains contextual information about the source or destination.</param>
+        protected OptionAssignedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Option = info.GetString("option");
+        }
+
+        /// <summary>
+        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// with information about the exception.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> 
+        ///  that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        ///  that contains contextual information about the source or destination.</param>
+        /// <PermissionSet>
+        ///   <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*" />
+        ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter" />
+        /// </PermissionSet>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            // Serialize our new property, call the base
+            info.AddValue("option", Option);
+            base.GetObjectData(info, context);
+        }
+
+        /// <summary>
+        /// Gets the option that was unknown
+        /// </summary>
+        /// <value>The option that was unknown.</value>
+        public string Option { get; private set; }
+    }
 }

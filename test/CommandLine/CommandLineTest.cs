@@ -70,6 +70,17 @@ namespace RJCP.Core.CommandLine
             public string OptionC { get; set; }
         }
 
+        private class ListOptions
+        {
+            public ListOptions()
+            {
+                List = new List<string>();
+            }
+
+            [Option('l', "list", false)]
+            public List<string> List { get; private set; }
+        }
+
         [TestMethod]
         [TestCategory("CommandLine")]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -430,6 +441,106 @@ namespace RJCP.Core.CommandLine
             options.ParseCommandLine(new[] { "-ab", "argument", "-c" });
 
             Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOption()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", "test1,test2,test3" });
+
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2", myOptions.List[1]);
+            Assert.AreEqual("test3", myOptions.List[2]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOptionMultipleArguments()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", "test1", "-l", "test2", "-l", "test3" });
+
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2", myOptions.List[1]);
+            Assert.AreEqual("test3", myOptions.List[2]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOptionEscaped()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", @"te\st1", "-l", @"tes\t2", "-l", @"\test3" });
+
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2", myOptions.List[1]);
+            Assert.AreEqual("test3", myOptions.List[2]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOptionQuoted1()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", @"test1,'test2','test 3'" });
+
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2", myOptions.List[1]);
+            Assert.AreEqual("test 3", myOptions.List[2]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOptionQuoted2()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", @"test1,'test2,test3b','test 3'" });
+
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2,test3b", myOptions.List[1]);
+            Assert.AreEqual("test 3", myOptions.List[2]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionException))]
+        public void CmdLineUnix_ListOptionQuotedInvalid1()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", @"test1,'test2,test3b','test 3'x" });
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionException))]
+        public void CmdLineUnix_ListOptionQuotedInvalid2()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", @"test1,test2,testx\" });
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionException))]
+        public void CmdLineUnix_ListOptionQuotedInvalid3()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", "test1,test2,\"test3" });
         }
     }
 }

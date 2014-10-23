@@ -1,12 +1,13 @@
 ﻿// TODO:
-// * Support setting properties that are lists. Arguments are either separated with colon ':' (Windows)
-//   or comma ',' (Unix).
-// * Implement Windows flavour
-// * Implement Help Usage
+// * Implement Windows flavour.
+// * Implement Help Usage.
+// * How are command line options quoted?
+// * Trim command line arguments
 
 namespace RJCP.Core.CommandLine
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -66,6 +67,16 @@ namespace RJCP.Core.CommandLine
             public FieldInfo Field { get; set; }
             public PropertyInfo Property { get; set; }
             public bool Set { get; set; }
+
+            public bool IsList
+            {
+                get
+                {
+                    if (Field != null && typeof(IList).IsAssignableFrom(Field.FieldType)) return true;
+                    if (Property != null && typeof(IList).IsAssignableFrom(Property.PropertyType)) return true;
+                    return false;
+                }
+            }
 
             public bool ExpectsValue
             {
@@ -262,7 +273,7 @@ namespace RJCP.Core.CommandLine
             if (optionData.ExpectsValue) {
                 OptionToken argumentToken = parser.GetToken(true);
                 if (argumentToken == null) throw new OptionMissingArgumentException(value);
-                SetOption(optionData, argumentToken.Value);
+                SetOption(parser, optionData, argumentToken.Value);
             } else {
                 // This is a boolean type. We can only set it to true.
                 SetBoolean(optionData, true);
@@ -280,7 +291,7 @@ namespace RJCP.Core.CommandLine
             if (optionData.ExpectsValue) {
                 OptionToken argumentToken = parser.GetToken(true);
                 if (argumentToken == null) throw new OptionMissingArgumentException(value);
-                SetOption(optionData, argumentToken.Value);
+                SetOption(parser, optionData, argumentToken.Value);
             } else {
                 // This is a boolean type. We can only set it to true.
                 SetBoolean(optionData, true);
@@ -289,12 +300,23 @@ namespace RJCP.Core.CommandLine
             optionData.Set = true;
         }
 
-        private void SetOption(OptionData optionData, string value)
+        private void SetOption(IOptionParser parser, OptionData optionData, string value)
         {
+            if (optionData.IsList) {
+                IList list = null;
+                if (optionData.Field != null) list = (IList)optionData.Field.GetValue(m_Options);
+                if (optionData.Property != null) list = (IList)optionData.Property.GetValue(m_Options, null);
+                SplitList(list, parser.ListSeparator, value);
+                return;
+            }
+
+            if (optionData.Set) throw new OptionAssignedException(value);
+
             if (optionData.Field != null) {
                 optionData.Field.SetValue(m_Options, ChangeType(value, optionData.Field.FieldType));
                 return;
             }
+
             if (optionData.Property != null) {
                 optionData.Property.SetValue(m_Options, ChangeType(value, optionData.Property.PropertyType), null);
                 return;
@@ -311,6 +333,66 @@ namespace RJCP.Core.CommandLine
                 optionData.Property.SetValue(m_Options, value, null);
                 return;
             }
+        }
+
+        private void SplitList(IList list, char separationChar, string value)
+        {
+            StringBuilder sb = new StringBuilder();
+            char quote = (char)0;
+            int schar = 0;
+            bool escape = false;
+            bool quoted = false;
+
+            for (int i = 0; i < value.Length; i++) {
+                char c = value[i];
+                if (escape) {
+                    escape = false;
+                    continue;
+                }
+                if (c == '\\') {
+                    // Copy from 'schar' to this character to cut out the
+                    // escape character.
+                    sb.Append(value.Substring(schar, i - schar));
+                    escape = true;
+                    schar = i + 1;
+                    continue;
+                }
+                if (c == '\'' || c == '\"') {
+                    if (quote == 0) {
+                        // Begin a quote
+                        schar = i + 1;
+                        quote = value[i];
+                        quoted = true;
+                        continue;
+                    }
+                    if (quote == value[i]) {
+                        // End of the quote
+                        sb.Append(value.Substring(schar, i - schar));
+                        schar = i + 1;
+                        quote = (char)0;
+                        continue;
+                    }
+                }
+                if (c == separationChar && quote == (char)0) {
+                    sb.Append(value.Substring(schar, i - schar));
+                    list.Add(sb.ToString());
+                    sb.Clear();
+                    schar = i + 1;
+                    quoted = false;
+                    continue;
+                }
+
+                if (quote == (char)0 && quoted) 
+                    throw new OptionException("Invalid data after quoted list, expect '" + separationChar + "' only");
+            }
+
+            if (escape) throw new OptionException("Invalid list, unfinished escape sequence");
+
+            if (quote != (char)0) throw new OptionException("Missing quote in list");
+
+            // Add the trailing option
+            sb.Append(value.Substring(schar));
+            list.Add(sb.ToString());
         }
 
         private void ParseOption(IOptionParser parser, string value)

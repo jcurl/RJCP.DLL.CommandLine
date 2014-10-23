@@ -41,6 +41,8 @@
 
         public bool LongOptionCaseInsenstive { get { return true; } }
 
+        public char ListSeparator { get { return ','; } }
+
         private bool m_ArgumentsOnly;
         private int m_ArgumentPosition;
         private int m_ArgumentCharPosition = -1;
