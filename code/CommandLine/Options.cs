@@ -46,7 +46,6 @@ namespace RJCP.Core.CommandLine
         {
             if (options == null) throw new ArgumentNullException("options");
             m_Options = options;
-            BuildOptionList();
         }
 
         /// <summary>
@@ -59,7 +58,6 @@ namespace RJCP.Core.CommandLine
             if (options == null) throw new ArgumentNullException("options");
             OptionsStyle = style;
             m_Options = options;
-            BuildOptionList();
         }
 
         private class OptionData
@@ -84,7 +82,7 @@ namespace RJCP.Core.CommandLine
         private Dictionary<char, OptionData> m_ShortOptionList = new Dictionary<char, OptionData>();
         private List<OptionData> m_OptionList = new List<OptionData>();
 
-        private void BuildOptionList()
+        private void BuildOptionList(bool longOptionCaseInsensitive)
         {
             foreach (FieldInfo field in m_Options.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)) {
                 OptionAttribute attribute = GetAttribute<OptionAttribute>(field);
@@ -94,7 +92,7 @@ namespace RJCP.Core.CommandLine
 
                     OptionData optionData = new OptionData();
                     optionData.Field = field;
-                    AddOption(optionData, attribute);
+                    AddOption(optionData, attribute, longOptionCaseInsensitive);
                 }
             }
 
@@ -106,20 +104,23 @@ namespace RJCP.Core.CommandLine
 
                     OptionData optionData = new OptionData();
                     optionData.Property = property;
-                    AddOption(optionData, attribute);
+                    AddOption(optionData, attribute, longOptionCaseInsensitive);
                 }
             }
 
         }
 
-        private void AddOption(OptionData optionData, OptionAttribute attribute)
+        private void AddOption(OptionData optionData, OptionAttribute attribute, bool longOptionCaseInsensitive)
         {
             optionData.OptionAttribute = attribute;
             m_OptionList.Add(optionData);
 
             m_ShortOptionList.Add(attribute.ShortOption, optionData);
             if (attribute.LongOption != null) {
-                m_LongOptionList.Add(attribute.LongOption, optionData);
+                string longOption = longOptionCaseInsensitive
+                    ? attribute.LongOption.ToLowerInvariant()
+                    : attribute.LongOption;
+                m_LongOptionList.Add(longOption, optionData);
             }
         }
 
@@ -186,6 +187,8 @@ namespace RJCP.Core.CommandLine
             OptionToken lastToken = null;
             OptionToken lastOptionToken = null;
             IOptionParser parser = new UnixOptionParser(arguments);
+
+            BuildOptionList(parser.LongOptionCaseInsenstive);
 
             do {
                 token = parser.GetToken(false);
@@ -271,7 +274,8 @@ namespace RJCP.Core.CommandLine
         private void ParseLongOption(IOptionParser parser, string value)
         {
             OptionData optionData;
-            if (!m_LongOptionList.TryGetValue(value, out optionData)) throw new OptionUnknownException(value);
+            string option = parser.LongOptionCaseInsenstive ? value.ToLowerInvariant() : value;
+            if (!m_LongOptionList.TryGetValue(option, out optionData)) throw new OptionUnknownException(value);
 
             if (optionData.ExpectsValue) {
                 OptionToken argumentToken = parser.GetToken(true);

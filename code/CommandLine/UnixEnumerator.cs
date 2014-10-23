@@ -39,6 +39,8 @@
             return null;
         }
 
+        public bool LongOptionCaseInsenstive { get { return true; } }
+
         private bool m_ArgumentsOnly;
         private int m_ArgumentPosition;
         private int m_ArgumentCharPosition = -1;

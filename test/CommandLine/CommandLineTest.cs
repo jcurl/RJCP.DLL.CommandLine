@@ -46,12 +46,44 @@ namespace RJCP.Core.CommandLine
             public string SearchString { get { return m_SearchString;  } }
         }
 
+        private class PropertyOptions
+        {
+            [Option('a', "along", false)]
+            public bool OptionA { get; set; }
+
+            [Option('b', "blong", false)]
+            public bool OptionB { get; set; }
+
+            [Option('c', "clong", false)]
+            public string OptionC { get; set; }
+        }
+
+        private class RequiredOptions
+        {
+            [Option('a', "along", false)]
+            public bool OptionA { get; set; }
+
+            [Option('b', "blong", false)]
+            public bool OptionB { get; set; }
+
+            [Option('c', "clong", true)]
+            public string OptionC { get; set; }
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CmdLine_NullOptions()
+        {
+            Options options = new Options(null);
+        }
+
         [TestMethod]
         [TestCategory("CommandLine")]
         public void CmdLineUnix_NullArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(null);
         }
 
@@ -60,7 +92,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_NoArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new string[0]);
         }
 
@@ -69,7 +101,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_NullArgumentsEmptyOptions()
         {
             NoArguments myOptions = new NoArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(null);
         }
 
@@ -78,7 +110,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_NoArgumentsEmptyOptions()
         {
             NoArguments myOptions = new NoArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new string[0]);
         }
 
@@ -87,7 +119,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_SingleShortOption()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] {"-a"});
 
             Assert.IsTrue(myOptions.OptionA);
@@ -100,7 +132,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsJoined()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-ab" });
 
             Assert.IsTrue(myOptions.OptionA);
@@ -113,7 +145,20 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsSeparated()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-a", "-b" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.IsNull(myOptions.OptionC);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsOnProperties()
+        {
+            PropertyOptions myOptions = new PropertyOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-a", "-b" });
 
             Assert.IsTrue(myOptions.OptionA);
@@ -126,7 +171,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsStringOneArg()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-cfoo" });
 
             Assert.IsFalse(myOptions.OptionA);
@@ -139,8 +184,21 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsStringTwoArgs()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-c", "foo" });
+
+            Assert.IsFalse(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.AreEqual("foo", myOptions.OptionC);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ShortOptionsStringOneArgAssigned()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-c=foo" });
 
             Assert.IsFalse(myOptions.OptionA);
             Assert.IsFalse(myOptions.OptionB);
@@ -152,7 +210,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsStringOneArgJoined()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-abcfoo" });
 
             Assert.IsTrue(myOptions.OptionA);
@@ -165,7 +223,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsStringTwoArgsJoined1()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-abc", "foo" });
 
             Assert.IsTrue(myOptions.OptionA);
@@ -178,7 +236,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsStringTwoArgsJoined2()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-cab", "foo" });
 
             Assert.IsFalse(myOptions.OptionA);
@@ -193,7 +251,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsRequired()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-ifs", "string" });
 
             Assert.IsTrue(myOptions.CaseInsensitive);
@@ -206,7 +264,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsRequiredOneArgument1()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-ifsstring" });
 
             Assert.IsTrue(myOptions.CaseInsensitive);
@@ -219,7 +277,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsRequiredOneArgument2()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-if", "-sstring" });
 
             Assert.IsTrue(myOptions.CaseInsensitive);
@@ -232,7 +290,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsRequiredOneArgument3()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-if", "-s=string" });
 
             Assert.IsTrue(myOptions.CaseInsensitive);
@@ -246,7 +304,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ShortOptionsRequiredMissingArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-ifs" });
 
             Assert.Fail("Exception not thrown");
@@ -254,10 +312,33 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
+        [ExpectedException(typeof (OptionMissingException))]
+        public void CmdLineUnix_MissingOption()
+        {
+            RequiredOptions myOptions = new RequiredOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-ab" });
+
+            Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_RequiredOption()
+        {
+            RequiredOptions myOptions = new RequiredOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-c=bar" });
+
+            Assert.AreEqual("bar", myOptions.OptionC);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
         public void CmdLineUnix_LongOptionOneArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "--search=string" });
 
             Assert.IsFalse(myOptions.CaseInsensitive);
@@ -270,7 +351,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_LongOptionTwoArguments()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "--search", "string" });
 
             Assert.IsFalse(myOptions.CaseInsensitive);
@@ -280,11 +361,36 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionMissingArgumentException))]
+        public void CmdLineUnix_LongOptionsRequiredMissingArgument()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "--search" });
+
+            Assert.Fail("Exception not thrown");
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_LongOptionsBoolean()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "--printfiles" });
+
+            Assert.IsTrue(myOptions.PrintFiles);
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsNull(myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownOption1()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "--search", "string", "-ab", "-c" });
 
             Assert.Fail("Exception not thrown");
@@ -296,7 +402,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_UnknownOption2()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-dabc" });
 
             Assert.Fail("Exception not thrown");
@@ -308,7 +414,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_UnknownLongOption()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "--foobar" });
 
             Assert.Fail("Exception not thrown");
@@ -320,7 +426,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineUnix_ExtraArgument()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = new Options(myOptions);
+            Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-ab", "argument", "-c" });
 
             Assert.Fail("Exception not thrown");
