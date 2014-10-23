@@ -2,6 +2,7 @@
 // * Support setting properties that are lists. Arguments are either separated with colon ':' (Windows)
 //   or comma ',' (Unix).
 // * Implement Windows flavour
+// * Implement Help Usage
 
 namespace RJCP.Core.CommandLine
 {
@@ -72,8 +73,8 @@ namespace RJCP.Core.CommandLine
             {
                 get
                 {
-                    if (Field == null) return false;
-                    if (Field.FieldType == typeof(bool)) return false;
+                    if (Field != null && Field.FieldType == typeof(bool)) return false;
+                    if (Property != null && Property.PropertyType == typeof(bool)) return false;
                     return true;
                 }
             }
