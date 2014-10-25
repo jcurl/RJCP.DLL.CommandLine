@@ -2,7 +2,6 @@
 // * Implement Windows flavour.
 // * Implement Help Usage.
 // * How are command line options quoted?
-// * Trim command line arguments
 
 namespace RJCP.Core.CommandLine
 {
