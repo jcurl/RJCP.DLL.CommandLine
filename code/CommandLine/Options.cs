@@ -2,6 +2,9 @@
 // * Implement Windows flavour.
 // * Implement Help Usage.
 // * How are command line options quoted?
+// * string types may be optional, where if no argument provided, it's set to string.empty.
+// * Allow long options without short options
+//
 
 namespace RJCP.Core.CommandLine
 {
@@ -34,6 +37,50 @@ namespace RJCP.Core.CommandLine
     /// <summary>
     /// Object to parse the command line options and set the fields within the class provided in the constructor.
     /// </summary>
+    /// <remarks>
+    /// To parse command line options, create a new class of your choosing that should contain the results of
+    /// command line parsing. You should define a set of properties and fields. It's those properties and fields
+    /// which will be set by this class when parsing the command line.
+    /// <para>The properties and fields may have any kind of visibility you need, e.g. <c>public</c>, <c>private</c>,
+    /// <c>internal</c>, <c>internal protected</c> or <c>protected</c> when using C#. Even the <c>private</c> fields
+    /// can be set through reflection.</para>
+    /// <para>Instantiate your class and then pass the reference to the method <see cref="ParseCommandLine"/> with
+    /// the command line parameters provided by the main entry point.</para>
+    /// <example>
+    /// <code>
+    /// using System;
+    /// namespace CommandLineTest {
+    ///   class Program {
+    ///     static void Main(string[] args) {
+    ///       CmdLineOptions myOptions = new CmdLineOptions();
+    ///       Options options = new Options(OptionsStyle.Unix, myOptions);
+    ///       options.ParseCommandLine(args);
+    ///     }
+    ///   }
+    /// }
+    /// </code>
+    /// </example>
+    /// <para>The class <c>CmdLineOptions</c> needs to be defined by your project. Properties that should
+    /// be set are decorated with the <see cref="OptionAttribute"/> attribute.</para>
+    /// <example>
+    /// <code>
+    /// private class CmdLineOptions {
+    ///   [Option('a', "along", false)]
+    ///   public bool OptionA;
+    ///
+    ///   [Option('b', "blong", false)]
+    ///   public bool OptionB;
+    ///
+    ///   [Option('c', "clong", false)]
+    ///   public string OptionC;
+    /// }
+    /// </code>
+    /// </example>
+    /// <para>So if your program is given the option "-a", the property <c>CmdLineOptions.OptionA</c> is automatically
+    /// set to <c>true</c>. The variable <c>OptionC</c> is set to the argument that follows, e.g. <c>-c mystring</c>.</para>
+    /// <para>Properties with the type <c>boolean</c> may not have arguments and are always set to <c>true</c> when
+    /// provided. All types except <c>boolean</c> types expect an argument.</para>
+    /// </remarks>
     public class Options
     {
         private object m_Options;
