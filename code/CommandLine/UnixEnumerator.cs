@@ -95,6 +95,7 @@
 
                     // The string -- occurs alone, don't parse any further options. They're all arguments
                     m_ArgumentsOnly = true;
+                    m_ArgumentPosition++;
                     return;
                 }
 

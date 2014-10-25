@@ -542,5 +542,20 @@ namespace RJCP.Core.CommandLine
             Options options = new Options(OptionsStyle.Unix, myOptions);
             options.ParseCommandLine(new[] { "-l", "test1,test2,\"test3" });
         }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_StopParsing()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-abc", "argument", "--", "-c" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("argument", myOptions.OptionC);
+            Assert.AreEqual(1, options.Arguments.Count);
+            Assert.AreEqual("-c", options.Arguments[0]);
+        }
     }
 }
