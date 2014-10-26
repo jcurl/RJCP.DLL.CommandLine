@@ -96,7 +96,7 @@
 
         private void CheckShortOption(char shortOption)
         {
-            if (!char.IsLetter(shortOption))
+            if (char.IsWhiteSpace(shortOption))
                 throw new ArgumentException("Short option must be a letter", "shortOption");
         }
 
