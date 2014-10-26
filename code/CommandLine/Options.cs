@@ -1,9 +1,6 @@
 ﻿// TODO:
 // * Implement Windows flavour.
 // * Implement Help Usage.
-// * How are command line options quoted?
-// * string types may be optional, where if no argument provided, it's set to string.empty.
-//
 
 namespace RJCP.Core.CommandLine
 {
@@ -332,16 +329,7 @@ namespace RJCP.Core.CommandLine
             OptionData optionData;
             if (!m_ShortOptionList.TryGetValue(value[0], out optionData)) throw new OptionUnknownException(value);
 
-            if (optionData.ExpectsValue) {
-                OptionToken argumentToken = parser.GetToken(true);
-                if (argumentToken == null) throw new OptionMissingArgumentException(value);
-                SetOption(parser, optionData, argumentToken.Value);
-            } else {
-                // This is a boolean type. We can only set it to true.
-                SetBoolean(optionData, true);
-            }
-
-            optionData.Set = true;
+            ParseOptionParameter(parser, optionData, value);
         }
 
         private void ParseLongOption(IOptionParser parser, string value)
@@ -350,10 +338,26 @@ namespace RJCP.Core.CommandLine
             string option = parser.LongOptionCaseInsenstive ? value.ToLowerInvariant() : value;
             if (!m_LongOptionList.TryGetValue(option, out optionData)) throw new OptionUnknownException(value);
 
+            ParseOptionParameter(parser, optionData, value);
+        }
+
+        private void ParseOptionParameter(IOptionParser parser, OptionData optionData, string value)
+        {
             if (optionData.ExpectsValue) {
                 OptionToken argumentToken = parser.GetToken(true);
-                if (argumentToken == null) throw new OptionMissingArgumentException(value);
-                SetOption(parser, optionData, argumentToken.Value);
+                string argument;
+                if (argumentToken == null) {
+                    OptionDefaultAttribute defaultAttribute = null;
+                    if (optionData.Field != null)
+                        defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Field);
+                    if (optionData.Property != null)
+                        defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Property);
+                    if (defaultAttribute == null) throw new OptionMissingArgumentException(value);
+                    argument = defaultAttribute.DefaultValue;
+                } else {
+                    argument = argumentToken.Value;
+                }
+                SetOption(parser, optionData, argument);
             } else {
                 // This is a boolean type. We can only set it to true.
                 SetBoolean(optionData, true);

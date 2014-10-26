@@ -93,6 +93,19 @@ namespace RJCP.Core.CommandLine
             public string OptionC;
         }
 
+        private class DefaultValueOption
+        {
+            [Option('a', "along", false)]
+            public bool OptionA { get; set; }
+
+            [Option('b', "blong", false)]
+            public bool OptionB { get; set; }
+
+            [Option('v', "verbosity")]
+            [OptionDefault("0")]
+            public string Verbosity;
+        }
+
         [TestMethod]
         [TestCategory("CommandLine")]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -593,6 +606,110 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("argument", myOptions.OptionC);
             Assert.AreEqual(1, options.Arguments.Count);
             Assert.AreEqual("-c", options.Arguments[0]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueProvidedShort()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] {"-abv3"} );
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("3", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueProvidedShort2()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-abv", "3" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("3", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueShort()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-abv" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("0", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueShortProvidedExistingOption()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-avb" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.AreEqual("b", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueProvidedLongEquals()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-ab", "--verbosity=2" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("2", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueProvidedLong()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-ab", "--verbosity", "2" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("2", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueLong()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-ab", "--verbosity" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("0", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_DefaultValueLong2()
+        {
+            DefaultValueOption myOptions = new DefaultValueOption();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "--verbosity", "-ab" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsTrue(myOptions.OptionB);
+            Assert.AreEqual("0", myOptions.Verbosity);
         }
     }
 }

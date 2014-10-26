@@ -31,7 +31,7 @@
                         token.Token = OptionTokenKind.Value;
                         return token;
                     }
-                    // Didn't find a value/argument, which is an error
+                    // Didn't find a value/argument
                     return null;
                 }
                 return m_Tokens.Dequeue();
