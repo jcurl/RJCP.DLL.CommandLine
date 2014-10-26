@@ -80,6 +80,11 @@ namespace RJCP.Core.CommandLine
     /// set to <c>true</c>. The variable <c>OptionC</c> is set to the argument that follows, e.g. <c>-c mystring</c>.</para>
     /// <para>Properties with the type <c>boolean</c> may not have arguments and are always set to <c>true</c> when
     /// provided. All types except <c>boolean</c> types expect an argument.</para>
+    /// <note type="note">This application can only parse the command line that comes from Windows. In particular,
+    /// Windows removes any quoting which may result in unexpected behaviour. Such an example is <c>--foo="a,b",c</c>
+    /// which results in a single argument <c>--foo=a,b,c</c> which is indistiguishable from the command line
+    /// <c>--foo="a,b,c"</c> that also results in <c>--foo=a,b,c</c>. In this case, the user should use the single
+    /// tick for quoting.</note>
     /// </remarks>
     public class Options
     {
