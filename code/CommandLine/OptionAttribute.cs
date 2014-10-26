@@ -58,6 +58,29 @@
             CheckShortOption(shortOption);
             CheckLongOption(longOption);
             ShortOption = shortOption;
+            LongOption = longOption;
+            Required = required;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAttribute"/> class.
+        /// </summary>
+        /// <param name="longOption">The long option string (case insensitive).</param>
+        public OptionAttribute(string longOption)
+        {
+            CheckLongOption(longOption);
+            LongOption = longOption;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionAttribute"/> class.
+        /// </summary>
+        /// <param name="longOption">The long option string (case insensitive).</param>
+        /// <param name="required">Option will be made mandatory if <c>true</c>.</param>
+        public OptionAttribute(string longOption, bool required)
+        {
+            CheckLongOption(longOption);
+            LongOption = longOption;
             Required = required;
         }
 

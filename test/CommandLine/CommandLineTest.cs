@@ -81,6 +81,18 @@ namespace RJCP.Core.CommandLine
             public List<string> List { get; private set; }
         }
 
+        private class OptionalLongArguments
+        {
+            [Option("along")]
+            public bool OptionA;
+
+            [Option("blong")]
+            public bool OptionB;
+
+            [Option("clong")]
+            public string OptionC;
+        }
+
         [TestMethod]
         [TestCategory("CommandLine")]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -393,6 +405,31 @@ namespace RJCP.Core.CommandLine
             Assert.IsTrue(myOptions.PrintFiles);
             Assert.IsFalse(myOptions.CaseInsensitive);
             Assert.IsNull(myOptions.SearchString);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void cmdLineUnix_LongOptionOnly()
+        {
+            OptionalLongArguments myOptions = new OptionalLongArguments();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "--along" });
+
+            Assert.IsTrue(myOptions.OptionA);
+            Assert.IsFalse(myOptions.OptionB);
+            Assert.IsNull(myOptions.OptionC);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionUnknownException))]
+        public void cmdLineUnix_LongOptionOnlyShort()
+        {
+            OptionalLongArguments myOptions = new OptionalLongArguments();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-a" });
+
+            Assert.Fail("Exception not thrown");
         }
 
         [TestMethod]

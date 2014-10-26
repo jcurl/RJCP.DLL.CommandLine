@@ -3,7 +3,6 @@
 // * Implement Help Usage.
 // * How are command line options quoted?
 // * string types may be optional, where if no argument provided, it's set to string.empty.
-// * Allow long options without short options
 //
 
 namespace RJCP.Core.CommandLine
@@ -177,7 +176,9 @@ namespace RJCP.Core.CommandLine
             optionData.OptionAttribute = attribute;
             m_OptionList.Add(optionData);
 
-            m_ShortOptionList.Add(attribute.ShortOption, optionData);
+            if (attribute.ShortOption != (char) 0) {
+                m_ShortOptionList.Add(attribute.ShortOption, optionData);
+            }
             if (attribute.LongOption != null) {
                 string longOption = longOptionCaseInsensitive
                     ? attribute.LongOption.ToLowerInvariant()
@@ -189,6 +190,8 @@ namespace RJCP.Core.CommandLine
         [Conditional("DEBUG")]
         private void CheckShortOption(char shortOption)
         {
+            if (shortOption == (char) 0) return;
+
             if (m_ShortOptionList.ContainsKey(shortOption)) {
                 throw new OptionDuplicateException("Option '" + shortOption + "' was specified multiple times");
             }
@@ -310,6 +313,14 @@ namespace RJCP.Core.CommandLine
             StringBuilder sb = new StringBuilder();
             foreach (OptionData option in m_OptionList) {
                 if (option.OptionAttribute.Required && !option.Set) {
+                    if (sb.Length != 0) sb.Append(", ");
+                    if (option.OptionAttribute.ShortOption != (char) 0) {
+                        sb.Append("-").Append(option.OptionAttribute.ShortOption);
+                        if (option.OptionAttribute.LongOption != null) sb.Append("|");
+                    }
+                    if (option.OptionAttribute.LongOption != null) {
+                        sb.Append("--").Append(option.OptionAttribute.LongOption);
+                    }
                     sb.Append(option.OptionAttribute.ShortOption);
                 }
             }
