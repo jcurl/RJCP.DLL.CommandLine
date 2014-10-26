@@ -1,6 +1,5 @@
 ﻿// TODO:
 // * Implement Windows flavour.
-// * Implement Help Usage.
 
 namespace RJCP.Core.CommandLine
 {
@@ -252,118 +251,175 @@ namespace RJCP.Core.CommandLine
 
             BuildOptionList(parser.LongOptionCaseInsenstive);
 
-            do {
-                token = parser.GetToken(false);
-                if (token != null) {
-                    switch (token.Token) {
-                    case OptionTokenKind.ShortOption:
-                        if (m_Arguments.Count > 0) {
-                            if (lastOptionToken != null) {
-                                throw new OptionException("Unexpected option '" + token.Value +
-                                                          "', perhaps too many arguments after '" +
-                                                          lastOptionToken.Value + "'");
-                            }
-                            throw new OptionException("Unexpected option '" + token.Value + "'");
+            try {
+                do {
+                    token = parser.GetToken(false);
+                    if (token != null) {
+                        switch (token.Token) {
+                            case OptionTokenKind.ShortOption:
+                                if (m_Arguments.Count > 0) {
+                                    if (lastOptionToken != null) {
+                                        throw new OptionException("Unexpected option '" + token.ToString(parser) +
+                                                                  "', perhaps too many arguments after '" +
+                                                                  lastOptionToken.ToString(parser) + "'");
+                                    }
+                                    throw new OptionException("Unexpected option '" + token.ToString(parser) + "'");
+                                }
+                                ParseShortOption(parser, token);
+                                lastOptionToken = token;
+                                break;
+                            case OptionTokenKind.LongOption:
+                                if (m_Arguments.Count > 0) {
+                                    if (lastOptionToken != null) {
+                                        throw new OptionException("Unexpected option '" + token.ToString(parser) +
+                                                                  "', perhaps too many arguments after '" +
+                                                                  lastOptionToken.ToString(parser) + "'");
+                                    }
+                                    throw new OptionException("Unexpected option '" + token.ToString(parser) + "'");
+                                }
+                                ParseLongOption(parser, token);
+                                lastOptionToken = token;
+                                break;
+                            case OptionTokenKind.Option:
+                                if (m_Arguments.Count > 0) {
+                                    if (lastOptionToken != null) {
+                                        throw new OptionException("Unexpected option '" + token.ToString(parser) +
+                                                                  "', perhaps too many arguments after '" +
+                                                                  lastOptionToken.ToString(parser) + "'");
+                                    }
+                                    throw new OptionException("Unexpected option '" + token.ToString(parser) + "'");
+                                }
+                                ParseOption(parser, token);
+                                lastOptionToken = token;
+                                break;
+                            case OptionTokenKind.Argument:
+                                ParseArgument(parser, token);
+                                break;
+                            case OptionTokenKind.Value:
+                                if (lastToken != null) {
+                                    throw new OptionException("Unexpected value for option " +
+                                                              lastToken.ToString(parser) +
+                                                              " (argument " + token + ")");
+                                }
+                                throw new OptionException("Unexpected value " + token);
                         }
-                        ParseShortOption(parser, token.Value);
-                        lastOptionToken = token;
-                        break;
-                    case OptionTokenKind.LongOption:
-                        if (m_Arguments.Count > 0) {
-                            if (lastOptionToken != null) {
-                                throw new OptionException("Unexpected option \"" + token.Value +
-                                                          "\", perhaps too many arguments after '" +
-                                                          lastOptionToken.Value + "'");
-                            }
-                            throw new OptionException("Unexpected option \"" + token.Value + "\"");
-                        }
-                        ParseLongOption(parser, token.Value);
-                        lastOptionToken = token;
-                        break;
-                    case OptionTokenKind.Option:
-                        if (m_Arguments.Count > 0) {
-                            if (lastOptionToken != null) {
-                                throw new OptionException("Unexpected option '" + token.Value +
-                                                          "', perhaps too many arguments after '" +
-                                                          lastOptionToken.Value + "'");
-                            }
-                            throw new OptionException("Unexpected option '" + token.Value + "'");
-                        }
-                        ParseOption(parser, token.Value);
-                        lastOptionToken = token;
-                        break;
-                    case OptionTokenKind.Argument:
-                        ParseArgument(parser, token.Value);
-                        break;
-                    case OptionTokenKind.Value:
-                        if (lastToken != null) {
-                            throw new OptionException("Unexpected value for option " + lastToken.Value +
-                                                        " (argument " + token.Value + ")");
-                        }
-                        throw new OptionException("Unexpected value " + token.Value);
+                        lastToken = token;
                     }
-                    lastToken = token;
-                }
-            } while (token != null);
+                } while (token != null);
+            } catch (OptionUnknownException e) {
+                IOptions options = m_Options as IOptions;
+                if (options != null) options.InvalidOption(e.Option);
+                throw;
+            } catch (OptionMissingArgumentException e) {
+                IOptions options = m_Options as IOptions;
+                if (options != null) options.InvalidOption(e.Option);
+                throw;
+            } catch (OptionFormatException e) {
+                IOptions options = m_Options as IOptions;
+                if (options != null) options.InvalidOption(e.Option);
+                throw;
+            } catch (OptionException) {
+                IOptions options = m_Options as IOptions;
+                if (options != null) options.Usage();
+                throw;
+            }
 
             // Check that all mandatory options were provided
             StringBuilder sb = new StringBuilder();
+            List<string> optionList = new List<string>(); 
             foreach (OptionData option in m_OptionList) {
                 if (option.OptionAttribute.Required && !option.Set) {
-                    if (sb.Length != 0) sb.Append(", ");
-                    if (option.OptionAttribute.ShortOption != (char) 0) {
-                        sb.Append("-").Append(option.OptionAttribute.ShortOption);
-                        if (option.OptionAttribute.LongOption != null) sb.Append("|");
-                    }
-                    if (option.OptionAttribute.LongOption != null) {
-                        sb.Append("--").Append(option.OptionAttribute.LongOption);
-                    }
-                    sb.Append(option.OptionAttribute.ShortOption);
+                    MissingOption(parser,
+                        option.OptionAttribute.ShortOption, option.OptionAttribute.LongOption,
+                        sb, optionList);
                 }
             }
-            if (sb.Length > 0) throw new OptionMissingException(sb.ToString());
+            if (sb.Length > 0) {
+                IOptions options = m_Options as IOptions;
+                if (options != null) options.Missing(optionList);
+                throw new OptionMissingException(sb.ToString());
+            }
         }
 
-        private void ParseShortOption(IOptionParser parser, string value)
+        private void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, IList<string> missing)
+        {
+            if (message.Length != 0) message.Append(", ");
+
+            if (shortOption != (char) 0) {
+                message.Append(parser.ShortOptionPrefix).Append(shortOption);
+                if (missing != null) missing.Add(shortOption.ToString());
+            } else if (longOption != null) {
+                message.Append(parser.LongOptionCaseInsenstive).Append(longOption);
+                if (missing != null) missing.Add(longOption);
+            }
+        }
+
+        private void ParseShortOption(IOptionParser parser, OptionToken token)
         {
             OptionData optionData;
-            if (!m_ShortOptionList.TryGetValue(value[0], out optionData)) throw new OptionUnknownException(value);
+            if (!m_ShortOptionList.TryGetValue(token.Value[0], out optionData)) 
+                throw new OptionUnknownException(token.ToString(parser));
 
-            ParseOptionParameter(parser, optionData, value);
+            ParseOptionParameter(parser, optionData, token);
         }
 
-        private void ParseLongOption(IOptionParser parser, string value)
+        private void ParseLongOption(IOptionParser parser, OptionToken token)
         {
             OptionData optionData;
-            string option = parser.LongOptionCaseInsenstive ? value.ToLowerInvariant() : value;
-            if (!m_LongOptionList.TryGetValue(option, out optionData)) throw new OptionUnknownException(value);
+            string option = parser.LongOptionCaseInsenstive ? token.Value.ToLowerInvariant() : token.Value;
+            if (!m_LongOptionList.TryGetValue(option, out optionData))
+                throw new OptionUnknownException(token.ToString(parser));
 
-            ParseOptionParameter(parser, optionData, value);
+            ParseOptionParameter(parser, optionData, token);
         }
 
-        private void ParseOptionParameter(IOptionParser parser, OptionData optionData, string value)
+        private void ParseOption(IOptionParser parser, OptionToken token)
         {
-            if (optionData.ExpectsValue) {
-                OptionToken argumentToken = parser.GetToken(true);
-                string argument;
-                if (argumentToken == null) {
-                    OptionDefaultAttribute defaultAttribute = null;
-                    if (optionData.Field != null)
-                        defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Field);
-                    if (optionData.Property != null)
-                        defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Property);
-                    if (defaultAttribute == null) throw new OptionMissingArgumentException(value);
-                    argument = defaultAttribute.DefaultValue;
-                } else {
-                    argument = argumentToken.Value;
-                }
-                SetOption(parser, optionData, argument);
+            if (token.Value.Length == 1) {
+                ParseShortOption(parser, token);
             } else {
-                // This is a boolean type. We can only set it to true.
-                SetBoolean(optionData, true);
+                ParseLongOption(parser, token);
             }
+        }
 
-            optionData.Set = true;
+        private void ParseArgument(IOptionParser parser, OptionToken token)
+        {
+            m_Arguments.Add(token.Value);
+        }
+
+        private void ParseOptionParameter(IOptionParser parser, OptionData optionData, OptionToken token)
+        {
+            string argument = null;
+            try {
+                if (optionData.ExpectsValue) {
+                    OptionToken argumentToken = parser.GetToken(true);
+                    if (argumentToken == null) {
+                        OptionDefaultAttribute defaultAttribute = null;
+                        if (optionData.Field != null)
+                            defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Field);
+                        if (optionData.Property != null)
+                            defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Property);
+                        if (defaultAttribute == null)
+                            throw new OptionMissingArgumentException(token.ToString(parser));
+                        argument = defaultAttribute.DefaultValue;
+                    } else {
+                        argument = argumentToken.Value;
+                    }
+                    SetOption(parser, optionData, argument);
+                } else {
+                    // This is a boolean type. We can only set it to true.
+                    SetBoolean(optionData, true);
+                }
+
+                optionData.Set = true;
+            } catch (OptionException) {
+                throw;
+            } catch (System.Exception e) {
+                if (argument == null) {
+                    throw new OptionException("Error parsing option '" + token.ToString(parser) + "'");
+                }
+                throw new OptionFormatException(token.Value, "Wrong format '" + argument + "' given to option " + token.ToString(parser), e);
+            }
         }
 
         private void SetOption(IOptionParser parser, OptionData optionData, string value)
@@ -380,12 +436,8 @@ namespace RJCP.Core.CommandLine
 
             if (optionData.Field != null) {
                 optionData.Field.SetValue(m_Options, ChangeType(value, optionData.Field.FieldType));
-                return;
-            }
-
-            if (optionData.Property != null) {
+            } else if (optionData.Property != null) {
                 optionData.Property.SetValue(m_Options, ChangeType(value, optionData.Property.PropertyType), null);
-                return;
             }
         }
 
@@ -459,20 +511,6 @@ namespace RJCP.Core.CommandLine
             // Add the trailing option
             sb.Append(value.Substring(schar));
             list.Add(sb.ToString());
-        }
-
-        private void ParseOption(IOptionParser parser, string value)
-        {
-            if (value.Length == 1) {
-                ParseShortOption(parser, value);
-            } else {
-                ParseLongOption(parser, value);
-            }
-        }
-
-        private void ParseArgument(IOptionParser parser, string value)
-        {
-            m_Arguments.Add(value);
         }
 
         private static object ChangeType(string value, Type type)

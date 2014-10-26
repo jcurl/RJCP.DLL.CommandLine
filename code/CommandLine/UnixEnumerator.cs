@@ -15,6 +15,12 @@
             m_Arguments = arguments;
         }
 
+        public bool LongOptionCaseInsenstive { get { return true; } }
+        public char ListSeparator { get { return ','; } }
+        public string ShortOptionPrefix { get { return "-"; } }
+        public string LongOptionPrefix { get { return "--"; } }
+        public string OptionPrefix { get { return string.Empty; } }
+
         public OptionToken GetToken(bool expectValue)
         {
             if (m_Arguments == null) return null;
@@ -38,10 +44,6 @@
             }
             return null;
         }
-
-        public bool LongOptionCaseInsenstive { get { return true; } }
-
-        public char ListSeparator { get { return ','; } }
 
         private bool m_ArgumentsOnly;
         private int m_ArgumentPosition;

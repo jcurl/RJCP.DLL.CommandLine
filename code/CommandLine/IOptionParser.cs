@@ -23,5 +23,23 @@
         /// </summary>
         /// <value>The list separator character.</value>
         char ListSeparator { get; }
+
+        /// <summary>
+        /// The prefix for short options.
+        /// </summary>
+        /// <value>The short option prefix.</value>
+        string ShortOptionPrefix { get; }
+
+        /// <summary>
+        /// The prefix for long options.
+        /// </summary>
+        /// <value>The long option prefix.</value>
+        string LongOptionPrefix { get; }
+
+        /// <summary>
+        /// The prefix for generic options.
+        /// </summary>
+        /// <value>The option prefix.</value>
+        string OptionPrefix { get; }
     }
 }

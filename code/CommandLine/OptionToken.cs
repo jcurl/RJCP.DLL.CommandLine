@@ -58,5 +58,41 @@
         /// </summary>
         /// <value>The value associated with the token.</value>
         public string Value { get; private set; }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return Value;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        /// <remarks>
+        /// This method differs that the format of the string can change depending on
+        /// the parser being used.
+        /// </remarks>
+        public virtual string ToString(IOptionParser parser)
+        {
+            switch (Token) {
+            case OptionTokenKind.ShortOption:
+                return parser.ShortOptionPrefix + Value;
+            case OptionTokenKind.LongOption:
+                return parser.LongOptionPrefix + Value;
+            case OptionTokenKind.Option:
+                return parser.OptionPrefix + Value;
+            case OptionTokenKind.Argument:
+                return Value;
+            case OptionTokenKind.Value:
+                return Value;
+            default:
+                return Value;
+            }
+        }
     }
 }

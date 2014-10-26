@@ -106,6 +106,27 @@ namespace RJCP.Core.CommandLine
             public string Verbosity;
         }
 
+        private enum BasicColor
+        {
+            Red,
+            Green,
+            Blue,
+            Yellow,
+            Cyan,
+            Purple,
+            Black,
+            White
+        }
+
+        private class TypesOptions
+        {
+            [Option('c', "color")]
+            public BasicColor Color { get; private set; }
+
+            [Option('O', "opacity")]
+            public int Opacity { get; private set; }
+        }
+
         [TestMethod]
         [TestCategory("CommandLine")]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -710,6 +731,51 @@ namespace RJCP.Core.CommandLine
             Assert.IsTrue(myOptions.OptionA);
             Assert.IsTrue(myOptions.OptionB);
             Assert.AreEqual("0", myOptions.Verbosity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_TypesEnum()
+        {
+            TypesOptions myOptions = new TypesOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-c", "yellow" });
+
+            Assert.AreEqual(BasicColor.Yellow, myOptions.Color);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_TypesEnumInt()
+        {
+            TypesOptions myOptions = new TypesOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-c", "4" });
+
+            Assert.AreEqual(BasicColor.Cyan, myOptions.Color);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_TypesInt()
+        {
+            TypesOptions myOptions = new TypesOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-O", "100" });
+
+            Assert.AreEqual(100, myOptions.Opacity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        [ExpectedException(typeof(OptionFormatException))]
+        public void CmdLineUnix_TypesIntInvalid()
+        {
+            TypesOptions myOptions = new TypesOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-O", "xxx" });
+
+            Assert.AreEqual(100, myOptions.Opacity);
         }
     }
 }

@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\IOptionParser.cs" />
+    <Compile Include="CommandLine\IOptions.cs" />
     <Compile Include="CommandLine\OptionAttribute.cs" />
     <Compile Include="CommandLine\OptionDefaultAttribute.cs" />
     <Compile Include="CommandLine\OptionException.cs" />
