@@ -530,6 +530,18 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOptionSingleElement()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] { "-l", "test1" });
+
+            Assert.AreEqual(1, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
         public void CmdLineUnix_ListOptionMultipleArguments()
         {
             ListOptions myOptions = new ListOptions();
