@@ -35,11 +35,5 @@
         /// </summary>
         /// <value>The long option prefix.</value>
         string LongOptionPrefix { get; }
-
-        /// <summary>
-        /// The prefix for generic options.
-        /// </summary>
-        /// <value>The option prefix.</value>
-        string OptionPrefix { get; }
     }
 }

@@ -43,6 +43,7 @@
     <Compile Include="CommandLine\Options.cs" />
     <Compile Include="CommandLine\OptionToken.cs" />
     <Compile Include="CommandLine\UnixEnumerator.cs" />
+    <Compile Include="CommandLine\WindowsEnumerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

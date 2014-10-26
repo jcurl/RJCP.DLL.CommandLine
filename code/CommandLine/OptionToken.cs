@@ -11,11 +11,6 @@
         Argument,
 
         /// <summary>
-        /// An option (unknown if short or long)
-        /// </summary>
-        Option,
-
-        /// <summary>
         /// A short option.
         /// </summary>
         ShortOption,
@@ -84,8 +79,6 @@
                 return parser.ShortOptionPrefix + Value;
             case OptionTokenKind.LongOption:
                 return parser.LongOptionPrefix + Value;
-            case OptionTokenKind.Option:
-                return parser.OptionPrefix + Value;
             case OptionTokenKind.Argument:
                 return Value;
             case OptionTokenKind.Value:

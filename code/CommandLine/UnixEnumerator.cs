@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     internal sealed class UnixOptionParser : IOptionParser
     {
@@ -19,7 +17,6 @@
         public char ListSeparator { get { return ','; } }
         public string ShortOptionPrefix { get { return "-"; } }
         public string LongOptionPrefix { get { return "--"; } }
-        public string OptionPrefix { get { return string.Empty; } }
 
         public OptionToken GetToken(bool expectValue)
         {

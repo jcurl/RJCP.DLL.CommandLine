@@ -54,6 +54,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CommandLine\CommandLineTest.cs" />
+    <Compile Include="CommandLine\CommandLineWinTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

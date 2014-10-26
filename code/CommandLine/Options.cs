@@ -247,7 +247,18 @@ namespace RJCP.Core.CommandLine
             OptionToken token;
             OptionToken lastToken = null;
             OptionToken lastOptionToken = null;
-            IOptionParser parser = new UnixOptionParser(arguments);
+            IOptionParser parser;
+
+            switch (m_OptionsStyle) {
+            case OptionsStyle.Unix:
+                parser = new UnixOptionParser(arguments);
+                break;
+            case OptionsStyle.Windows:
+                parser = new WindowsOptionEnumerator(arguments);
+                break;
+            default:
+                throw new ApplicationException("Unknown command style parser");
+            }
 
             BuildOptionList(parser.LongOptionCaseInsenstive);
 
@@ -278,18 +289,6 @@ namespace RJCP.Core.CommandLine
                                     throw new OptionException("Unexpected option '" + token.ToString(parser) + "'");
                                 }
                                 ParseLongOption(parser, token);
-                                lastOptionToken = token;
-                                break;
-                            case OptionTokenKind.Option:
-                                if (m_Arguments.Count > 0) {
-                                    if (lastOptionToken != null) {
-                                        throw new OptionException("Unexpected option '" + token.ToString(parser) +
-                                                                  "', perhaps too many arguments after '" +
-                                                                  lastOptionToken.ToString(parser) + "'");
-                                    }
-                                    throw new OptionException("Unexpected option '" + token.ToString(parser) + "'");
-                                }
-                                ParseOption(parser, token);
                                 lastOptionToken = token;
                                 break;
                             case OptionTokenKind.Argument:
@@ -371,15 +370,6 @@ namespace RJCP.Core.CommandLine
                 throw new OptionUnknownException(token.ToString(parser));
 
             ParseOptionParameter(parser, optionData, token);
-        }
-
-        private void ParseOption(IOptionParser parser, OptionToken token)
-        {
-            if (token.Value.Length == 1) {
-                ParseShortOption(parser, token);
-            } else {
-                ParseLongOption(parser, token);
-            }
         }
 
         private void ParseArgument(IOptionParser parser, OptionToken token)
