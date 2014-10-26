@@ -1,7 +1,4 @@
-﻿// TODO:
-// * Implement Windows flavour.
-
-namespace RJCP.Core.CommandLine
+﻿namespace RJCP.Core.CommandLine
 {
     using System;
     using System.Collections;
