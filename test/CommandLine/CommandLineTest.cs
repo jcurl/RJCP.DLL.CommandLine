@@ -127,6 +127,23 @@ namespace RJCP.Core.CommandLine
             public int Opacity { get; private set; }
         }
 
+        private class ArgumentsAttributeOptions
+        {
+            [Option('a', "along", false)]
+            public bool OptionA;
+
+            [Option('b', "blong", false)]
+            public bool OptionB;
+
+            [Option('c', "clong", false)]
+            public string OptionC;
+
+            private List<string> m_Arguments = new List<string>();
+
+            [OptionArguments]
+            public IList<string> Arguments { get { return m_Arguments; } }
+        }
+
         [TestMethod]
         [TestCategory("CommandLine")]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -788,6 +805,20 @@ namespace RJCP.Core.CommandLine
             options.ParseCommandLine(new[] { "-O", "xxx" });
 
             Assert.AreEqual(100, myOptions.Opacity);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ArgumentsAttribute()
+        {
+            ArgumentsAttributeOptions myOptions = new ArgumentsAttributeOptions();
+            Options options = new Options(OptionsStyle.Unix, myOptions);
+            options.ParseCommandLine(new[] {"-a", "arg1", "arg2" } );
+
+            Assert.AreEqual(2, options.Arguments.Count);
+            Assert.AreEqual(2, myOptions.Arguments.Count);
+            Assert.AreEqual("arg1", myOptions.Arguments[0]);
+            Assert.AreEqual("arg2", myOptions.Arguments[1]);
         }
     }
 }

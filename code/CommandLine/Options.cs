@@ -74,7 +74,7 @@
     /// provided. All types except <c>boolean</c> types expect an argument.</para>
     /// <note type="note">This application can only parse the command line that comes from Windows. In particular,
     /// Windows removes any quoting which may result in unexpected behaviour. Such an example is <c>--foo="a,b",c</c>
-    /// which results in a single argument <c>--foo=a,b,c</c> which is indistiguishable from the command line
+    /// which results in a single argument <c>--foo=a,b,c</c> which is indistinguishable from the command line
     /// <c>--foo="a,b,c"</c> that also results in <c>--foo=a,b,c</c>. In this case, the user should use the single
     /// tick for quoting.</note>
     /// </remarks>
@@ -106,7 +106,7 @@
 
         private class OptionData
         {
-            public OptionAttribute OptionAttribute { get; set; }
+            public OptionAttribute Attribute { get; set; }
             public FieldInfo Field { get; set; }
             public PropertyInfo Property { get; set; }
             public bool Set { get; set; }
@@ -132,9 +132,27 @@
             }
         }
 
+        private class OptionArgumentData
+        {
+            public FieldInfo Field { get; set; }
+            public PropertyInfo Property { get; set; }
+
+            public bool IsArgumentList
+            {
+                get
+                {
+                    if (Field != null && typeof(IList<string>).IsAssignableFrom(Field.FieldType)) return true;
+                    if (Property != null && typeof(IList<string>).IsAssignableFrom(Property.PropertyType)) return true;
+                    return false;
+                }
+            }
+        }
+
         private Dictionary<string, OptionData> m_LongOptionList = new Dictionary<string, OptionData>();
         private Dictionary<char, OptionData> m_ShortOptionList = new Dictionary<char, OptionData>();
         private List<OptionData> m_OptionList = new List<OptionData>();
+        private IList<string> m_Arguments;
+        private OptionArgumentData m_ArgumentField;
 
         private void BuildOptionList(bool longOptionCaseInsensitive)
         {
@@ -147,6 +165,15 @@
                     OptionData optionData = new OptionData();
                     optionData.Field = field;
                     AddOption(optionData, attribute, longOptionCaseInsensitive);
+                    continue;
+                }
+
+                OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(field);
+                if (argAttribute != null) {
+                    if (m_ArgumentField != null)
+                        throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
+                    m_ArgumentField = new OptionArgumentData();
+                    m_ArgumentField.Field = field;
                 }
             }
 
@@ -160,13 +187,20 @@
                     optionData.Property = property;
                     AddOption(optionData, attribute, longOptionCaseInsensitive);
                 }
-            }
 
+                OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(property);
+                if (argAttribute != null) {
+                    if (m_ArgumentField != null)
+                        throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
+                    m_ArgumentField = new OptionArgumentData();
+                    m_ArgumentField.Property = property;
+                }
+            }
         }
 
         private void AddOption(OptionData optionData, OptionAttribute attribute, bool longOptionCaseInsensitive)
         {
-            optionData.OptionAttribute = attribute;
+            optionData.Attribute = attribute;
             m_OptionList.Add(optionData);
 
             if (attribute.ShortOption != (char) 0) {
@@ -260,6 +294,15 @@
             BuildOptionList(parser.LongOptionCaseInsenstive);
             IOptions options = m_Options as IOptions;
 
+            // Assign the options to the argument
+            if (m_ArgumentField != null && m_ArgumentField.IsArgumentList) {
+                if (m_ArgumentField.Field != null) m_Arguments = (IList<string>)m_ArgumentField.Field.GetValue(m_Options);
+                if (m_ArgumentField.Property != null) m_Arguments = (IList<string>)m_ArgumentField.Property.GetValue(m_Options, null);
+                if (m_Arguments == null)
+                    throw new OptionException("Invalid property associated with OptionArgumentsAttribute");
+            }
+            if (m_Arguments == null) m_Arguments = new List<string>();
+
             try {
                 do {
                     token = parser.GetToken(false);
@@ -320,10 +363,11 @@
             // Check that all mandatory options were provided
             StringBuilder sb = new StringBuilder();
             List<string> optionList = new List<string>(); 
-            foreach (OptionData option in m_OptionList) {
-                if (option.OptionAttribute.Required && !option.Set) {
+            foreach (OptionData optionData in m_OptionList) {
+                if (((OptionAttribute)optionData.Attribute).Required && !optionData.Set) {
                     MissingOption(parser,
-                        option.OptionAttribute.ShortOption, option.OptionAttribute.LongOption,
+                        ((OptionAttribute)optionData.Attribute).ShortOption,
+                        ((OptionAttribute)optionData.Attribute).LongOption,
                         sb, optionList);
                 }
             }
@@ -505,7 +549,6 @@
             return converter.ConvertFromInvariantString(value);
         }
 
-        private List<string> m_Arguments = new List<string>();
         private ReadOnlyCollection<string> m_ArgumentsReadOnly;
 
         /// <summary>
