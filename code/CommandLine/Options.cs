@@ -81,30 +81,34 @@
     /// </remarks>
     public class Options
     {
+        public static Options Parse(object options, string[] arguments)
+        {
+            Options cmdLine = new Options(options);
+            cmdLine.ParseCommandLine(arguments);
+            return cmdLine;
+        }
+
+        public static Options Parse(object options, string[] arguments, OptionsStyle style)
+        {
+            Options cmdLine = new Options(options);
+            cmdLine.OptionsStyle = style;
+            cmdLine.ParseCommandLine(arguments);
+            return cmdLine;
+        }
+
         private object m_Options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Options"/> class using the Windows style.
         /// </summary>
         /// <param name="options">The object to receive the options for.</param>
-        public Options(object options)
+        private Options(object options)
         {
             if (options == null) throw new ArgumentNullException("options");
             m_Options = options;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Options"/> class using the style specified.
-        /// </summary>
-        /// <param name="style">The style of command line options given.</param>
-        /// <param name="options">The object to receive the options for.</param>
-        public Options(OptionsStyle style, object options)
-        {
-            if (options == null) throw new ArgumentNullException("options");
-            OptionsStyle = style;
-            m_Options = options;
-        }
-
+        #region Inspecting and building command line options
         private class OptionData
         {
             public OptionData(OptionAttribute attribute, MemberInfo member)
@@ -288,6 +292,7 @@
         {
             return provider.GetCustomAttributes(typeof(T), false).OfType<T>().FirstOrDefault();
         }
+        #endregion
 
         private OptionsStyle m_OptionsStyle;
 
@@ -315,7 +320,7 @@
         /// Parses the command line arguments provided, setting the fields in the object provided when
         /// this object was instantiated.
         /// </remarks>
-        public void ParseCommandLine(string[] arguments)
+        private void ParseCommandLine(string[] arguments)
         {
             OptionToken token;
             OptionToken lastToken = null;
@@ -398,10 +403,10 @@
             StringBuilder sb = new StringBuilder();
             List<string> optionList = new List<string>(); 
             foreach (OptionData optionData in m_OptionList) {
-                if (((OptionAttribute)optionData.Attribute).Required && !optionData.Set) {
+                if (optionData.Attribute.Required && !optionData.Set) {
                     MissingOption(parser,
-                        ((OptionAttribute)optionData.Attribute).ShortOption,
-                        ((OptionAttribute)optionData.Attribute).LongOption,
+                        optionData.Attribute.ShortOption,
+                        optionData.Attribute.LongOption,
                         sb, optionList);
                 }
             }
