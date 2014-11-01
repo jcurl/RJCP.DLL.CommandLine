@@ -81,6 +81,12 @@
     /// </remarks>
     public class Options
     {
+        /// <summary>
+        /// Parses the command line arguments writing to options.
+        /// </summary>
+        /// <param name="options">The options object to write to.</param>
+        /// <param name="arguments">The argument list to parse.</param>
+        /// <returns>An instance of this object.</returns>
         public static Options Parse(object options, string[] arguments)
         {
             Options cmdLine = new Options(options);
@@ -88,6 +94,13 @@
             return cmdLine;
         }
 
+        /// <summary>
+        /// Parses the specified options.
+        /// </summary>
+        /// <param name="options">The options object to write to.</param>
+        /// <param name="arguments">The argument list to parse.</param>
+        /// <param name="style">The option style to use.</param>
+        /// <returns>An instance of this object.</returns>
         public static Options Parse(object options, string[] arguments, OptionsStyle style)
         {
             Options cmdLine = new Options(options);
