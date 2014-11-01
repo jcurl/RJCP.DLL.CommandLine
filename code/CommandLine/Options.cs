@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Datastructures;
 
     /// <summary>
     /// The style of command line options to use.
@@ -106,18 +107,69 @@
 
         private class OptionData
         {
+            public OptionData(OptionAttribute attribute, MemberInfo member)
+            {
+                if (attribute == null) throw new ArgumentNullException("attribute");
+                if (!(member is PropertyInfo) && !(member is FieldInfo))
+                    throw new ArgumentException("Not a property/field", "member");
+
+                Attribute = attribute;
+                Member = member;
+            }
+
             public OptionAttribute Attribute { get; set; }
-            public FieldInfo Field { get; set; }
-            public PropertyInfo Property { get; set; }
+            public MemberInfo Member { get; set; }
             public bool Set { get; set; }
 
             public bool IsList
             {
                 get
                 {
-                    if (Field != null && typeof(IList).IsAssignableFrom(Field.FieldType)) return true;
-                    if (Property != null && typeof(IList).IsAssignableFrom(Property.PropertyType)) return true;
+                    if (Member == null) return false;
+                    if ((Member is FieldInfo) && typeof(IList).IsAssignableFrom(((FieldInfo)Member).FieldType)) return true;
+                    if ((Member is PropertyInfo) && typeof(IList).IsAssignableFrom(((PropertyInfo)Member).PropertyType)) return true;
                     return false;
+                }
+            }
+
+            public IList GetList(object options)
+            {
+                if (Member is FieldInfo) return (IList)(((FieldInfo)Member).GetValue(options));
+                if (Member is PropertyInfo) return (IList)(((PropertyInfo)Member).GetValue(options, null));
+                return null;
+            }
+
+            public void SetValue(object options, string value)
+            {
+                FieldInfo field = Member as FieldInfo;
+                if (field != null) {
+                    field.SetValue(options, ChangeType(value, field.FieldType));
+                    Set = true;
+                    return;
+                }
+
+                PropertyInfo property = Member as PropertyInfo;
+                if (property != null) {
+                    property.SetValue(options, ChangeType(value, property.PropertyType), null);
+                    Set = true;
+                    return;
+                }
+            }
+
+            public void SetValue(object options, bool value)
+            {
+                FieldInfo field = Member as FieldInfo;
+                if (field != null) {
+                    field.SetValue(options, value);
+                    Set = true;
+                    return;
+                }
+
+                PropertyInfo property = Member as PropertyInfo;
+                if (property != null) {
+                    property.SetValue(options, value, null);
+                    Set = true;
+                    return;
                 }
             }
 
@@ -125,25 +177,9 @@
             {
                 get
                 {
-                    if (Field != null && Field.FieldType == typeof(bool)) return false;
-                    if (Property != null && Property.PropertyType == typeof(bool)) return false;
+                    if ((Member is FieldInfo) && ((FieldInfo)Member).FieldType == typeof(bool)) return false;
+                    if ((Member is PropertyInfo) && ((PropertyInfo)Member).PropertyType == typeof(bool)) return false;
                     return true;
-                }
-            }
-        }
-
-        private class OptionArgumentData
-        {
-            public FieldInfo Field { get; set; }
-            public PropertyInfo Property { get; set; }
-
-            public bool IsArgumentList
-            {
-                get
-                {
-                    if (Field != null && typeof(IList<string>).IsAssignableFrom(Field.FieldType)) return true;
-                    if (Property != null && typeof(IList<string>).IsAssignableFrom(Property.PropertyType)) return true;
-                    return false;
                 }
             }
         }
@@ -152,66 +188,72 @@
         private Dictionary<char, OptionData> m_ShortOptionList = new Dictionary<char, OptionData>();
         private List<OptionData> m_OptionList = new List<OptionData>();
         private IList<string> m_Arguments;
-        private OptionArgumentData m_ArgumentField;
 
         private void BuildOptionList(bool longOptionCaseInsensitive)
         {
             foreach (FieldInfo field in m_Options.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)) {
-                OptionAttribute attribute = GetAttribute<OptionAttribute>(field);
-                if (attribute != null) {
-                    CheckShortOption(attribute.ShortOption);
-                    CheckLongOption(attribute.LongOption);
-
-                    OptionData optionData = new OptionData();
-                    optionData.Field = field;
-                    AddOption(optionData, attribute, longOptionCaseInsensitive);
-                    continue;
-                }
-
-                OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(field);
-                if (argAttribute != null) {
-                    if (m_ArgumentField != null)
-                        throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
-                    m_ArgumentField = new OptionArgumentData();
-                    m_ArgumentField.Field = field;
-                }
+                ParseMember(field, longOptionCaseInsensitive);
             }
 
             foreach (PropertyInfo property in m_Options.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)) {
-                OptionAttribute attribute = GetAttribute<OptionAttribute>(property);
-                if (attribute != null) {
-                    CheckShortOption(attribute.ShortOption);
-                    CheckLongOption(attribute.LongOption);
-
-                    OptionData optionData = new OptionData();
-                    optionData.Property = property;
-                    AddOption(optionData, attribute, longOptionCaseInsensitive);
-                }
-
-                OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(property);
-                if (argAttribute != null) {
-                    if (m_ArgumentField != null)
-                        throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
-                    m_ArgumentField = new OptionArgumentData();
-                    m_ArgumentField.Property = property;
-                }
+                ParseMember(property, longOptionCaseInsensitive);
             }
         }
 
-        private void AddOption(OptionData optionData, OptionAttribute attribute, bool longOptionCaseInsensitive)
+        private void ParseMember(MemberInfo memberInfo, bool longOptionCaseInsensitive)
         {
-            optionData.Attribute = attribute;
-            m_OptionList.Add(optionData);
+            OptionAttribute attribute = GetAttribute<OptionAttribute>(memberInfo);
+            if (attribute != null) {
+                CheckShortOption(attribute.ShortOption);
+                CheckLongOption(attribute.LongOption);
 
-            if (attribute.ShortOption != (char) 0) {
-                m_ShortOptionList.Add(attribute.ShortOption, optionData);
+                OptionData optionData = new OptionData(attribute, memberInfo);
+                m_OptionList.Add(optionData);
+
+                if (attribute.ShortOption != (char)0) {
+                    m_ShortOptionList.Add(attribute.ShortOption, optionData);
+                }
+                if (attribute.LongOption != null) {
+                    string longOption = longOptionCaseInsensitive
+                        ? attribute.LongOption.ToLowerInvariant()
+                        : attribute.LongOption;
+                    m_LongOptionList.Add(longOption, optionData);
+                }
+                return;
             }
-            if (attribute.LongOption != null) {
-                string longOption = longOptionCaseInsensitive
-                    ? attribute.LongOption.ToLowerInvariant()
-                    : attribute.LongOption;
-                m_LongOptionList.Add(longOption, optionData);
+
+            OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(memberInfo);
+            if (argAttribute != null) {
+                if (m_Arguments != null)
+                    throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
+                m_Arguments = GenerateArgumentList(memberInfo);
+                m_ArgumentsReadOnly = m_Arguments;
             }
+        }
+
+        private IList<string> GenerateArgumentList(MemberInfo member)
+        {
+            FieldInfo field = member as FieldInfo;
+            if (field != null) {
+                if (typeof(IList<string>).IsAssignableFrom(field.FieldType)) {
+                    return new GenericList<string>((IList<string>)field.GetValue(m_Options));
+                }
+                if (typeof(IList).IsAssignableFrom(field.FieldType)) {
+                    return new GenericList<string>((IList)field.GetValue(m_Options));
+                }
+            }
+
+            PropertyInfo property = member as PropertyInfo;
+            if (property != null) {
+                if (typeof(IList<string>).IsAssignableFrom(property.PropertyType)) {
+                    return new GenericList<string>((IList<string>)property.GetValue(m_Options, null));
+                }
+                if (typeof(IList).IsAssignableFrom(property.PropertyType)) {
+                    return new GenericList<string>((IList)property.GetValue(m_Options, null));
+                }
+            }
+
+            return null;
         }
 
         [Conditional("DEBUG")]
@@ -293,14 +335,6 @@
 
             BuildOptionList(parser.LongOptionCaseInsenstive);
             IOptions options = m_Options as IOptions;
-
-            // Assign the options to the argument
-            if (m_ArgumentField != null && m_ArgumentField.IsArgumentList) {
-                if (m_ArgumentField.Field != null) m_Arguments = (IList<string>)m_ArgumentField.Field.GetValue(m_Options);
-                if (m_ArgumentField.Property != null) m_Arguments = (IList<string>)m_ArgumentField.Property.GetValue(m_Options, null);
-                if (m_Arguments == null)
-                    throw new OptionException("Invalid property associated with OptionArgumentsAttribute");
-            }
             if (m_Arguments == null) m_Arguments = new List<string>();
 
             try {
@@ -425,10 +459,8 @@
                     OptionToken argumentToken = parser.GetToken(true);
                     if (argumentToken == null) {
                         OptionDefaultAttribute defaultAttribute = null;
-                        if (optionData.Field != null)
-                            defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Field);
-                        if (optionData.Property != null)
-                            defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Property);
+                        if (optionData.Member != null)
+                            defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Member);
                         if (defaultAttribute == null)
                             throw new OptionMissingArgumentException(token.ToString(parser));
                         argument = defaultAttribute.DefaultValue;
@@ -455,32 +487,18 @@
         private void SetOption(IOptionParser parser, OptionData optionData, string value)
         {
             if (optionData.IsList) {
-                IList list = null;
-                if (optionData.Field != null) list = (IList)optionData.Field.GetValue(m_Options);
-                if (optionData.Property != null) list = (IList)optionData.Property.GetValue(m_Options, null);
+                IList list = optionData.GetList(m_Options);
                 SplitList(list, parser.ListSeparator, value);
                 return;
             }
 
             if (optionData.Set) throw new OptionAssignedException(value);
-
-            if (optionData.Field != null) {
-                optionData.Field.SetValue(m_Options, ChangeType(value, optionData.Field.FieldType));
-            } else if (optionData.Property != null) {
-                optionData.Property.SetValue(m_Options, ChangeType(value, optionData.Property.PropertyType), null);
-            }
+            optionData.SetValue(m_Options, value);
         }
 
         private void SetBoolean(OptionData optionData, bool value)
         {
-            if (optionData.Field != null) {
-                optionData.Field.SetValue(m_Options, value);
-                return;
-            }
-            if (optionData.Property != null) {
-                optionData.Property.SetValue(m_Options, value, null);
-                return;
-            }
+            optionData.SetValue(m_Options, value);
         }
 
         private void SplitList(IList list, char separationChar, string value)
@@ -549,7 +567,7 @@
             return converter.ConvertFromInvariantString(value);
         }
 
-        private ReadOnlyCollection<string> m_ArgumentsReadOnly;
+        private IList<string> m_ArgumentsReadOnly;
 
         /// <summary>
         /// Gets the arguments that were not parsed as options.
