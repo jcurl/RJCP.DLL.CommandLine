@@ -258,6 +258,7 @@
             }
 
             BuildOptionList(parser.LongOptionCaseInsenstive);
+            IOptions options = m_Options as IOptions;
 
             try {
                 do {
@@ -303,19 +304,15 @@
                     }
                 } while (token != null);
             } catch (OptionUnknownException e) {
-                IOptions options = m_Options as IOptions;
                 if (options != null) options.InvalidOption(e.Option);
                 throw;
             } catch (OptionMissingArgumentException e) {
-                IOptions options = m_Options as IOptions;
                 if (options != null) options.InvalidOption(e.Option);
                 throw;
             } catch (OptionFormatException e) {
-                IOptions options = m_Options as IOptions;
                 if (options != null) options.InvalidOption(e.Option);
                 throw;
             } catch (OptionException) {
-                IOptions options = m_Options as IOptions;
                 if (options != null) options.Usage();
                 throw;
             }
@@ -330,11 +327,13 @@
                         sb, optionList);
                 }
             }
+
             if (sb.Length > 0) {
-                IOptions options = m_Options as IOptions;
                 if (options != null) options.Missing(optionList);
                 throw new OptionMissingException(sb.ToString());
             }
+
+            if (options != null) options.Check();
         }
 
         private void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, IList<string> missing)

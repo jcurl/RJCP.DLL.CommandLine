@@ -11,7 +11,16 @@
     public interface IOptions
     {
         /// <summary>
-        /// Displays usage help in case of an error when parsing options
+        /// Checks the options once parsing is complete.
+        /// </summary>
+        /// <remarks>
+        /// This method checks the consistency of all parsed options. If there is an
+        /// issue, an exception should be raised.
+        /// </remarks>
+        void Check();
+
+        /// <summary>
+        /// Displays usage help in case of an error when parsing options.
         /// </summary>
         void Usage();
 
