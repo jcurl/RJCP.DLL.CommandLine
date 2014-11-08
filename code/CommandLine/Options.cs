@@ -37,7 +37,7 @@
     /// <para>The properties and fields may have any kind of visibility you need, e.g. <c>public</c>, <c>private</c>,
     /// <c>internal</c>, <c>internal protected</c> or <c>protected</c> when using C#. Even the <c>private</c> fields
     /// can be set through reflection.</para>
-    /// <para>Instantiate your class and then pass the reference to the method <see cref="ParseCommandLine"/> with
+    /// <para>Instantiate your class and then pass the reference to the method <see cref="Parse(object, string[])"/> with
     /// the command line parameters provided by the main entry point.</para>
     /// <example>
     /// <code>
@@ -46,8 +46,7 @@
     ///   class Program {
     ///     static void Main(string[] args) {
     ///       CmdLineOptions myOptions = new CmdLineOptions();
-    ///       Options options = new Options(OptionsStyle.Unix, myOptions);
-    ///       options.ParseCommandLine(args);
+    ///       Options.Parse(myOptions, args, OptionsStyle.Unix);
     ///     }
     ///   }
     /// }
