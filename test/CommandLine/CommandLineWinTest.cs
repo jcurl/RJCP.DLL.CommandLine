@@ -13,11 +13,14 @@ namespace RJCP.Core.CommandLine
     {
         private class NoArguments
         {
+#pragma warning disable 0649
             public bool NoOption;
+#pragma warning restore 0649
         }
         
         private class OptionalArguments
         {
+#pragma warning disable 0649
             [Option('a', "along", false)]
             public bool OptionA;
 
@@ -26,10 +29,12 @@ namespace RJCP.Core.CommandLine
 
             [Option('c', "clong", false)]
             public string OptionC;
+#pragma warning restore 0649
         }
 
         private class RequiredArguments
         {
+#pragma warning disable 0649
             [Option('i', "insensitive")]
             private bool m_CaseInsensitive;
 
@@ -38,6 +43,7 @@ namespace RJCP.Core.CommandLine
 
             [Option('s', "search")]
             private string m_SearchString;
+#pragma warning restore 0649
 
             public bool CaseInsensitive { get { return m_CaseInsensitive; } }
 
@@ -83,6 +89,7 @@ namespace RJCP.Core.CommandLine
 
         private class OptionalLongArguments
         {
+#pragma warning disable 0649
             [Option("along")]
             public bool OptionA;
 
@@ -91,6 +98,7 @@ namespace RJCP.Core.CommandLine
 
             [Option("clong")]
             public string OptionC;
+#pragma warning restore 0649
         }
 
         private class DefaultValueOption
@@ -101,9 +109,11 @@ namespace RJCP.Core.CommandLine
             [Option('b', "blong", false)]
             public bool OptionB { get; set; }
 
+#pragma warning disable 0649
             [Option('v', "verbosity")]
             [OptionDefault("0")]
             public string Verbosity;
+#pragma warning restore 0649
         }
 
         private enum BasicColor
