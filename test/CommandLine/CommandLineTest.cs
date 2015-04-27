@@ -536,19 +536,6 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLineUnix_ListOptionEscaped()
-        {
-            ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "-l", @"te\st1", "-l", @"tes\t2", "-l", @"\test3" }, OptionsStyle.Unix);
-
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2", myOptions.List[1]);
-            Assert.AreEqual("test3", myOptions.List[2]);
-        }
-
-        [TestMethod]
-        [TestCategory("CommandLine")]
         public void CmdLineUnix_ListOptionQuoted1()
         {
             ListOptions myOptions = new ListOptions();
@@ -584,11 +571,24 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        [ExpectedException(typeof(OptionException))]
-        public void CmdLineUnix_ListOptionQuotedInvalid2()
+        public void CmdLineUnix_ListOptionWindowsPath()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = Options.Parse(myOptions, new[] { "-l", @"c:\users\homeuser" }, OptionsStyle.Unix);
+            Assert.AreEqual(1, myOptions.List.Count);
+            Assert.AreEqual(@"c:\users\homeuser", myOptions.List[0]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineUnix_ListOptionQuotedEndEscape()
         {
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "-l", @"test1,test2,testx\" }, OptionsStyle.Unix);
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2", myOptions.List[1]);
+            Assert.AreEqual(@"testx\", myOptions.List[2]);
         }
 
         [TestMethod]

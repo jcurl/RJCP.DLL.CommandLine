@@ -403,7 +403,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineWin_ListOption()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", "test1:test2:test3" }, OptionsStyle.Windows);
+            Options options = Options.Parse(myOptions, new[] { "/l", "test1,test2,test3" }, OptionsStyle.Windows);
 
             Assert.AreEqual(3, myOptions.List.Count);
             Assert.AreEqual("test1", myOptions.List[0]);
@@ -437,23 +437,10 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        public void CmdLineWin_ListOptionEscaped()
-        {
-            ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", @"te\st1", "/l", @"tes\t2", "/l", @"\test3" }, OptionsStyle.Windows);
-
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2", myOptions.List[1]);
-            Assert.AreEqual("test3", myOptions.List[2]);
-        }
-
-        [TestMethod]
-        [TestCategory("CommandLine")]
         public void CmdLineWin_ListOptionQuoted1()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", @"test1:'test2':'test 3'" }, OptionsStyle.Windows);
+            Options options = Options.Parse(myOptions, new[] { "/l", @"test1,'test2','test 3'" }, OptionsStyle.Windows);
 
             Assert.AreEqual(3, myOptions.List.Count);
             Assert.AreEqual("test1", myOptions.List[0]);
@@ -466,7 +453,7 @@ namespace RJCP.Core.CommandLine
         public void CmdLineWin_ListOptionQuoted2()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", @"test1:'test2,test3b':'test 3'" }, OptionsStyle.Windows);
+            Options options = Options.Parse(myOptions, new[] { "/l", @"test1,'test2,test3b','test 3'" }, OptionsStyle.Windows);
 
             Assert.AreEqual(3, myOptions.List.Count);
             Assert.AreEqual("test1", myOptions.List[0]);
@@ -485,11 +472,24 @@ namespace RJCP.Core.CommandLine
 
         [TestMethod]
         [TestCategory("CommandLine")]
-        [ExpectedException(typeof(OptionException))]
-        public void CmdLineWin_ListOptionQuotedInvalid2()
+        public void CmdLineWin_ListOptionWindowsPath()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", @"test1:test2:testx\" }, OptionsStyle.Windows);
+            Options options = Options.Parse(myOptions, new[] { "/l", @"c:\users\homeuser" }, OptionsStyle.Windows);
+            Assert.AreEqual(1, myOptions.List.Count);
+            Assert.AreEqual(@"c:\users\homeuser", myOptions.List[0]);
+        }
+
+        [TestMethod]
+        [TestCategory("CommandLine")]
+        public void CmdLineWin_ListOptionQuotedEndEscape()
+        {
+            ListOptions myOptions = new ListOptions();
+            Options options = Options.Parse(myOptions, new[] { "/l", @"test1,test2,testx\" }, OptionsStyle.Windows);
+            Assert.AreEqual(3, myOptions.List.Count);
+            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.AreEqual("test2", myOptions.List[1]);
+            Assert.AreEqual(@"testx\", myOptions.List[2]);
         }
 
         [TestMethod]

@@ -530,6 +530,11 @@
                 char c = value[i];
                 if (escape) {
                     escape = false;
+
+                    // We only escape quotes, else every other character is literal. This allows
+                    // Windows paths to be given without having to escape each path character.
+                    if (c == '\'' || c == '\"') continue;
+                    sb.Append('\\');
                     continue;
                 }
                 if (c == '\\') {
@@ -569,7 +574,7 @@
                     throw new OptionException("Invalid data after quoted list, expect '" + separationChar + "' only");
             }
 
-            if (escape) throw new OptionException("Invalid list, unfinished escape sequence");
+            if (escape) sb.Append('\\');
 
             if (quote != (char)0) throw new OptionException("Missing quote in list");
 

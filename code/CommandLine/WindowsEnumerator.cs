@@ -14,7 +14,7 @@
         }
 
         public bool LongOptionCaseInsenstive { get { return true; } }
-        public char ListSeparator { get { return ':'; } }
+        public char ListSeparator { get { return ','; } }
         public string ShortOptionPrefix { get { return "/"; } }
         public string LongOptionPrefix { get { return "/"; } }
 
