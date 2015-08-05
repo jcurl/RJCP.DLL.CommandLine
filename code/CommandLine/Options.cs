@@ -350,7 +350,7 @@
                 throw new ApplicationException("Unknown command style parser");
             }
 
-            BuildOptionList(parser.LongOptionCaseInsenstive);
+            BuildOptionList(parser.LongOptionCaseInsensitive);
             IOptions options = m_Options as IOptions;
             if (m_Arguments == null) m_Arguments = new List<string>();
 
@@ -439,7 +439,7 @@
                 message.Append(parser.ShortOptionPrefix).Append(shortOption);
                 if (missing != null) missing.Add(shortOption.ToString());
             } else if (longOption != null) {
-                message.Append(parser.LongOptionCaseInsenstive).Append(longOption);
+                message.Append(parser.LongOptionCaseInsensitive).Append(longOption);
                 if (missing != null) missing.Add(longOption);
             }
         }
@@ -456,7 +456,7 @@
         private void ParseLongOption(IOptionParser parser, OptionToken token)
         {
             OptionData optionData;
-            string option = parser.LongOptionCaseInsenstive ? token.Value.ToLowerInvariant() : token.Value;
+            string option = parser.LongOptionCaseInsensitive ? token.Value.ToLowerInvariant() : token.Value;
             if (!m_LongOptionList.TryGetValue(option, out optionData))
                 throw new OptionUnknownException(token.ToString(parser));
 

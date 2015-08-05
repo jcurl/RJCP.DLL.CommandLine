@@ -16,7 +16,7 @@
         /// Gets a value indicating whether long options are case insensitive (lower case).
         /// </summary>
         /// <value><c>true</c> if long options are case insensitive; otherwise, <c>false</c>.</value>
-        bool LongOptionCaseInsenstive { get; }
+        bool LongOptionCaseInsensitive { get; }
 
         /// <summary>
         /// Gets the list separator character when assigning to lists.
