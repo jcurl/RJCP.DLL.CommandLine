@@ -1,14 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace RJCP.Core.CommandLine
+﻿namespace RJCP.Core.CommandLine
 {
-    /// <summary>
-    /// Summary description for UnitTest1
-    /// </summary>
-    [TestClass]
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+
+    [TestFixture]
     public class CommandLineWinTest
     {
         private class NoArguments
@@ -137,40 +133,40 @@ namespace RJCP.Core.CommandLine
             public int Opacity { get; private set; }
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_NullArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, null, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_NoArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, new string[0], OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_NullArgumentsEmptyOptions()
         {
             NoArguments myOptions = new NoArguments();
             Options options = Options.Parse(myOptions, null, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_NoArgumentsEmptyOptions()
         {
             NoArguments myOptions = new NoArguments();
             Options options = Options.Parse(myOptions, new string[0], OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_SingleShortOption()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -181,8 +177,8 @@ namespace RJCP.Core.CommandLine
             Assert.IsNull(myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_ShortOptionsJoined()
         {
@@ -190,8 +186,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/ab" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ShortOptionsSeparated()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -202,8 +198,8 @@ namespace RJCP.Core.CommandLine
             Assert.IsNull(myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ShortOptionsOnProperties()
         {
             PropertyOptions myOptions = new PropertyOptions();
@@ -214,8 +210,8 @@ namespace RJCP.Core.CommandLine
             Assert.IsNull(myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ShortOptionsStringOneArg()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -226,8 +222,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("foo", myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ShortOptionsStringTwoArgs()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -238,8 +234,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("foo", myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ShortOptionsRequired()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -250,8 +246,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("string", myOptions.SearchString);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ShortOptionsRequiredOneArgument2()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -262,8 +258,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("string", myOptions.SearchString);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineWin_ShortOptionsRequiredMissingArgument()
         {
@@ -273,8 +269,8 @@ namespace RJCP.Core.CommandLine
             Assert.Fail("Exception not thrown");
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof (OptionMissingException))]
         public void CmdLineWin_MissingOption()
         {
@@ -284,8 +280,8 @@ namespace RJCP.Core.CommandLine
             Assert.Fail("Exception not thrown");
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_RequiredOption()
         {
             RequiredOptions myOptions = new RequiredOptions();
@@ -294,8 +290,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("bar", myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_LongOptionOneArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -306,8 +302,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("string", myOptions.SearchString);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_LongOptionTwoArguments()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -318,8 +314,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("string", myOptions.SearchString);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineWin_LongOptionsRequiredMissingArgument()
         {
@@ -329,8 +325,8 @@ namespace RJCP.Core.CommandLine
             Assert.Fail("Exception not thrown");
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_LongOptionsBoolean()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -341,8 +337,8 @@ namespace RJCP.Core.CommandLine
             Assert.IsNull(myOptions.SearchString);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_LongOptionOnly()
         {
             OptionalLongArguments myOptions = new OptionalLongArguments();
@@ -353,8 +349,8 @@ namespace RJCP.Core.CommandLine
             Assert.IsNull(myOptions.OptionC);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_LongOptionOnlyShort()
         {
@@ -362,8 +358,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/a" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_UnknownOption1()
         {
@@ -371,8 +367,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/search", "string", "/a", "/b", "/c" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_UnknownOption2()
         {
@@ -380,8 +376,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/d", "/a", "/b", "/c" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_UnknownLongOption()
         {
@@ -389,8 +385,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/foobar" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionException))]
         public void CmdLineWin_ExtraArgument()
         {
@@ -398,8 +394,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "argument", "/c" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOption()
         {
             ListOptions myOptions = new ListOptions();
@@ -411,8 +407,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("test3", myOptions.List[2]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOptionSingleElement()
         {
             ListOptions myOptions = new ListOptions();
@@ -422,8 +418,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("test1", myOptions.List[0]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOptionMultipleArguments()
         {
             ListOptions myOptions = new ListOptions();
@@ -435,8 +431,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("test3", myOptions.List[2]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOptionQuoted1()
         {
             ListOptions myOptions = new ListOptions();
@@ -448,8 +444,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("test 3", myOptions.List[2]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOptionQuoted2()
         {
             ListOptions myOptions = new ListOptions();
@@ -461,8 +457,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("test 3", myOptions.List[2]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionException))]
         public void CmdLineWin_ListOptionQuotedInvalid1()
         {
@@ -470,8 +466,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/l", @"test1:'test2:test3b':'test 3'x" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOptionWindowsPath()
         {
             ListOptions myOptions = new ListOptions();
@@ -480,8 +476,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual(@"c:\users\homeuser", myOptions.List[0]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_ListOptionQuotedEndEscape()
         {
             ListOptions myOptions = new ListOptions();
@@ -492,8 +488,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual(@"testx\", myOptions.List[2]);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionException))]
         public void CmdLineWin_ListOptionQuotedInvalid3()
         {
@@ -501,8 +497,8 @@ namespace RJCP.Core.CommandLine
             Options options = Options.Parse(myOptions, new[] { "/l", "test1:test2:\"test3" }, OptionsStyle.Windows);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueProvidedShort()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -513,8 +509,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("3", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueProvidedShort2()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -525,8 +521,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("3", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueShort()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -537,8 +533,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("0", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueProvidedLongEquals()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -549,8 +545,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("2", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueProvidedLong()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -561,8 +557,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("2", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueLong()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -573,8 +569,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("0", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_DefaultValueLong2()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -585,8 +581,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual("0", myOptions.Verbosity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_TypesEnum()
         {
             TypesOptions myOptions = new TypesOptions();
@@ -595,8 +591,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual(BasicColor.Yellow, myOptions.Color);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_TypesEnumInt()
         {
             TypesOptions myOptions = new TypesOptions();
@@ -605,8 +601,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual(BasicColor.Cyan, myOptions.Color);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         public void CmdLineWin_TypesInt()
         {
             TypesOptions myOptions = new TypesOptions();
@@ -615,8 +611,8 @@ namespace RJCP.Core.CommandLine
             Assert.AreEqual(100, myOptions.Opacity);
         }
 
-        [TestMethod]
-        [TestCategory("CommandLine")]
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionFormatException))]
         public void CmdLineWin_TypesIntInvalid()
         {
