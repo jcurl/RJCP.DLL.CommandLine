@@ -88,9 +88,13 @@
         {
             if (string.IsNullOrWhiteSpace(longOption))
                 throw new ArgumentException("Long Option may not be empty", "longOption");
+
+            char[] validOptionChars = new char[] { '-', '_' };
             for (int i = 0; i < longOption.Length; i++) {
-                if (!char.IsLetter(longOption[i]))
-                    throw new ArgumentException("Long option has invalid characters, only letters allowed", "longOption");
+                if (!char.IsLetter(longOption[i]) && Array.IndexOf(validOptionChars, longOption[i]) == -1) {
+                    string msg = string.Format("Long option has invalid character: {0}", longOption[i]);
+                    throw new ArgumentException(msg, "longOption");
+                }
             }
         }
 
