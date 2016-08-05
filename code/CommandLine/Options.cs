@@ -316,7 +316,7 @@
         public OptionsStyle OptionsStyle
         {
             get { return m_OptionsStyle; }
-            set
+            internal set
             {
                 if (!Enum.IsDefined(OptionsStyle.GetType(), value))
                     throw new ArgumentException("Unknown Options Style", "value");
