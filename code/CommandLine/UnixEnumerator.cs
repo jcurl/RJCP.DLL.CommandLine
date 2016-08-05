@@ -48,7 +48,7 @@
 
         private void ParseNextArgument(bool expectValue)
         {
-            string argument = m_Arguments[m_ArgumentPosition].Trim();
+            string argument = m_Arguments[m_ArgumentPosition];
 
             if (m_ArgumentsOnly) {
                 m_Tokens.Enqueue(new OptionToken(OptionTokenKind.Argument, argument));

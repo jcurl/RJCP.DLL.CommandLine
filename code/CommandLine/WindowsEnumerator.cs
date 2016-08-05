@@ -45,7 +45,7 @@
         private int m_ArgumentPosition;
         private void ParseNextArgument(bool expectValue)
         {
-            string argument = m_Arguments[m_ArgumentPosition].Trim();
+            string argument = m_Arguments[m_ArgumentPosition];
 
             if (argument.Length > 0 && argument[0] == '/') {
                 // This is either a long or a short option

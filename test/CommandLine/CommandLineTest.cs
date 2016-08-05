@@ -417,6 +417,78 @@
 
         [Test]
         [Category("Utilities.CommandLine")]
+        public void CmdLineUnix_LongOptionWithSpace()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "--search= string " }, OptionsStyle.Unix);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(" string ", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineUnix_LongOptionWithSpace2()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "--search= string" }, OptionsStyle.Unix);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(" string", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineUnix_LongOptionWithSpace3()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "--search=string " }, OptionsStyle.Unix);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("string ", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineUnix_LongOptionWithSpace4()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "--search", " string " }, OptionsStyle.Unix);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(" string ", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineUnix_LongOptionWithSpace5()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "--search", "=", "string" }, OptionsStyle.Unix);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("=", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineUnix_LongOptionWithSpace6()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "--search", "=", " string " }, OptionsStyle.Unix);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("=", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineUnix_LongOptionsRequiredMissingArgument()
         {

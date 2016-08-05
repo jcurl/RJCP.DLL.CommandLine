@@ -316,6 +316,102 @@
 
         [Test]
         [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search: string " }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(" string ", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace2()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search: string" }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(" string", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace3()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search:string " }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("string ", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace4()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search", " string " }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(" string ", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace5()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search", ":", "string" }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(":", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace6()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search", ":", " string " }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual(":", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace7()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search", "=", "string" }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("=", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
+        public void CmdLineWin_LongOptionWithSpace8()
+        {
+            RequiredArguments myOptions = new RequiredArguments();
+            Options options = Options.Parse(myOptions, new[] { "/search", "=", " string " }, OptionsStyle.Windows);
+
+            Assert.IsFalse(myOptions.CaseInsensitive);
+            Assert.IsFalse(myOptions.PrintFiles);
+            Assert.AreEqual("=", myOptions.SearchString);
+        }
+
+        [Test]
+        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineWin_LongOptionsRequiredMissingArgument()
         {
