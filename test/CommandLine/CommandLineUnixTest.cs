@@ -5,7 +5,7 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class CommandLineTest
+    public class CommandLineUnixTest
     {
         private class NoArguments
         {
