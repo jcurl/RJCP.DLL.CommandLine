@@ -403,7 +403,7 @@
 
             // Check that all mandatory options were provided
             StringBuilder sb = new StringBuilder();
-            List<string> optionList = new List<string>(); 
+            List<string> optionList = new List<string>();
             foreach (OptionData optionData in m_OptionList) {
                 if (optionData.Attribute.Required && !optionData.Set) {
                     MissingOption(parser,
@@ -449,7 +449,7 @@
         private void ParseShortOption(IOptionParser parser, OptionToken token)
         {
             OptionData optionData;
-            if (!m_ShortOptionList.TryGetValue(token.Value[0], out optionData)) 
+            if (!m_ShortOptionList.TryGetValue(token.Value[0], out optionData))
                 throw new OptionUnknownException(token.ToString(parser));
 
             ParseOptionParameter(parser, optionData, token);
@@ -572,7 +572,7 @@
                     continue;
                 }
 
-                if (quote == (char)0 && quoted) 
+                if (quote == (char)0 && quoted)
                     throw new OptionException("Invalid data after quoted list, expect '" + separationChar + "' only");
             }
 
