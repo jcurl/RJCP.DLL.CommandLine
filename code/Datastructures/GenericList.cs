@@ -235,11 +235,6 @@
                 }
             }
 
-            public void Dispose()
-            {
-                if (m_EnumeratorGen != null) m_EnumeratorGen.Dispose();
-            }
-
             object IEnumerator.Current
             {
                 get { return Current; }
@@ -256,6 +251,11 @@
             {
                 if (m_EnumeratorGen != null) m_EnumeratorGen.Reset();
                 if (m_EnumeratorObj != null) m_EnumeratorObj.Reset();
+            }
+
+            public void Dispose()
+            {
+                if (m_EnumeratorGen != null) m_EnumeratorGen.Dispose();
             }
         }
     }
