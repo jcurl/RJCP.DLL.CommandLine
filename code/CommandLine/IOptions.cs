@@ -6,7 +6,7 @@
     using System.Text;
 
     /// <summary>
-    /// Optional Interface IOptions that can be used to customise output
+    /// Optional Interface IOptions that can be used to customize output
     /// </summary>
     public interface IOptions
     {

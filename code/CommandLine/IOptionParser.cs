@@ -1,7 +1,7 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     /// <summary>
-    /// Interface IOptionParser for different flavours of command line parsing.
+    /// Interface IOptionParser for different flavors of command line parsing.
     /// </summary>
     internal interface IOptionParser
     {

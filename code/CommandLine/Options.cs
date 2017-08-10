@@ -150,8 +150,12 @@
 
             public IList GetList(object options)
             {
-                if (Member is FieldInfo) return (IList)(((FieldInfo)Member).GetValue(options));
-                if (Member is PropertyInfo) return (IList)(((PropertyInfo)Member).GetValue(options, null));
+                FieldInfo fieldInfo = Member as FieldInfo;
+                if (fieldInfo != null) return (IList)(fieldInfo.GetValue(options));
+
+                PropertyInfo propertyInfo = Member as PropertyInfo;
+                if (propertyInfo != null) return (IList)(propertyInfo.GetValue(options, null));
+
                 return null;
             }
 
@@ -421,7 +425,7 @@
             if (options != null) options.Check();
         }
 
-        private void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, IList<string> missing)
+        private void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, ICollection<string> missing)
         {
             if (message.Length != 0) message.Append(", ");
 

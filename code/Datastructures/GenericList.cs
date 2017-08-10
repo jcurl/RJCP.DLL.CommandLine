@@ -211,17 +211,15 @@
 
         private sealed class ListEnumerator : IEnumerator<T>
         {
-            private GenericList<T> m_Parent;
             private IEnumerator m_EnumeratorObj;
             private IEnumerator<T> m_EnumeratorGen;
 
             public ListEnumerator(GenericList<T> parent)
             {
-                m_Parent = parent;
-                if (m_Parent.m_ListGeneric != null) {
-                    m_EnumeratorGen = m_Parent.m_ListGeneric.GetEnumerator();
-                } else if (m_Parent.m_List != null) {
-                    m_EnumeratorObj = m_Parent.m_List.GetEnumerator();
+                if (parent.m_ListGeneric != null) {
+                    m_EnumeratorGen = parent.m_ListGeneric.GetEnumerator();
+                } else if (parent.m_List != null) {
+                    m_EnumeratorObj = parent.m_List.GetEnumerator();
                 }
             }
 
