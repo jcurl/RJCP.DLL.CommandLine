@@ -252,8 +252,6 @@
         {
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/i", "/f", "/s" }, OptionsStyle.Windows);
-
-            Assert.Fail("Exception not thrown");
         }
 
         [Test]
@@ -262,8 +260,6 @@
         {
             RequiredOptions myOptions = new RequiredOptions();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b" }, OptionsStyle.Windows);
-
-            Assert.Fail("Exception not thrown");
         }
 
         [Test]
@@ -391,8 +387,6 @@
         {
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search" }, OptionsStyle.Windows);
-
-            Assert.Fail("Exception not thrown");
         }
 
         [Test]
