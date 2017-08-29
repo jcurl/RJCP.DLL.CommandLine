@@ -46,7 +46,7 @@
 
             public bool PrintFiles { get { return m_PrintFiles; } }
 
-            public string SearchString { get { return m_SearchString;  } }
+            public string SearchString { get { return m_SearchString; } }
         }
 
         private class PropertyOptions
@@ -154,10 +154,9 @@
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CmdLine_NullOptions()
         {
-            Options options = Options.Parse(null, null);
+            Assert.That(() => { Options.Parse(null, null); }, Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -345,19 +344,17 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineUnix_ShortOptionsRequiredMissingArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = Options.Parse(myOptions, new[] { "-ifs" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-ifs" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionMissingArgumentException>());
         }
 
         [Test]
-        [ExpectedException(typeof (OptionMissingException))]
         public void CmdLineUnix_MissingOption()
         {
             RequiredOptions myOptions = new RequiredOptions();
-            Options options = Options.Parse(myOptions, new[] { "-ab" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-ab" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionMissingException>());
         }
 
         [Test]
@@ -458,11 +455,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineUnix_LongOptionsRequiredMissingArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = Options.Parse(myOptions, new[] { "--search" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "--search" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionMissingArgumentException>());
         }
 
         [Test]
@@ -488,43 +484,38 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void cmdLineUnix_LongOptionOnlyShort()
         {
             OptionalLongArguments myOptions = new OptionalLongArguments();
-            Options options = Options.Parse(myOptions, new[] { "-a" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-a" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownOption1()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = Options.Parse(myOptions, new[] { "--search", "string", "-ab", "-c" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "--search", "string", "-ab", "-c" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownOption2()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "-dabc" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-dabc" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownLongOption()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "--foobar" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "--foobar" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionException))]
         public void CmdLineUnix_ExtraArgument()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "-ab", "argument", "-c" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-ab", "argument", "-c" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionException>());
         }
 
         [Test]
@@ -586,11 +577,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionException))]
         public void CmdLineUnix_ListOptionQuotedInvalid1()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "-l", @"test1,'test2,test3b','test 3'x" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-l", @"test1,'test2,test3b','test 3'x" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionException>());
         }
 
         [Test]
@@ -614,11 +604,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionException))]
         public void CmdLineUnix_ListOptionQuotedInvalid3()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "-l", "test1,test2,\"test3" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-l", "test1,test2,\"test3" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionException>());
         }
 
         [Test]
@@ -750,11 +739,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionFormatException))]
         public void CmdLineUnix_TypesIntInvalid()
         {
             TypesOptions myOptions = new TypesOptions();
-            Options options = Options.Parse(myOptions, new[] { "-O", "xxx" }, OptionsStyle.Unix);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "-O", "xxx" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionFormatException>());
         }
 
         [Test]

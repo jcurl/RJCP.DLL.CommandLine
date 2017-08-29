@@ -45,7 +45,7 @@
 
             public bool PrintFiles { get { return m_PrintFiles; } }
 
-            public string SearchString { get { return m_SearchString;  } }
+            public string SearchString { get { return m_SearchString; } }
         }
 
         private class PropertyOptions
@@ -173,11 +173,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_ShortOptionsJoined()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "/ab" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/ab" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
@@ -247,19 +246,18 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineWin_ShortOptionsRequiredMissingArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = Options.Parse(myOptions, new[] { "/i", "/f", "/s" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/i", "/f", "/s" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionMissingArgumentException>());
+
         }
 
         [Test]
-        [ExpectedException(typeof (OptionMissingException))]
         public void CmdLineWin_MissingOption()
         {
             RequiredOptions myOptions = new RequiredOptions();
-            Options options = Options.Parse(myOptions, new[] { "/a", "/b" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/a", "/b" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionMissingException>());
         }
 
         [Test]
@@ -382,11 +380,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineWin_LongOptionsRequiredMissingArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = Options.Parse(myOptions, new[] { "/search" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/search" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionMissingArgumentException>());
         }
 
         [Test]
@@ -412,43 +409,38 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_LongOptionOnlyShort()
         {
             OptionalLongArguments myOptions = new OptionalLongArguments();
-            Options options = Options.Parse(myOptions, new[] { "/a" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/a" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_UnknownOption1()
         {
             RequiredArguments myOptions = new RequiredArguments();
-            Options options = Options.Parse(myOptions, new[] { "/search", "string", "/a", "/b", "/c" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/search", "string", "/a", "/b", "/c" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_UnknownOption2()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "/d", "/a", "/b", "/c" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/d", "/a", "/b", "/c" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineWin_UnknownLongOption()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "/foobar" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/foobar" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionUnknownException>());
         }
 
         [Test]
-        [ExpectedException(typeof(OptionException))]
         public void CmdLineWin_ExtraArgument()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, new[] { "/a", "/b", "argument", "/c" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/a", "/b", "argument", "/c" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionException>());
         }
 
         [Test]
@@ -510,11 +502,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionException))]
         public void CmdLineWin_ListOptionQuotedInvalid1()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", @"test1:'test2:test3b':'test 3'x" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/l", @"test1:'test2:test3b':'test 3'x" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionException>());
         }
 
         [Test]
@@ -538,11 +529,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionException))]
         public void CmdLineWin_ListOptionQuotedInvalid3()
         {
             ListOptions myOptions = new ListOptions();
-            Options options = Options.Parse(myOptions, new[] { "/l", "test1:test2:\"test3" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/l", "test1:test2:\"test3" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionException>());
         }
 
         [Test]
@@ -650,11 +640,10 @@
         }
 
         [Test]
-        [ExpectedException(typeof(OptionFormatException))]
         public void CmdLineWin_TypesIntInvalid()
         {
             TypesOptions myOptions = new TypesOptions();
-            Options options = Options.Parse(myOptions, new[] { "/O", "xxx" }, OptionsStyle.Windows);
+            Assert.That(() => { Options.Parse(myOptions, new[] { "/O", "xxx" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionFormatException>());
         }
     }
 }
