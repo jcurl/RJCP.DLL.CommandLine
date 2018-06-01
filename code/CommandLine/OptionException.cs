@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionException(string message, Exception innerException) : base(message, innerException) { }
 
         /// <summary>
@@ -63,7 +63,7 @@
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionDuplicateException(string message, Exception innerException) : base(message, innerException) {}
 
         /// <summary>
@@ -87,12 +87,17 @@
         /// </summary>
         public OptionUnknownException() { }
 
+        private static string UnknownOptionMessage(string option)
+        {
+            return string.Format("Unknown option '{0}'", option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionUnknownException" /> class with a specified error message.
         /// </summary>
         /// <param name="option">The option provided on the command line that is unknown.</param>
         public OptionUnknownException(string option)
-            : base("Unknown option '" + option + "'")
+            : base(UnknownOptionMessage(option))
         {
             Option = option;
         }
@@ -103,9 +108,9 @@
         /// </summary>
         /// <param name="option">The option provided on the command line that is unknown.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionUnknownException(string option, Exception innerException)
-            : base("Unknown option '" + option + "'", innerException)
+            : base(UnknownOptionMessage(option), innerException)
         {
             Option = option;
         }
@@ -166,12 +171,17 @@
         /// </summary>
         public OptionMissingArgumentException() { }
 
+        private static string MissingOptionMessage(string option)
+        {
+            return string.Format("Missing argument for '{0}'", option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingArgumentException" /> class with a specified error message.
         /// </summary>
         /// <param name="option">The option provided on the command line that is unknown.</param>
         public OptionMissingArgumentException(string option)
-            : base("Missing argument for '" + option + "'")
+            : base(MissingOptionMessage(option))
         {
             Option = option;
         }
@@ -182,9 +192,9 @@
         /// </summary>
         /// <param name="option">The option provided on the command line that is unknown.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionMissingArgumentException(string option, Exception innerException)
-            : base("Missing argument for '" + option + "'", innerException)
+            : base(MissingOptionMessage(option), innerException)
         {
             Option = option;
         }
@@ -247,12 +257,17 @@
         /// </summary>
         public OptionMissingException() { }
 
+        private static string MissingOptionMessage(string option)
+        {
+            return string.Format("Missing argument for options '{0}'", option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingException" /> class with a specified error message.
         /// </summary>
         /// <param name="options">The options missing.</param>
         public OptionMissingException(string options)
-            : base("Missing argument for options '" + options + "'")
+            : base(MissingOptionMessage(options))
         {
             Options = options;
         }
@@ -263,9 +278,9 @@
         /// </summary>
         /// <param name="options">The options missing.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionMissingException(string options, Exception innerException)
-            : base("Missing argument for options '" + options + "'", innerException)
+            : base(MissingOptionMessage(options), innerException)
         {
             Options = options;
         }
@@ -328,12 +343,17 @@
         /// </summary>
         public OptionAssignedException() { }
 
+        private static string DuplicateOptionMessage(string option)
+        {
+            return string.Format("Option '{0}' provided multiple times", option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionAssignedException" /> class with a specified error message.
         /// </summary>
         /// <param name="option">The options missing.</param>
         public OptionAssignedException(string option)
-            : base("Option '" + option + "' provided multiple times")
+            : base(DuplicateOptionMessage(option))
         {
             Option = option;
         }
@@ -344,9 +364,9 @@
         /// </summary>
         /// <param name="option">The options missing.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionAssignedException(string option, Exception innerException)
-            : base("Option '" + option + "' provided multiple times", innerException)
+            : base(DuplicateOptionMessage(option), innerException)
         {
             Option = option;
         }
@@ -409,12 +429,17 @@
         /// </summary>
         public OptionFormatException() { }
 
+        private static string IncorrectFormatOptionMessage(string option)
+        {
+            return string.Format("Option '{0}' has incorrect format", option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionFormatException" /> class with a specified error message.
         /// </summary>
         /// <param name="option">The option provided with the wrong format.</param>
         public OptionFormatException(string option)
-            : base("Option '" + option + "' has incorrect format")
+            : base(IncorrectFormatOptionMessage(option))
         {
             Option = option;
         }
@@ -425,9 +450,9 @@
         /// </summary>
         /// <param name="option">The option provided with the wrong format.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionFormatException(string option, Exception innerException)
-            : base("Option '" + option + "' has incorrect format", innerException)
+            : base(IncorrectFormatOptionMessage(option), innerException)
         {
             Option = option;
         }
@@ -438,7 +463,7 @@
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="option">The option provided with the wrong format.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
-        ///  or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public OptionFormatException(string option, string message, Exception innerException)
             : base(message, innerException)
         {

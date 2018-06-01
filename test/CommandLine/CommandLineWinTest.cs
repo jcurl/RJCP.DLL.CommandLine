@@ -176,9 +176,9 @@
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, new[] { "/a" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsFalse(myOptions.OptionB);
-            Assert.IsNull(myOptions.OptionC);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.False);
+            Assert.That(myOptions.OptionC, Is.Null);
         }
 
         [Test]
@@ -194,9 +194,9 @@
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.IsNull(myOptions.OptionC);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.OptionC, Is.Null);
         }
 
         [Test]
@@ -205,9 +205,9 @@
             PropertyOptions myOptions = new PropertyOptions();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.IsNull(myOptions.OptionC);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.OptionC, Is.Null);
         }
 
         [Test]
@@ -216,9 +216,9 @@
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, new[] { "/c:foo" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.OptionA);
-            Assert.IsFalse(myOptions.OptionB);
-            Assert.AreEqual("foo", myOptions.OptionC);
+            Assert.That(myOptions.OptionA, Is.False);
+            Assert.That(myOptions.OptionB, Is.False);
+            Assert.That(myOptions.OptionC, Is.EqualTo("foo"));
         }
 
         [Test]
@@ -227,9 +227,9 @@
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, new[] { "/c", "foo" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.OptionA);
-            Assert.IsFalse(myOptions.OptionB);
-            Assert.AreEqual("foo", myOptions.OptionC);
+            Assert.That(myOptions.OptionA, Is.False);
+            Assert.That(myOptions.OptionB, Is.False);
+            Assert.That(myOptions.OptionC, Is.EqualTo("foo"));
         }
 
         [Test]
@@ -238,9 +238,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/i", "/f", "/s", "string" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.CaseInsensitive);
-            Assert.IsTrue(myOptions.PrintFiles);
-            Assert.AreEqual("string", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.True);
+            Assert.That(myOptions.PrintFiles, Is.True);
+            Assert.That(myOptions.SearchString, Is.EqualTo("string"));
         }
 
         [Test]
@@ -249,9 +249,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/i", "/f", "/s:string" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.CaseInsensitive);
-            Assert.IsTrue(myOptions.PrintFiles);
-            Assert.AreEqual("string", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.True);
+            Assert.That(myOptions.PrintFiles, Is.True);
+            Assert.That(myOptions.SearchString, Is.EqualTo("string"));
         }
 
         [Test]
@@ -275,7 +275,7 @@
             RequiredOptions myOptions = new RequiredOptions();
             Options options = Options.Parse(myOptions, new[] { "/c:bar" }, OptionsStyle.Windows);
 
-            Assert.AreEqual("bar", myOptions.OptionC);
+            Assert.That(myOptions.OptionC, Is.EqualTo("bar"));
         }
 
         [Test]
@@ -284,9 +284,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search:string" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual("string", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo("string"));
         }
 
         [Test]
@@ -295,9 +295,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search", "string" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual("string", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo("string"));
         }
 
         [Test]
@@ -306,9 +306,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search: string " }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual(" string ", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo(" string "));
         }
 
         [Test]
@@ -317,9 +317,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search: string" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual(" string", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo(" string"));
         }
 
         [Test]
@@ -328,9 +328,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search:string " }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual("string ", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo("string "));
         }
 
         [Test]
@@ -339,9 +339,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search", " string " }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual(" string ", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo(" string "));
         }
 
         [Test]
@@ -350,9 +350,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search", ":", "string" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual(":", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo(":"));
         }
 
         [Test]
@@ -361,9 +361,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search", ":", " string " }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual(":", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo(":"));
         }
 
         [Test]
@@ -372,9 +372,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search", "=", "string" }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual("=", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo("="));
         }
 
         [Test]
@@ -383,9 +383,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/search", "=", " string " }, OptionsStyle.Windows);
 
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsFalse(myOptions.PrintFiles);
-            Assert.AreEqual("=", myOptions.SearchString);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.PrintFiles, Is.False);
+            Assert.That(myOptions.SearchString, Is.EqualTo("="));
         }
 
         [Test]
@@ -401,9 +401,9 @@
             RequiredArguments myOptions = new RequiredArguments();
             Options options = Options.Parse(myOptions, new[] { "/printfiles" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.PrintFiles);
-            Assert.IsFalse(myOptions.CaseInsensitive);
-            Assert.IsNull(myOptions.SearchString);
+            Assert.That(myOptions.PrintFiles, Is.True);
+            Assert.That(myOptions.CaseInsensitive, Is.False);
+            Assert.That(myOptions.SearchString, Is.Null);
         }
 
         [Test]
@@ -412,9 +412,9 @@
             OptionalLongArguments myOptions = new OptionalLongArguments();
             Options options = Options.Parse(myOptions, new[] { "/along" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsFalse(myOptions.OptionB);
-            Assert.IsNull(myOptions.OptionC);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.False);
+            Assert.That(myOptions.OptionC, Is.Null);
         }
 
         [Test]
@@ -458,10 +458,10 @@
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", "test1,test2,test3" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2", myOptions.List[1]);
-            Assert.AreEqual("test3", myOptions.List[2]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List[0], Is.EqualTo("test1"));
+            Assert.That(myOptions.List[1], Is.EqualTo("test2"));
+            Assert.That(myOptions.List[2], Is.EqualTo("test3"));
         }
 
         [Test]
@@ -470,8 +470,8 @@
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", "test1" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(1, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List[0], Is.EqualTo("test1"));
         }
 
         [Test]
@@ -480,10 +480,10 @@
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", "test1", "/l", "test2", "/l", "test3" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2", myOptions.List[1]);
-            Assert.AreEqual("test3", myOptions.List[2]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List[0], Is.EqualTo("test1"));
+            Assert.That(myOptions.List[1], Is.EqualTo("test2"));
+            Assert.That(myOptions.List[2], Is.EqualTo("test3"));
         }
 
         [Test]
@@ -492,10 +492,10 @@
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", @"test1,'test2','test 3'" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2", myOptions.List[1]);
-            Assert.AreEqual("test 3", myOptions.List[2]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List[0], Is.EqualTo("test1"));
+            Assert.That(myOptions.List[1], Is.EqualTo("test2"));
+            Assert.That(myOptions.List[2], Is.EqualTo("test 3"));
         }
 
         [Test]
@@ -504,10 +504,10 @@
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", @"test1,'test2,test3b','test 3'" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2,test3b", myOptions.List[1]);
-            Assert.AreEqual("test 3", myOptions.List[2]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List[0], Is.EqualTo("test1"));
+            Assert.That(myOptions.List[1], Is.EqualTo("test2,test3b"));
+            Assert.That(myOptions.List[2], Is.EqualTo("test 3"));
         }
 
         [Test]
@@ -522,8 +522,8 @@
         {
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", @"c:\users\homeuser" }, OptionsStyle.Windows);
-            Assert.AreEqual(1, myOptions.List.Count);
-            Assert.AreEqual(@"c:\users\homeuser", myOptions.List[0]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List[0], Is.EqualTo(@"c:\users\homeuser"));
         }
 
         [Test]
@@ -531,10 +531,10 @@
         {
             ListOptions myOptions = new ListOptions();
             Options options = Options.Parse(myOptions, new[] { "/l", @"test1,test2,testx\" }, OptionsStyle.Windows);
-            Assert.AreEqual(3, myOptions.List.Count);
-            Assert.AreEqual("test1", myOptions.List[0]);
-            Assert.AreEqual("test2", myOptions.List[1]);
-            Assert.AreEqual(@"testx\", myOptions.List[2]);
+            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List[0], Is.EqualTo("test1"));
+            Assert.That(myOptions.List[1], Is.EqualTo("test2"));
+            Assert.That(myOptions.List[2], Is.EqualTo(@"testx\"));
         }
 
         [Test]
@@ -550,9 +550,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "/v:3" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("3", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("3"));
         }
 
         [Test]
@@ -561,9 +561,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "/v", "3" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("3", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("3"));
         }
 
         [Test]
@@ -572,9 +572,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "/v" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("0", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("0"));
         }
 
         [Test]
@@ -583,9 +583,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "/verbosity:2" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("2", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("2"));
         }
 
         [Test]
@@ -594,9 +594,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "/verbosity", "2" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("2", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("2"));
         }
 
         [Test]
@@ -605,9 +605,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/a", "/b", "/verbosity" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("0", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("0"));
         }
 
         [Test]
@@ -616,9 +616,9 @@
             DefaultValueOption myOptions = new DefaultValueOption();
             Options options = Options.Parse(myOptions, new[] { "/verbosity", "/a", "/b" }, OptionsStyle.Windows);
 
-            Assert.IsTrue(myOptions.OptionA);
-            Assert.IsTrue(myOptions.OptionB);
-            Assert.AreEqual("0", myOptions.Verbosity);
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.Verbosity, Is.EqualTo("0"));
         }
 
         [Test]
@@ -627,7 +627,7 @@
             TypesOptions myOptions = new TypesOptions();
             Options options = Options.Parse(myOptions, new[] { "/c", "yellow" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(BasicColor.Yellow, myOptions.Color);
+            Assert.That(myOptions.Color, Is.EqualTo(BasicColor.Yellow));
         }
 
         [Test]
@@ -636,7 +636,7 @@
             TypesOptions myOptions = new TypesOptions();
             Options options = Options.Parse(myOptions, new[] { "/c", "4" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(BasicColor.Cyan, myOptions.Color);
+            Assert.That(myOptions.Color, Is.EqualTo(BasicColor.Cyan));
         }
 
         [Test]
@@ -645,7 +645,7 @@
             TypesOptions myOptions = new TypesOptions();
             Options options = Options.Parse(myOptions, new[] { "/O", "100" }, OptionsStyle.Windows);
 
-            Assert.AreEqual(100, myOptions.Opacity);
+            Assert.That(myOptions.Opacity, Is.EqualTo(100));
         }
 
         [Test]
