@@ -73,7 +73,7 @@
     /// <para>Properties with the type <c>boolean</c> may not have arguments and are always set to <c>true</c> when
     /// provided. All types except <c>boolean</c> types expect an argument.</para>
     /// <note type="note">This application can only parse the command line that comes from Windows. In particular,
-    /// Windows removes any quoting which may result in unexpected behaviour. Such an example is <c>--foo="a,b",c</c>
+    /// Windows removes any quoting which may result in unexpected behavior. Such an example is <c>--foo="a,b",c</c>
     /// which results in a single argument <c>--foo=a,b,c</c> which is indistinguishable from the command line
     /// <c>--foo="a,b,c"</c> that also results in <c>--foo=a,b,c</c>. In this case, the user should use the single
     /// tick for quoting.</note>
@@ -86,9 +86,20 @@
         /// <param name="options">The options object to write to.</param>
         /// <param name="arguments">The argument list to parse.</param>
         /// <returns>An instance of this object.</returns>
+        /// <remarks>
+        /// The default style used for command line options is dependent on the operating system that this program is
+        /// running on. For Windows NT, the <see cref="OptionsStyle.Windows"/> is used. For Unix like operating systems
+        /// (such as Linux and MacOS), the <see cref="OptionsStyle.Unix"/> is used. Use the constructor
+        /// <see cref="Options.Parse(object, string[], OptionsStyle)"/> to override this.
+        /// </remarks>
         public static Options Parse(object options, string[] arguments)
         {
             Options cmdLine = new Options(options);
+            if (Platform.IsWinNT()) {
+                cmdLine.OptionsStyle = OptionsStyle.Windows;
+            } else {
+                cmdLine.OptionsStyle = OptionsStyle.Unix;
+            }
             cmdLine.ParseCommandLine(arguments);
             return cmdLine;
         }
@@ -320,9 +331,9 @@
         public OptionsStyle OptionsStyle
         {
             get { return m_OptionsStyle; }
-            internal set
+            private set
             {
-                if (!Enum.IsDefined(OptionsStyle.GetType(), value))
+                if (!Enum.IsDefined(typeof(OptionsStyle), value))
                     throw new ArgumentException("Unknown Options Style", "value");
                 m_OptionsStyle = value;
             }

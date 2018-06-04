@@ -154,7 +154,16 @@
         }
 
         [Test]
-        public void CmdLine_NullOptions()
+        [Platform(Include = "Unix")]
+        public void CmdLineUnix_OptionsType()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = Options.Parse(myOptions, null);
+            Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Unix));
+        }
+
+        [Test]
+        public void CmdLineUnix_NullOptions()
         {
             Assert.That(() => { Options.Parse(null, null); }, Throws.TypeOf<ArgumentNullException>());
         }

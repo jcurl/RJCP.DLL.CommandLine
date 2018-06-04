@@ -43,6 +43,7 @@
     <Compile Include="CommandLine\OptionException.cs" />
     <Compile Include="CommandLine\Options.cs" />
     <Compile Include="CommandLine\OptionToken.cs" />
+    <Compile Include="CommandLine\Platform.cs" />
     <Compile Include="CommandLine\UnixEnumerator.cs" />
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
     <Compile Include="Datastructures\GenericList.cs" />

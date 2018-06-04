@@ -134,6 +134,15 @@
         }
 
         [Test]
+        [Platform(Include = "Win")]
+        public void CmdLineWin_OptionsType()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = Options.Parse(myOptions, null);
+            Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Windows));
+        }
+
+        [Test]
         public void CmdLineWin_NullArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
