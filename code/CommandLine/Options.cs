@@ -267,7 +267,7 @@
             FieldInfo field = member as FieldInfo;
             if (field != null) {
                 if (typeof(IList<string>).IsAssignableFrom(field.FieldType)) {
-                    return new GenericList<string>((IList<string>)field.GetValue(m_Options));
+                    return (IList<string>)field.GetValue(m_Options);
                 }
                 if (typeof(IList).IsAssignableFrom(field.FieldType)) {
                     return new GenericList<string>((IList)field.GetValue(m_Options));
@@ -277,7 +277,7 @@
             PropertyInfo property = member as PropertyInfo;
             if (property != null) {
                 if (typeof(IList<string>).IsAssignableFrom(property.PropertyType)) {
-                    return new GenericList<string>((IList<string>)property.GetValue(m_Options, null));
+                    return (IList<string>)property.GetValue(m_Options, null);
                 }
                 if (typeof(IList).IsAssignableFrom(property.PropertyType)) {
                     return new GenericList<string>((IList)property.GetValue(m_Options, null));

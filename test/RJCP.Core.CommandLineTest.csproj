@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="CommandLine\CommandLineUnixTest.cs" />
     <Compile Include="CommandLine\CommandLineWinTest.cs" />
+    <Compile Include="Datastructures\GenericListTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
