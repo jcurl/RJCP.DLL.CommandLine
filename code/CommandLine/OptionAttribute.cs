@@ -89,19 +89,41 @@
             if (string.IsNullOrWhiteSpace(longOption))
                 throw new ArgumentException("Long Option may not be empty", nameof(longOption));
 
-            char[] validOptionChars = new char[] { '-', '_' };
             for (int i = 0; i < longOption.Length; i++) {
-                if (!char.IsLetter(longOption[i]) && Array.IndexOf(validOptionChars, longOption[i]) == -1) {
+                if (!IsValidLongOptionChar(i, longOption[i])) {
                     string msg = string.Format("Long option has invalid character: {0}", longOption[i]);
                     throw new ArgumentException(msg, nameof(longOption));
                 }
             }
         }
 
+        private static readonly char[] ValidLongOptionChars = new char[] { '-', '_' };
+
+        private static bool IsValidLongOptionChar(int pos, char longOptionChar)
+        {
+            if (char.IsLetter(longOptionChar)) return true;
+            if (pos == 0) return false;
+            if (char.IsDigit(longOptionChar)) return true;
+            if (Array.IndexOf<char>(ValidLongOptionChars, longOptionChar) != -1) return true;
+            return false;
+        }
+
         private void CheckShortOption(char shortOption)
         {
-            if (char.IsWhiteSpace(shortOption))
-                throw new ArgumentException("Short option must be a letter", nameof(shortOption));
+            if (!IsValidShortOptionChar(shortOption)) {
+                string message = string.Format("Short option '{0}' character not allowed", shortOption);
+                throw new ArgumentException(message, nameof(shortOption));
+            }
+        }
+
+        private static readonly char[] ValidShortOptionChars = new char[] { '-', '_', '!', '+', '?', '#' };
+
+        private static bool IsValidShortOptionChar(char shortOptionChar)
+        {
+            if (char.IsLetter(shortOptionChar)) return true;
+            if (char.IsDigit(shortOptionChar)) return true;
+            if (Array.IndexOf(ValidShortOptionChars, shortOptionChar) != -1) return true;
+            return false;
         }
 
         /// <summary>

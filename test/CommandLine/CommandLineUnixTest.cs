@@ -95,6 +95,33 @@
 
             [Option("clong")]
             public string OptionC;
+
+            [Option("level42")]
+            public string Level42;
+#pragma warning restore 0649
+        }
+
+        private class InvalidLongArgumentWithDigit1
+        {
+#pragma warning disable 0649
+            [Option("6502")]
+            public bool Option6502;
+#pragma warning restore 0649
+        }
+
+        private class InvalidLongArgumentWithDigit2
+        {
+#pragma warning disable 0649
+            [Option("6502level")]
+            public bool Option6502;
+#pragma warning restore 0649
+        }
+
+        private class ShortOptionWithDigit
+        {
+#pragma warning disable 0649
+            [Option('9')]
+            public bool Level;
 #pragma warning restore 0649
         }
 
@@ -518,6 +545,42 @@
         {
             OptionalArguments myOptions = new OptionalArguments();
             Assert.That(() => { Options.Parse(myOptions, new[] { "--foobar" }, OptionsStyle.Unix); }, Throws.TypeOf<OptionUnknownException>());
+        }
+
+        [Test]
+        public void CmdLineUnix_InvalidLongOption1a()
+        {
+            InvalidLongArgumentWithDigit1 myOptions = new InvalidLongArgumentWithDigit1();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { }, OptionsStyle.Unix); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineUnix_InvalidLongOption1b()
+        {
+            InvalidLongArgumentWithDigit1 myOptions = new InvalidLongArgumentWithDigit1();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { "--6502" }, OptionsStyle.Unix); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineUnix_InvalidLongOption2a()
+        {
+            InvalidLongArgumentWithDigit2 myOptions = new InvalidLongArgumentWithDigit2();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { }, OptionsStyle.Unix); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineUnix_InvalidLongOption2b()
+        {
+            InvalidLongArgumentWithDigit2 myOptions = new InvalidLongArgumentWithDigit2();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { "--6502level" }, OptionsStyle.Unix); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineUnix_ShortOptionWithDigit()
+        {
+            ShortOptionWithDigit myOptions = new ShortOptionWithDigit();
+            Options options = Options.Parse(myOptions, new string[] { "-9" }, OptionsStyle.Unix);
+            Assert.That(myOptions.Level, Is.True);
         }
 
         [Test]

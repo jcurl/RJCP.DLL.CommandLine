@@ -94,6 +94,33 @@
 
             [Option("clong")]
             public string OptionC;
+
+            [Option("level42")]
+            public string Level42;
+#pragma warning restore 0649
+        }
+
+        private class InvalidLongArgumentWithDigit1
+        {
+#pragma warning disable 0649
+            [Option("6502")]
+            public bool Option6502;
+#pragma warning restore 0649
+        }
+
+        private class InvalidLongArgumentWithDigit2
+        {
+#pragma warning disable 0649
+            [Option("6502level")]
+            public bool Option6502;
+#pragma warning restore 0649
+        }
+
+        private class ShortOptionWithDigit
+        {
+#pragma warning disable 0649
+            [Option('9')]
+            public bool Level;
 #pragma warning restore 0649
         }
 
@@ -415,6 +442,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.Null);
+            Assert.That(myOptions.Level42, Is.Null);
         }
 
         [Test]
@@ -443,6 +471,42 @@
         {
             OptionalArguments myOptions = new OptionalArguments();
             Assert.That(() => { Options.Parse(myOptions, new[] { "/foobar" }, OptionsStyle.Windows); }, Throws.TypeOf<OptionUnknownException>());
+        }
+
+        [Test]
+        public void CmdLineWin_InvalidLongOption1a()
+        {
+            InvalidLongArgumentWithDigit1 myOptions = new InvalidLongArgumentWithDigit1();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { }, OptionsStyle.Windows); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineWin_InvalidLongOption1b()
+        {
+            InvalidLongArgumentWithDigit1 myOptions = new InvalidLongArgumentWithDigit1();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { "/6502" }, OptionsStyle.Windows); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineWin_InvalidLongOption2a()
+        {
+            InvalidLongArgumentWithDigit2 myOptions = new InvalidLongArgumentWithDigit2();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { }, OptionsStyle.Windows); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineWin_InvalidLongOption2b()
+        {
+            InvalidLongArgumentWithDigit2 myOptions = new InvalidLongArgumentWithDigit2();
+            Assert.That(() => { Options.Parse(myOptions, new string[] { "/6502level" }, OptionsStyle.Windows); }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void CmdLineWin_ShortOptionWithDigit()
+        {
+            ShortOptionWithDigit myOptions = new ShortOptionWithDigit();
+            Options options = Options.Parse(myOptions, new string[] { "/9" }, OptionsStyle.Windows);
+            Assert.That(myOptions.Level, Is.True);
         }
 
         [Test]
