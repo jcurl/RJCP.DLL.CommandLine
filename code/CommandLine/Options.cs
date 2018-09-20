@@ -288,12 +288,24 @@
 
         private void BuildOptionList(bool longOptionCaseInsensitive)
         {
-            foreach (FieldInfo field in m_Options.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)) {
-                ParseMember(field, longOptionCaseInsensitive);
-            }
+            Type optionsClassType = m_Options.GetType();
 
-            foreach (PropertyInfo property in m_Options.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)) {
-                ParseMember(property, longOptionCaseInsensitive);
+            while (optionsClassType != null) {
+                FieldInfo[] fields = optionsClassType.GetFields(
+                    BindingFlags.Instance | BindingFlags.Static |
+                    BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                foreach (FieldInfo field in fields) {
+                    ParseMember(field, longOptionCaseInsensitive);
+                }
+
+                PropertyInfo[] properties = optionsClassType.GetProperties(
+                    BindingFlags.Instance | BindingFlags.Static |
+                    BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                foreach (PropertyInfo property in properties) {
+                    ParseMember(property, longOptionCaseInsensitive);
+                }
+
+                optionsClassType = optionsClassType.BaseType;
             }
         }
 

@@ -175,4 +175,60 @@
         [OptionArguments]
         public IList<string> Arguments { get { return m_Arguments; } }
     }
+
+    internal class BaseOptionsPrivate
+    {
+        [Option('a', "along")]
+#pragma warning disable 0649
+        private bool m_OptionA;
+#pragma warning restore 0649
+
+        public bool OptionA { get { return m_OptionA; } }
+    }
+
+    internal class DerivedOptionsPrivate : BaseOptionsPrivate
+    {
+        [Option('b', "blong")]
+#pragma warning disable 0649
+        private bool m_OptionB;
+#pragma warning restore 0649
+
+        public bool OptionB { get { return m_OptionB; } }
+    }
+
+    internal class BaseOptionsProtected
+    {
+        [Option('a', "along")]
+#pragma warning disable 0649
+        protected bool m_OptionA;
+#pragma warning restore 0649
+
+        public bool OptionA { get { return m_OptionA; } }
+    }
+
+    internal class DerivedOptionsProtected : BaseOptionsProtected
+    {
+        [Option('b', "blong")]
+#pragma warning disable 0649
+        protected bool m_OptionB;
+#pragma warning restore 0649
+
+        public bool OptionB { get { return m_OptionB; } }
+    }
+
+    internal class BaseOptionsProtectedList
+    {
+        [Option('a', "along")]
+        protected List<string> m_OptionA = new List<string>();
+
+        public IList<string> OptionA { get { return m_OptionA; } }
+    }
+
+    internal class DerivedOptionsProtectedList : BaseOptionsProtectedList
+    {
+        [Option('b', "blong")]
+        protected List<string> m_OptionB = new List<string>();
+
+        public IList<string> OptionB { get { return m_OptionB; } }
+    }
 }

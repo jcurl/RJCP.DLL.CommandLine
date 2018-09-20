@@ -739,5 +739,65 @@
             Assert.That(myOptions.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(myOptions.Arguments[1], Is.EqualTo("arg2"));
         }
+
+        [Test]
+        public void DerivedOptionsPrivate1()
+        {
+            DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
+            Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
+
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.False);
+        }
+
+        [Test]
+        public void DerivedOptionsPrivate2()
+        {
+            DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
+            Options options = GetOptions(myOptions, new[] { "/b" }, new[] { "-b" });
+
+            Assert.That(myOptions.OptionA, Is.False);
+            Assert.That(myOptions.OptionB, Is.True);
+        }
+
+        [Test]
+        public void DerivedOptionsProtected1()
+        {
+            DerivedOptionsProtected myOptions = new DerivedOptionsProtected();
+            Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
+
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.False);
+        }
+
+        [Test]
+        public void DerivedOptionsProtected2()
+        {
+            DerivedOptionsProtected myOptions = new DerivedOptionsProtected();
+            Options options = GetOptions(myOptions, new[] { "/b" }, new[] { "-b" });
+
+            Assert.That(myOptions.OptionA, Is.False);
+            Assert.That(myOptions.OptionB, Is.True);
+        }
+
+        [Test]
+        public void DerivedOptionsProtectedList1()
+        {
+            DerivedOptionsProtectedList myOptions = new DerivedOptionsProtectedList();
+            Options options = GetOptions(myOptions, new[] { "/a", "foo,bar" }, new[] { "-a", "foo,bar" });
+
+            Assert.That(myOptions.OptionA.Count, Is.EqualTo(2));
+            Assert.That(myOptions.OptionB.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void DerivedOptionsProtectedList2()
+        {
+            DerivedOptionsProtectedList myOptions = new DerivedOptionsProtectedList();
+            Options options = GetOptions(myOptions, new[] { "/b", "foo,bar" }, new[] { "-b", "foo,bar" });
+
+            Assert.That(myOptions.OptionA.Count, Is.EqualTo(0));
+            Assert.That(myOptions.OptionB.Count, Is.EqualTo(2));
+        }
     }
 }
