@@ -231,4 +231,12 @@
 
         public IList<string> OptionB { get { return m_OptionB; } }
     }
+
+    internal class EventWithOption
+    {
+        [Option('e', "event")]
+#pragma warning disable 0067
+        public event EventHandler<EventArgs> MyEvent;
+#pragma warning restore 0067
+    }
 }

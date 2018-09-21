@@ -746,6 +746,7 @@
             DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
             Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
 
+            Assert.That(options, Is.Not.Null);
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.False);
         }
@@ -756,6 +757,7 @@
             DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
             Options options = GetOptions(myOptions, new[] { "/b" }, new[] { "-b" });
 
+            Assert.That(options, Is.Not.Null);
             Assert.That(myOptions.OptionA, Is.False);
             Assert.That(myOptions.OptionB, Is.True);
         }
@@ -766,6 +768,7 @@
             DerivedOptionsProtected myOptions = new DerivedOptionsProtected();
             Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
 
+            Assert.That(options, Is.Not.Null);
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.False);
         }
@@ -776,6 +779,7 @@
             DerivedOptionsProtected myOptions = new DerivedOptionsProtected();
             Options options = GetOptions(myOptions, new[] { "/b" }, new[] { "-b" });
 
+            Assert.That(options, Is.Not.Null);
             Assert.That(myOptions.OptionA, Is.False);
             Assert.That(myOptions.OptionB, Is.True);
         }
@@ -786,6 +790,7 @@
             DerivedOptionsProtectedList myOptions = new DerivedOptionsProtectedList();
             Options options = GetOptions(myOptions, new[] { "/a", "foo,bar" }, new[] { "-a", "foo,bar" });
 
+            Assert.That(options, Is.Not.Null);
             Assert.That(myOptions.OptionA.Count, Is.EqualTo(2));
             Assert.That(myOptions.OptionB.Count, Is.EqualTo(0));
         }
@@ -796,8 +801,19 @@
             DerivedOptionsProtectedList myOptions = new DerivedOptionsProtectedList();
             Options options = GetOptions(myOptions, new[] { "/b", "foo,bar" }, new[] { "-b", "foo,bar" });
 
+            Assert.That(options, Is.Not.Null);
             Assert.That(myOptions.OptionA.Count, Is.EqualTo(0));
             Assert.That(myOptions.OptionB.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void OptionOnEvent()
+        {
+            EventWithOption eventOption = new EventWithOption();
+
+            // The attribute "Option" is given on an event, which should be ignored.
+            Assert.That(() => { GetOptions(eventOption, new[] { "/e" }, new[] { "-e" }); },
+                Throws.TypeOf<OptionUnknownException>());
         }
     }
 }

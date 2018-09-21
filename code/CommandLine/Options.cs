@@ -1,4 +1,7 @@
-﻿namespace RJCP.Core.CommandLine
+﻿#pragma warning disable S3626 // Jump statements should not be redundant - used here to add symmetry in code with no side effects
+#pragma warning disable S1172 // Unused method parameters should be removed - used here to add symmetry in code
+
+namespace RJCP.Core.CommandLine
 {
     using System;
     using System.Collections;
@@ -211,7 +214,9 @@
             }
 
             public OptionAttribute Attribute { get; set; }
+
             public MemberInfo Member { get; set; }
+
             public bool Set { get; set; }
 
             public bool IsList
@@ -233,7 +238,7 @@
                 PropertyInfo propertyInfo = Member as PropertyInfo;
                 if (propertyInfo != null) return (IList)(propertyInfo.GetValue(options, null));
 
-                return null;
+                throw new ApplicationException("Unknown member in Options class");
             }
 
             public void SetValue(object options, string value)
@@ -362,7 +367,7 @@
                 }
             }
 
-            return null;
+            throw new ApplicationException("Unknown member in Options class");
         }
 
         [Conditional("DEBUG")]
