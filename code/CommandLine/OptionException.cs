@@ -247,7 +247,7 @@
     }
 
     /// <summary>
-    /// An option was specified on the command line and is missing a mandatory argument.
+    /// A mandatory option was not specified on the command line.
     /// </summary>
     [Serializable]
     public class OptionMissingException : OptionException
