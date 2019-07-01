@@ -128,9 +128,8 @@
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (array == null) throw new ArgumentNullException(nameof(array));
-            if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex), "arrayIndex is less than zero");
-            if (array.Rank != 1) throw new ArgumentException("array is multidimensional", nameof(array));
-            if (m_List.Count + arrayIndex > array.Length) throw new ArgumentException("insufficient space to copy", nameof(array));
+            if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex), "may not be negative");
+            if (m_List.Count > array.Length - arrayIndex) throw new ArgumentException("insufficient space to copy", nameof(array));
 
             int offset = 0;
             foreach (object element in m_List) {
