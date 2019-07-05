@@ -414,7 +414,7 @@ namespace RJCP.Core.CommandLine
         /// Gets or sets the options style to use when parsing the command line.
         /// </summary>
         /// <value>The options style to use when parsing the command line.</value>
-        /// <exception cref="System.ArgumentException">Unknown Options Style;value</exception>
+        /// <exception cref="ArgumentException">Unknown Options Style</exception>
         public OptionsStyle OptionsStyle
         {
             get { return m_OptionsStyle; }
@@ -598,7 +598,7 @@ namespace RJCP.Core.CommandLine
                 optionData.Set = true;
             } catch (OptionException) {
                 throw;
-            } catch (System.Exception e) {
+            } catch (Exception e) {
                 string message;
                 if (argument == null) {
                     message = string.Format("Error parsing option '{0}'", token.ToString(parser));

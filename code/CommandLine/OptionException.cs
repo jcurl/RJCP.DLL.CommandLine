@@ -33,9 +33,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
@@ -69,9 +69,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionDuplicateException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionDuplicateException(SerializationInfo info, StreamingContext context) : base(info, context) {}
     }
@@ -128,9 +128,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionUnknownException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionUnknownException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
@@ -138,12 +138,12 @@
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -213,9 +213,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingArgumentException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionMissingArgumentException(SerializationInfo info, StreamingContext context)
             : base(info, context)
@@ -224,12 +224,12 @@
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -299,9 +299,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionMissingException(SerializationInfo info, StreamingContext context)
             : base(info, context)
@@ -310,12 +310,12 @@
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -385,9 +385,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionAssignedException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionAssignedException(SerializationInfo info, StreamingContext context)
             : base(info, context)
@@ -396,12 +396,12 @@
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -473,9 +473,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionFormatException" /> class with serialized data.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         protected OptionFormatException(SerializationInfo info, StreamingContext context)
             : base(info, context)
@@ -484,12 +484,12 @@
         }
 
         /// <summary>
-        /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" />
+        /// <param name="info">The <see cref="SerializationInfo" />
         ///  that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" />
+        /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
