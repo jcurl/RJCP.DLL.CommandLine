@@ -72,6 +72,28 @@
         }
 
         [Test]
+        public void EmptyOption()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+
+            Options options = GetOptions(myOptions, new[] { "/" }, new[] { "-" });
+            Assert.That(options.Arguments.Count, Is.EqualTo(1));
+
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                Assert.That(options.Arguments[0], Is.EqualTo("/"));
+                return;
+            case OptionsStyle.Unix:
+                Assert.That(options.Arguments[0], Is.EqualTo("-"));
+                return;
+            default:
+                Assert.Fail("Unknown options style");
+                return;
+            }
+
+        }
+
+        [Test]
         public void ShortOptionsJoined()
         {
             OptionalArguments myOptions = new OptionalArguments();
