@@ -16,7 +16,7 @@
         public void NullArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, null);
+            Assert.That(() => { _ = Options.Parse(myOptions, null); }, Throws.Nothing);
         }
 
         [Test]
