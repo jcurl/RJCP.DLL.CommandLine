@@ -182,8 +182,9 @@ namespace RJCP.Core.CommandLine
         /// </exception>
         public static Options Parse(object options, string[] arguments, OptionsStyle style)
         {
-            Options cmdLine = new Options(options);
-            cmdLine.OptionsStyle = style;
+            Options cmdLine = new Options(options) {
+                OptionsStyle = style
+            };
             cmdLine.ParseCommandLine(arguments);
             return cmdLine;
         }
@@ -477,7 +478,7 @@ namespace RJCP.Core.CommandLine
                         lastOptionToken = token;
                         break;
                     case OptionTokenKind.Argument:
-                        ParseArgument(parser, token);
+                        ParseArgument(token);
                         break;
                     case OptionTokenKind.Value:
                         if (lastToken != null) {
@@ -551,8 +552,7 @@ namespace RJCP.Core.CommandLine
 
         private void ParseShortOption(IOptionParser parser, OptionToken token)
         {
-            OptionData optionData;
-            if (!m_ShortOptionList.TryGetValue(token.Value[0], out optionData))
+            if (!m_ShortOptionList.TryGetValue(token.Value[0], out OptionData optionData))
                 throw new OptionUnknownException(token.ToString(parser));
 
             ParseOptionParameter(parser, optionData, token);
@@ -560,15 +560,14 @@ namespace RJCP.Core.CommandLine
 
         private void ParseLongOption(IOptionParser parser, OptionToken token)
         {
-            OptionData optionData;
             string option = parser.LongOptionCaseInsensitive ? token.Value.ToLowerInvariant() : token.Value;
-            if (!m_LongOptionList.TryGetValue(option, out optionData))
+            if (!m_LongOptionList.TryGetValue(option, out OptionData optionData))
                 throw new OptionUnknownException(token.ToString(parser));
 
             ParseOptionParameter(parser, optionData, token);
         }
 
-        private void ParseArgument(IOptionParser parser, OptionToken token)
+        private void ParseArgument(OptionToken token)
         {
             m_Arguments.Add(token.Value);
         }

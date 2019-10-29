@@ -20,9 +20,9 @@
         public void AddWrapper_Generic()
         {
             ArrayList myList = new ArrayList();
-            GenericList<string> stringList = new GenericList<string>(myList);
-
-            stringList.Add("Test");
+            GenericList<string> stringList = new GenericList<string>(myList) {
+                "Test"
+            };
             Assert.That(stringList.Count, Is.EqualTo(1));
             Assert.That(myList.Count, Is.EqualTo(1));
         }

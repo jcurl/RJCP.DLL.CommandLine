@@ -239,8 +239,8 @@
 
             public void Dispose()
             {
-                IDisposable disposable = m_EnumeratorObj as IDisposable;
-                if (disposable != null) disposable.Dispose();
+                if (m_EnumeratorObj is IDisposable disposable)
+                    disposable.Dispose();
                 m_EnumeratorObj = null;
             }
         }
