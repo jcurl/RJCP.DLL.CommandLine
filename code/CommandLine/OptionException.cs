@@ -87,11 +87,6 @@
         /// </summary>
         public OptionUnknownException() { }
 
-        private static string UnknownOptionMessage(string option)
-        {
-            return string.Format("Unknown option '{0}'", option);
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionUnknownException" /> class with a specified error message.
         /// </summary>
@@ -137,6 +132,11 @@
             Option = info.GetString("option");
         }
 
+        private static string UnknownOptionMessage(string option)
+        {
+            return string.Format("Unknown option '{0}'", option);
+        }
+
         /// <summary>
         /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
@@ -171,11 +171,6 @@
         /// </summary>
         public OptionMissingArgumentException() { }
 
-        private static string MissingOptionMessage(string option)
-        {
-            return string.Format("Missing argument for '{0}'", option);
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingArgumentException" /> class with a specified error message.
         /// </summary>
@@ -208,6 +203,11 @@
             : base(message)
         {
             Option = option;
+        }
+
+        private static string MissingOptionMessage(string option)
+        {
+            return string.Format("Missing argument for '{0}'", option);
         }
 
         /// <summary>
@@ -257,11 +257,6 @@
         /// </summary>
         public OptionMissingException() { }
 
-        private static string MissingOptionMessage(string option)
-        {
-            return string.Format("Missing argument for options '{0}'", option);
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingException" /> class with a specified error message.
         /// </summary>
@@ -309,6 +304,11 @@
             Options = info.GetString("option");
         }
 
+        private static string MissingOptionMessage(string option)
+        {
+            return string.Format("Missing argument for options '{0}'", option);
+        }
+
         /// <summary>
         /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
@@ -342,11 +342,6 @@
         /// Initializes a new instance of the <see cref="OptionAssignedException"/> class.
         /// </summary>
         public OptionAssignedException() { }
-
-        private static string DuplicateOptionMessage(string option)
-        {
-            return string.Format("Option '{0}' provided multiple times", option);
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionAssignedException" /> class with a specified error message.
@@ -395,6 +390,11 @@
             Option = info.GetString("option");
         }
 
+        private static string DuplicateOptionMessage(string option)
+        {
+            return string.Format("Option '{0}' provided multiple times", option);
+        }
+
         /// <summary>
         /// When overridden in a derived class, sets the <see cref="SerializationInfo" />
         /// with information about the exception.
@@ -428,11 +428,6 @@
         /// Initializes a new instance of the <see cref="OptionFormatException"/> class.
         /// </summary>
         public OptionFormatException() { }
-
-        private static string IncorrectFormatOptionMessage(string option)
-        {
-            return string.Format("Option '{0}' has incorrect format", option);
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionFormatException" /> class with a specified error message.
@@ -481,6 +476,11 @@
             : base(info, context)
         {
             Option = info.GetString("option");
+        }
+
+        private static string IncorrectFormatOptionMessage(string option)
+        {
+            return string.Format("Option '{0}' has incorrect format", option);
         }
 
         /// <summary>
