@@ -1,6 +1,5 @@
 ﻿namespace RJCP.Core.CommandLine
 {
-    using System;
     using NUnit.Framework;
 
     [TestFixture(Category = "Utilities.CommandLine")]
