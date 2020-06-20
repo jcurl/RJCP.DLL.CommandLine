@@ -206,6 +206,46 @@
         public IList<string> Arguments { get { return m_Arguments; } }
     }
 
+    internal class ArgumentsListGenericStringAttributeOptions
+    {
+        [OptionArguments]
+        private List<string> m_Arguments = new List<string>();
+
+        public IList<string> Arguments { get { return m_Arguments; } }
+    }
+
+    internal class ArgumentsListCollGenericStringAttributeOptions
+    {
+        private List<string> m_Arguments = new List<string>();
+
+        [OptionArguments]
+        public ICollection<string> Arguments { get { return m_Arguments; } }
+    }
+
+    internal class ArgumentsListCollGenericIntAttributeOptions
+    {
+        private List<int> m_Arguments = new List<int>();
+
+        [OptionArguments]
+        public ICollection<int> Arguments { get { return m_Arguments; } }
+    }
+
+    internal class ArgumentsListAttributeOptions
+    {
+        [OptionArguments]
+        private ArrayList m_Arguments = new ArrayList();
+
+        public IList Arguments { get { return m_Arguments; } }
+    }
+
+    internal class ArgumentsListCollAttributeOptions
+    {
+        private ArrayList m_Arguments = new ArrayList();
+
+        [OptionArguments]
+        public ICollection Arguments { get { return m_Arguments; } }
+    }
+
     internal class BaseOptionsPrivate
     {
         [Option('a', "along")]

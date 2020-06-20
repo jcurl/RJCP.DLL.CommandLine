@@ -42,7 +42,6 @@
     <Compile Include="CommandLine\CommandLineOptions.cs" />
     <Compile Include="CommandLine\CommandLineTest.cs" />
     <Compile Include="CommandLine\CommandLineUnixTest.cs" />
-    <Compile Include="Datastructures\GenericListTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,13 +1,11 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
     using System.Text;
-    using Datastructures;
 
     /// <summary>
     /// The style of command line options to use.
@@ -194,13 +192,16 @@
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
             m_Options = options;
+
+            Arguments = new ReadOnlyCollection<string>(m_Arguments);
         }
 
         #region Inspecting and building command line options
         private Dictionary<string, OptionMember> m_LongOptionList = new Dictionary<string, OptionMember>();
         private Dictionary<char, OptionMember> m_ShortOptionList = new Dictionary<char, OptionMember>();
         private List<OptionMember> m_OptionList = new List<OptionMember>();
-        private IList<string> m_Arguments;
+        private IList<string> m_Arguments = new List<string>();
+        private OptionField m_ArgumentsField;
 
         private void BuildOptionList(bool longOptionCaseInsensitive)
         {
@@ -249,36 +250,15 @@
 
             OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(memberInfo);
             if (argAttribute != null) {
-                if (m_Arguments != null)
+                if (m_ArgumentsField != null)
                     throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
-                m_Arguments = GenerateArgumentList(memberInfo);
-                m_ArgumentsReadOnly = m_Arguments;
-            }
-        }
 
-        private IList<string> GenerateArgumentList(MemberInfo member)
-        {
-            FieldInfo field = member as FieldInfo;
-            if (field != null) {
-                if (typeof(IList<string>).IsAssignableFrom(field.FieldType)) {
-                    return (IList<string>)field.GetValue(m_Options);
-                }
-                if (typeof(IList).IsAssignableFrom(field.FieldType)) {
-                    return new GenericList<string>((IList)field.GetValue(m_Options));
-                }
+                m_ArgumentsField = new OptionField(memberInfo);
+                if (!m_ArgumentsField.IsList)
+                    throw new OptionException("OptionArgumentsAttribute must be assigned to a collection");
+                if (m_ArgumentsField.ListType != typeof(string) && m_ArgumentsField.ListType != typeof(object))
+                    throw new OptionException("OptionArgumentsAttribute collection must be type of string");
             }
-
-            PropertyInfo property = member as PropertyInfo;
-            if (property != null) {
-                if (typeof(IList<string>).IsAssignableFrom(property.PropertyType)) {
-                    return (IList<string>)property.GetValue(m_Options, null);
-                }
-                if (typeof(IList).IsAssignableFrom(property.PropertyType)) {
-                    return new GenericList<string>((IList)property.GetValue(m_Options, null));
-                }
-            }
-
-            throw new ApplicationException("Unknown member in Options class");
         }
 
         private void CheckShortOption(char shortOption)
@@ -363,8 +343,6 @@
 
             BuildOptionList(parser.LongOptionCaseInsensitive);
             IOptions options = m_Options as IOptions;
-            if (m_Arguments == null) m_Arguments = new List<string>();
-
             try {
                 do {
                     string message;
@@ -478,6 +456,7 @@
         private void ParseArgument(OptionToken token)
         {
             m_Arguments.Add(token.Value);
+            if (m_ArgumentsField != null) m_ArgumentsField.Add(m_Options, token.Value);
         }
 
         private void ParseOptionParameter(IOptionParser parser, OptionMember optionMember, OptionToken token)
@@ -587,19 +566,10 @@
             optionMember.AddValue(sb.ToString());
         }
 
-        private IList<string> m_ArgumentsReadOnly;
-
         /// <summary>
         /// Gets the arguments that were not parsed as options.
         /// </summary>
         /// <value>The arguments not parsed as options.</value>
-        public IList<string> Arguments
-        {
-            get
-            {
-                if (m_ArgumentsReadOnly == null) m_ArgumentsReadOnly = new ReadOnlyCollection<string>(m_Arguments);
-                return m_ArgumentsReadOnly;
-            }
-        }
+        public IList<string> Arguments { get; private set; }
     }
 }

@@ -48,7 +48,6 @@
     <Compile Include="CommandLine\Platform.cs" />
     <Compile Include="CommandLine\UnixEnumerator.cs" />
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
-    <Compile Include="Datastructures\GenericList.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -826,6 +826,74 @@
         }
 
         [Test]
+        public void ArgumentsAttributeList()
+        {
+            ArgumentsListGenericStringAttributeOptions myOptions = new ArgumentsListGenericStringAttributeOptions();
+            Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
+
+            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
+            Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
+            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments[0], Is.EqualTo("arg1"));
+            Assert.That(myOptions.Arguments[1], Is.EqualTo("arg2"));
+        }
+
+        [Test]
+        public void ArgumentsAttributeListInt()
+        {
+            ArgumentsListCollGenericIntAttributeOptions myOptions = new ArgumentsListCollGenericIntAttributeOptions();
+            Assert.That(() => {
+                _ = GetOptions(myOptions, new[] { "1", "2" }, new[] { "1", "2" });
+            }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
+        public void ArgumentsAttributeListIntInvalidType()
+        {
+            ArgumentsListCollGenericIntAttributeOptions myOptions = new ArgumentsListCollGenericIntAttributeOptions();
+            Assert.That(() => {
+                _ = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
+            }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
+        public void ArgumentsAttributeListCollection()
+        {
+            ArgumentsListCollGenericStringAttributeOptions myOptions = new ArgumentsListCollGenericStringAttributeOptions();
+            Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
+
+            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
+            Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
+            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments, Is.EquivalentTo(new[] { "arg1", "arg2" }));
+        }
+
+        [Test]
+        public void ArgumentsAttributeListNonGeneric()
+        {
+            ArgumentsListAttributeOptions myOptions = new ArgumentsListAttributeOptions();
+            Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
+
+            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
+            Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
+            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments[0], Is.EqualTo("arg1"));
+            Assert.That(myOptions.Arguments[1], Is.EqualTo("arg2"));
+        }
+
+        [Test]
+        public void ArgumentsAttributeListCollNonGeneric()
+        {
+            ArgumentsListCollAttributeOptions myOptions = new ArgumentsListCollAttributeOptions();
+            Assert.That(() => {
+                _ = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
+            }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
         public void DerivedOptionsPrivate1()
         {
             DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
