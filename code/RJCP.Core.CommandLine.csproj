@@ -41,6 +41,8 @@
     <Compile Include="CommandLine\OptionAttribute.cs" />
     <Compile Include="CommandLine\OptionDefaultAttribute.cs" />
     <Compile Include="CommandLine\OptionException.cs" />
+    <Compile Include="CommandLine\OptionField.cs" />
+    <Compile Include="CommandLine\OptionMember.cs" />
     <Compile Include="CommandLine\Options.cs" />
     <Compile Include="CommandLine\OptionToken.cs" />
     <Compile Include="CommandLine\Platform.cs" />

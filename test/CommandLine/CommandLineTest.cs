@@ -1,6 +1,8 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using NUnit.Framework;
 
     [TestFixture(OptionsStyle.Unix, Category = "Utilities.CommandLine")]
@@ -611,6 +613,67 @@
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/l", "test1:test2:\"test3" }, new[] { "-l", "test1,test2,\"test3" });
             }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
+        public void ListOptionWithGenericStringInterface()
+        {
+            ListOptionsInterfaceGeneric myOptions = new ListOptionsInterfaceGeneric();
+            Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
+            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List[0], Is.EqualTo("item"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ListOptionWithInterface()
+        {
+            ListOptionsInterface myOptions = new ListOptionsInterface();
+            Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
+            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List[0], Is.EqualTo("item"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ListCollectionOptionWithGenericStringInterface()
+        {
+            CollectionOptionsInterfaceGeneric myOptions = new CollectionOptionsInterfaceGeneric();
+            Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
+            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Is.EquivalentTo(new[] { "item" }));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ListCollectionOptionWithInterface()
+        {
+            CollectionOptionsInterface myOptions = new CollectionOptionsInterface();
+            Assert.That(() => {
+                // Fails, because method List of of type ICollection, which doesn't have an 'Add' method. Collections
+                // must implement IList or ICollection<object>.
+                _ = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
+            }, Throws.TypeOf<OptionFormatException>());
+        }
+
+        [Test]
+        public void ListOptionWithInteger()
+        {
+            ListOptionsIntegers myOptions = new ListOptionsIntegers();
+            Options options = GetOptions(myOptions, new[] { "/l", "1" }, new[] { "-l", "1" });
+            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Is.EqualTo(new[] { 1 }));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ListOptionWithIntegers()
+        {
+            ListOptionsIntegers myOptions = new ListOptionsIntegers();
+            Options options = GetOptions(myOptions, new[] { "/l", "3,1,4" }, new[] { "-l", "3,1,4" });
+            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Is.EqualTo(new[] { 3, 1, 4 }));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
         }
 
         [Test]

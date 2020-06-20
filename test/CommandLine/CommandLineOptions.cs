@@ -1,6 +1,7 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
 
     internal class NoArguments
@@ -77,6 +78,36 @@
 
         [Option('l', "list", false)]
         public List<string> List { get; private set; }
+    }
+
+    internal class ListOptionsInterfaceGeneric
+    {
+        [Option('l', "list", false)]
+        public IList<string> List { get; } = new List<string>();
+    }
+
+    internal class ListOptionsInterface
+    {
+        [Option('l', "list", false)]
+        public IList List { get; } = new List<string>();
+    }
+
+    internal class CollectionOptionsInterfaceGeneric
+    {
+        [Option('l', "list", false)]
+        public ICollection<string> List { get; } = new List<string>();
+    }
+
+    internal class CollectionOptionsInterface
+    {
+        [Option('l', "list", false)]
+        public ICollection List { get; } = new List<string>();
+    }
+
+    internal class ListOptionsIntegers
+    {
+        [Option('l', "list", false)]
+        public IList<int> List { get; } = new List<int>();
     }
 
     internal class OptionalLongArguments

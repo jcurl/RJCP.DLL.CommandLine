@@ -1,13 +1,9 @@
-﻿#pragma warning disable S3626 // Jump statements should not be redundant - used here to add symmetry in code with no side effects
-#pragma warning disable S1172 // Unused method parameters should be removed - used here to add symmetry in code
-
-namespace RJCP.Core.CommandLine
+﻿namespace RJCP.Core.CommandLine
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
@@ -202,94 +198,9 @@ namespace RJCP.Core.CommandLine
         }
 
         #region Inspecting and building command line options
-        private class OptionData
-        {
-            public OptionData(OptionAttribute attribute, MemberInfo member)
-            {
-                if (attribute == null) throw new ArgumentNullException(nameof(attribute));
-                if (!(member is PropertyInfo) && !(member is FieldInfo))
-                    throw new ArgumentException("Not a property/field", nameof(member));
-
-                Attribute = attribute;
-                Member = member;
-            }
-
-            public OptionAttribute Attribute { get; set; }
-
-            public MemberInfo Member { get; set; }
-
-            public bool Set { get; set; }
-
-            public bool IsList
-            {
-                get
-                {
-                    if (Member == null) return false;
-                    if ((Member is FieldInfo) && typeof(IList).IsAssignableFrom(((FieldInfo)Member).FieldType)) return true;
-                    if ((Member is PropertyInfo) && typeof(IList).IsAssignableFrom(((PropertyInfo)Member).PropertyType)) return true;
-                    return false;
-                }
-            }
-
-            public IList GetList(object options)
-            {
-                FieldInfo fieldInfo = Member as FieldInfo;
-                if (fieldInfo != null) return (IList)(fieldInfo.GetValue(options));
-
-                PropertyInfo propertyInfo = Member as PropertyInfo;
-                if (propertyInfo != null) return (IList)(propertyInfo.GetValue(options, null));
-
-                throw new ApplicationException("Unknown member in Options class");
-            }
-
-            public void SetValue(object options, string value)
-            {
-                FieldInfo field = Member as FieldInfo;
-                if (field != null) {
-                    field.SetValue(options, ChangeType(value, field.FieldType));
-                    Set = true;
-                    return;
-                }
-
-                PropertyInfo property = Member as PropertyInfo;
-                if (property != null) {
-                    property.SetValue(options, ChangeType(value, property.PropertyType), null);
-                    Set = true;
-                    return;
-                }
-            }
-
-            public void SetValue(object options, bool value)
-            {
-                FieldInfo field = Member as FieldInfo;
-                if (field != null) {
-                    field.SetValue(options, value);
-                    Set = true;
-                    return;
-                }
-
-                PropertyInfo property = Member as PropertyInfo;
-                if (property != null) {
-                    property.SetValue(options, value, null);
-                    Set = true;
-                    return;
-                }
-            }
-
-            public bool ExpectsValue
-            {
-                get
-                {
-                    if ((Member is FieldInfo) && ((FieldInfo)Member).FieldType == typeof(bool)) return false;
-                    if ((Member is PropertyInfo) && ((PropertyInfo)Member).PropertyType == typeof(bool)) return false;
-                    return true;
-                }
-            }
-        }
-
-        private Dictionary<string, OptionData> m_LongOptionList = new Dictionary<string, OptionData>();
-        private Dictionary<char, OptionData> m_ShortOptionList = new Dictionary<char, OptionData>();
-        private List<OptionData> m_OptionList = new List<OptionData>();
+        private Dictionary<string, OptionMember> m_LongOptionList = new Dictionary<string, OptionMember>();
+        private Dictionary<char, OptionMember> m_ShortOptionList = new Dictionary<char, OptionMember>();
+        private List<OptionMember> m_OptionList = new List<OptionMember>();
         private IList<string> m_Arguments;
 
         private void BuildOptionList(bool longOptionCaseInsensitive)
@@ -322,17 +233,17 @@ namespace RJCP.Core.CommandLine
                 CheckShortOption(attribute.ShortOption);
                 CheckLongOption(attribute.LongOption);
 
-                OptionData optionData = new OptionData(attribute, memberInfo);
-                m_OptionList.Add(optionData);
+                OptionMember optionMember = new OptionMember(m_Options, attribute, memberInfo);
+                m_OptionList.Add(optionMember);
 
                 if (attribute.ShortOption != (char)0) {
-                    m_ShortOptionList.Add(attribute.ShortOption, optionData);
+                    m_ShortOptionList.Add(attribute.ShortOption, optionMember);
                 }
                 if (attribute.LongOption != null) {
                     string longOption = longOptionCaseInsensitive
                         ? attribute.LongOption.ToLowerInvariant()
                         : attribute.LongOption;
-                    m_LongOptionList.Add(longOption, optionData);
+                    m_LongOptionList.Add(longOption, optionMember);
                 }
                 return;
             }
@@ -508,11 +419,11 @@ namespace RJCP.Core.CommandLine
             // Check that all mandatory options were provided
             StringBuilder sb = new StringBuilder();
             List<string> optionList = new List<string>();
-            foreach (OptionData optionData in m_OptionList) {
-                if (optionData.Attribute.Required && !optionData.Set) {
+            foreach (OptionMember optionMember in m_OptionList) {
+                if (optionMember.Attribute.Required && !optionMember.IsSet) {
                     MissingOption(parser,
-                        optionData.Attribute.ShortOption,
-                        optionData.Attribute.LongOption,
+                        optionMember.Attribute.ShortOption,
+                        optionMember.Attribute.LongOption,
                         sb, optionList);
                 }
             }
@@ -552,19 +463,19 @@ namespace RJCP.Core.CommandLine
 
         private void ParseShortOption(IOptionParser parser, OptionToken token)
         {
-            if (!m_ShortOptionList.TryGetValue(token.Value[0], out OptionData optionData))
+            if (!m_ShortOptionList.TryGetValue(token.Value[0], out OptionMember optionMember))
                 throw new OptionUnknownException(token.ToString(parser));
 
-            ParseOptionParameter(parser, optionData, token);
+            ParseOptionParameter(parser, optionMember, token);
         }
 
         private void ParseLongOption(IOptionParser parser, OptionToken token)
         {
             string option = parser.LongOptionCaseInsensitive ? token.Value.ToLowerInvariant() : token.Value;
-            if (!m_LongOptionList.TryGetValue(option, out OptionData optionData))
+            if (!m_LongOptionList.TryGetValue(option, out OptionMember optionMember))
                 throw new OptionUnknownException(token.ToString(parser));
 
-            ParseOptionParameter(parser, optionData, token);
+            ParseOptionParameter(parser, optionMember, token);
         }
 
         private void ParseArgument(OptionToken token)
@@ -572,29 +483,33 @@ namespace RJCP.Core.CommandLine
             m_Arguments.Add(token.Value);
         }
 
-        private void ParseOptionParameter(IOptionParser parser, OptionData optionData, OptionToken token)
+        private void ParseOptionParameter(IOptionParser parser, OptionMember optionMember, OptionToken token)
         {
             string argument = null;
             try {
-                if (optionData.ExpectsValue) {
+                if (optionMember.ExpectsValue) {
                     OptionToken argumentToken = parser.GetToken(true);
                     if (argumentToken == null) {
-                        OptionDefaultAttribute defaultAttribute = null;
-                        if (optionData.Member != null)
-                            defaultAttribute = GetAttribute<OptionDefaultAttribute>(optionData.Member);
+                        OptionDefaultAttribute defaultAttribute =
+                            GetAttribute<OptionDefaultAttribute>(optionMember.Member);
                         if (defaultAttribute == null)
                             throw new OptionMissingArgumentException(token.ToString(parser));
                         argument = defaultAttribute.DefaultValue;
                     } else {
                         argument = argumentToken.Value;
                     }
-                    SetOption(parser, optionData, argument);
+
+                    if (optionMember.IsList) {
+                        SplitList(optionMember, parser.ListSeparator, argument);
+                    } else {
+                        if (optionMember.IsSet) throw new OptionAssignedException(argument);
+                        optionMember.SetValue(argument);
+                    }
                 } else {
                     // This is a boolean type. We can only set it to true.
-                    SetBoolean(optionData, true);
+                    optionMember.SetValue(true);
                 }
-
-                optionData.Set = true;
+                optionMember.IsSet = true;
             } catch (OptionException) {
                 throw;
             } catch (Exception e) {
@@ -608,24 +523,7 @@ namespace RJCP.Core.CommandLine
             }
         }
 
-        private void SetOption(IOptionParser parser, OptionData optionData, string value)
-        {
-            if (optionData.IsList) {
-                IList list = optionData.GetList(m_Options);
-                SplitList(list, parser.ListSeparator, value);
-                return;
-            }
-
-            if (optionData.Set) throw new OptionAssignedException(value);
-            optionData.SetValue(m_Options, value);
-        }
-
-        private void SetBoolean(OptionData optionData, bool value)
-        {
-            optionData.SetValue(m_Options, value);
-        }
-
-        private void SplitList(IList list, char separationChar, string value)
+        private void SplitList(OptionMember optionMember, char separationChar, string value)
         {
             StringBuilder sb = new StringBuilder();
             char quote = (char)0;
@@ -670,7 +568,7 @@ namespace RJCP.Core.CommandLine
                 }
                 if (c == separationChar && quote == (char)0) {
                     sb.Append(value.Substring(schar, i - schar));
-                    list.Add(sb.ToString());
+                    optionMember.AddValue(sb.ToString());
                     sb.Clear();
                     schar = i + 1;
                     quoted = false;
@@ -689,13 +587,7 @@ namespace RJCP.Core.CommandLine
 
             // Add the trailing option
             sb.Append(value.Substring(schar));
-            list.Add(sb.ToString());
-        }
-
-        private static object ChangeType(string value, Type type)
-        {
-            TypeConverter converter = TypeDescriptor.GetConverter(type);
-            return converter.ConvertFromInvariantString(value);
+            optionMember.AddValue(sb.ToString());
         }
 
         private IList<string> m_ArgumentsReadOnly;
