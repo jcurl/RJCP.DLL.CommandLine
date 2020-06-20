@@ -269,4 +269,22 @@
         public event EventHandler<EventArgs> MyEvent;
 #pragma warning restore CS0067
     }
+
+    internal class DuplicateOptionsShort
+    {
+        [Option('a')]
+        public bool OptionA { get; set; }
+
+        [Option('a')]
+        public bool OptionADup { get; set; }
+    }
+
+    internal class DuplicateOptionsLong
+    {
+        [Option("along")]
+        public bool OptionA { get; set; }
+
+        [Option("along")]
+        public bool OptionADup { get; set; }
+    }
 }

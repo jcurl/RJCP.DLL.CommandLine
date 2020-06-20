@@ -900,5 +900,41 @@
             Assert.That(() => { GetOptions(eventOption, new[] { "/e" }, new[] { "-e" }); },
                 Throws.TypeOf<OptionUnknownException>());
         }
+
+        [Test]
+        public void DuplicateShortOptionsNoArgs()
+        {
+            DuplicateOptionsShort options = new DuplicateOptionsShort();
+            Assert.That(() => {
+                _ = GetOptions(options, new string[0], new string[0]);
+            }, Throws.TypeOf<OptionDuplicateException>());
+        }
+
+        [Test]
+        public void DuplicateShortOptionsWithArgs()
+        {
+            DuplicateOptionsShort options = new DuplicateOptionsShort();
+            Assert.That(() => {
+                _ = GetOptions(options, new[] { "/a" }, new[] { "-a" });
+            }, Throws.TypeOf<OptionDuplicateException>());
+        }
+
+        [Test]
+        public void DuplicateLongOptionsNoArgs()
+        {
+            DuplicateOptionsLong options = new DuplicateOptionsLong();
+            Assert.That(() => {
+                _ = GetOptions(options, new string[0], new string[0]);
+            }, Throws.TypeOf<OptionDuplicateException>());
+        }
+
+        [Test]
+        public void DuplicateLongOptionsWithArgs()
+        {
+            DuplicateOptionsLong options = new DuplicateOptionsLong();
+            Assert.That(() => {
+                _ = GetOptions(options, new[] { "/along" }, new[] { "--along" });
+            }, Throws.TypeOf<OptionDuplicateException>());
+        }
     }
 }

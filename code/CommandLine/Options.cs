@@ -4,7 +4,6 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -282,7 +281,6 @@
             throw new ApplicationException("Unknown member in Options class");
         }
 
-        [Conditional("DEBUG")]
         private void CheckShortOption(char shortOption)
         {
             if (shortOption == (char) 0) return;
@@ -297,7 +295,6 @@
             }
         }
 
-        [Conditional("DEBUG")]
         private void CheckLongOption(string longOption)
         {
             if (longOption == null) return;
