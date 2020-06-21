@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture(Category = "Utilities.CommandLine")]
     public class CommandLineUnixTest
     {
         private class NoArguments
@@ -14,7 +14,7 @@
             public bool NoOption;
 #pragma warning restore 0649
         }
-        
+
         private class OptionalArguments
         {
 #pragma warning disable 0649
@@ -154,7 +154,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void CmdLine_NullOptions()
         {
@@ -162,7 +161,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_NullArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -170,7 +168,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_NoArguments()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -178,7 +175,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_NullArgumentsEmptyOptions()
         {
             NoArguments myOptions = new NoArguments();
@@ -186,7 +182,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_NoArgumentsEmptyOptions()
         {
             NoArguments myOptions = new NoArguments();
@@ -194,7 +189,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_SingleShortOption()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -206,7 +200,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsJoined()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -218,7 +211,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsSeparated()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -230,7 +222,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsOnProperties()
         {
             PropertyOptions myOptions = new PropertyOptions();
@@ -242,7 +233,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsStringOneArg()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -254,7 +244,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsStringTwoArgs()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -266,7 +255,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsStringOneArgAssigned()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -278,7 +266,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsStringOneArgJoined()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -290,7 +277,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsStringTwoArgsJoined1()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -302,7 +288,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsStringTwoArgsJoined2()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -316,7 +301,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsRequired()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -328,7 +312,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsRequiredOneArgument1()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -340,7 +323,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsRequiredOneArgument2()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -352,7 +334,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ShortOptionsRequiredOneArgument3()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -364,7 +345,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineUnix_ShortOptionsRequiredMissingArgument()
         {
@@ -373,7 +353,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof (OptionMissingException))]
         public void CmdLineUnix_MissingOption()
         {
@@ -382,7 +361,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_RequiredOption()
         {
             RequiredOptions myOptions = new RequiredOptions();
@@ -392,7 +370,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionOneArgument()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -404,7 +381,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionTwoArguments()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -416,7 +392,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionWithSpace()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -428,7 +403,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionWithSpace2()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -440,7 +414,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionWithSpace3()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -452,7 +425,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionWithSpace4()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -464,7 +436,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionWithSpace5()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -476,7 +447,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionWithSpace6()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -488,7 +458,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionMissingArgumentException))]
         public void CmdLineUnix_LongOptionsRequiredMissingArgument()
         {
@@ -497,7 +466,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_LongOptionsBoolean()
         {
             RequiredArguments myOptions = new RequiredArguments();
@@ -509,7 +477,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void cmdLineUnix_LongOptionOnly()
         {
             OptionalLongArguments myOptions = new OptionalLongArguments();
@@ -521,7 +488,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void cmdLineUnix_LongOptionOnlyShort()
         {
@@ -530,7 +496,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownOption1()
         {
@@ -539,7 +504,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownOption2()
         {
@@ -548,7 +512,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionUnknownException))]
         public void CmdLineUnix_UnknownLongOption()
         {
@@ -557,7 +520,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionException))]
         public void CmdLineUnix_ExtraArgument()
         {
@@ -566,7 +528,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOption()
         {
             ListOptions myOptions = new ListOptions();
@@ -579,7 +540,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOptionSingleElement()
         {
             ListOptions myOptions = new ListOptions();
@@ -590,7 +550,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOptionMultipleArguments()
         {
             ListOptions myOptions = new ListOptions();
@@ -603,7 +562,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOptionQuoted1()
         {
             ListOptions myOptions = new ListOptions();
@@ -616,7 +574,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOptionQuoted2()
         {
             ListOptions myOptions = new ListOptions();
@@ -629,7 +586,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionException))]
         public void CmdLineUnix_ListOptionQuotedInvalid1()
         {
@@ -638,7 +594,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOptionWindowsPath()
         {
             ListOptions myOptions = new ListOptions();
@@ -648,7 +603,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ListOptionQuotedEndEscape()
         {
             ListOptions myOptions = new ListOptions();
@@ -660,7 +614,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionException))]
         public void CmdLineUnix_ListOptionQuotedInvalid3()
         {
@@ -669,7 +622,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_StopParsing()
         {
             OptionalArguments myOptions = new OptionalArguments();
@@ -683,7 +635,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueProvidedShort()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -695,7 +646,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueProvidedShort2()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -707,7 +657,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueShort()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -719,7 +668,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueShortProvidedExistingOption()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -731,7 +679,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueProvidedLongEquals()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -743,7 +690,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueProvidedLong()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -755,7 +701,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueLong()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -767,7 +712,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_DefaultValueLong2()
         {
             DefaultValueOption myOptions = new DefaultValueOption();
@@ -779,7 +723,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_TypesEnum()
         {
             TypesOptions myOptions = new TypesOptions();
@@ -789,7 +732,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_TypesEnumInt()
         {
             TypesOptions myOptions = new TypesOptions();
@@ -799,7 +741,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_TypesInt()
         {
             TypesOptions myOptions = new TypesOptions();
@@ -809,7 +750,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         [ExpectedException(typeof(OptionFormatException))]
         public void CmdLineUnix_TypesIntInvalid()
         {
@@ -818,7 +758,6 @@
         }
 
         [Test]
-        [Category("Utilities.CommandLine")]
         public void CmdLineUnix_ArgumentsAttribute()
         {
             ArgumentsAttributeOptions myOptions = new ArgumentsAttributeOptions();
