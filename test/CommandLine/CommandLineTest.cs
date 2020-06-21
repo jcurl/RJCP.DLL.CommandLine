@@ -1,8 +1,6 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using NUnit.Framework;
 
     [TestFixture(OptionsStyle.Unix, Category = "Utilities.CommandLine")]
@@ -178,6 +176,200 @@
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.EqualTo("foo"));
             Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterSingleSlash()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong:/" }, new[] { "--clong=/" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("/"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+
+        [Test]
+        public void OptionStringParameterSingleSlashTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong", "/" }, new[] { "--clong", "/" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("/"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterSingleEqual()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong:=" }, new[] { "--clong==" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("="));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+
+        [Test]
+        public void OptionStringParameterSingleEqualTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong", "=" }, new[] { "--clong", "=" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("="));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterSingleColon()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong::" }, new[] { "--clong=:" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo(":"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+
+        [Test]
+        public void OptionStringParameterSingleColonTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong", ":" }, new[] { "--clong", ":" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo(":"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterDualSlash()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong://" }, new[] { "--clong=//" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("//"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterDualSlashTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = null;
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                // This throws an exception, as following '/clong' is '//' which is interpreted as a new option. If you
+                // really want to pass '//' to '/clong', then use '/clong://'
+                Assert.That(() => {
+                    _ = Options.Parse(myOptions, new[] { "/clong", "//" }, OptionsStyle.Windows);
+                }, Throws.TypeOf<OptionMissingArgumentException>());
+
+                // Then the exception is raised because '/clong' must require a parameter and has no default.
+                Assert.That(myOptions.InvalidOptions, Is.EquivalentTo(new[] { "/clong" }));
+                break;
+            case OptionsStyle.Unix:
+                options = Options.Parse(myOptions, new[] { "--clong", "//" }, OptionsStyle.Unix);
+                Assert.That(myOptions.OptionC, Is.EqualTo("//"));
+                Assert.That(options.Arguments.Count, Is.EqualTo(0));
+                break;
+            default:
+                Assert.Fail("Unknown options style");
+                break;
+            }
+        }
+
+        [Test]
+        public void OptionStringParameterSingleDash()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong:-" }, new[] { "--clong=-" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("-"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterSingleDashTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong", "-" }, new[] { "--clong", "-" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("-"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterDualDash()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong:--" }, new[] { "--clong=--" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("--"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterDualDashTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = null;
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                options = Options.Parse(myOptions, new[] { "/clong", "--" }, OptionsStyle.Windows);
+                Assert.That(myOptions.OptionC, Is.EqualTo("--"));
+                Assert.That(options.Arguments.Count, Is.EqualTo(0));
+                break;
+            case OptionsStyle.Unix:
+                // This throws an exception, as following '--clong' is '--' which is interpreted as a new option. If you
+                // really want to pass '--' to '--clong', then use '--clong=--'
+                Assert.That(() => {
+                    _ = Options.Parse(myOptions, new[] { "--clong", "--" }, OptionsStyle.Unix);
+                }, Throws.TypeOf<OptionMissingArgumentException>());
+
+                // Then the exception is raised because '--clong' must require a parameter and has no default.
+                Assert.That(myOptions.InvalidOptions, Is.EquivalentTo(new[] { "--clong" }));
+                break;
+            default:
+                Assert.Fail("Unknown options style");
+                break;
+            }
+        }
+
+        [Test]
+        public void OptionStringParameterDualDash2()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/clong:--x" }, new[] { "--clong=--x" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("--x"));
+            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OptionStringParameterDualDash2TwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = null;
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                options = Options.Parse(myOptions, new[] { "/clong", "--x" }, OptionsStyle.Windows);
+                Assert.That(myOptions.OptionC, Is.EqualTo("--x"));
+                Assert.That(options.Arguments.Count, Is.EqualTo(0));
+                break;
+            case OptionsStyle.Unix:
+                // This throws an exception, as following '--clong' is '--x' which is interpreted as a new option. If you
+                // really want to pass '--x' to '--clong', then use '--clong=--x'
+                Assert.That(() => {
+                    _ = Options.Parse(myOptions, new[] { "--clong", "--x" }, OptionsStyle.Unix);
+                }, Throws.TypeOf<OptionMissingArgumentException>());
+
+                // Then the exception is raised because '--clong' must require a parameter and has no default.
+                Assert.That(myOptions.InvalidOptions, Is.EquivalentTo(new[] { "--clong" }));
+                break;
+            default:
+                Assert.Fail("Unknown options style");
+                break;
+            }
         }
 
         [Test]

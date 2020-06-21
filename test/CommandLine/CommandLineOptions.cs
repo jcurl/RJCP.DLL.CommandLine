@@ -327,4 +327,38 @@
         [Option("along")]
         public bool OptionADup { get; set; }
     }
+
+    internal class OptionHandling : IOptions
+    {
+#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
+        [Option('a', "along", false)]
+        public bool OptionA;
+
+        [Option('b', "blong", false)]
+        public bool OptionB;
+
+        [Option('c', "clong", false)]
+        public string OptionC;
+#pragma warning restore CS0649
+
+        public void Check() { /* Nothing to check */ }
+
+        public IList<string> InvalidOptions { get; private set; } = new List<string>();
+
+        public void InvalidOption(string option)
+        {
+            InvalidOptions.Add(option);
+        }
+
+        public IList<string> MissingOptions { get; private set; } = new List<string>();
+
+        public void Missing(IList<string> missingOptions)
+        {
+            foreach (string missing in missingOptions) {
+                MissingOptions.Add(missing);
+            }
+        }
+
+        public void Usage() { /* Nothing to show */ }
+    }
 }
