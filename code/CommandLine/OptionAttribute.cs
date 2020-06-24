@@ -1,6 +1,7 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using Resources;
 
     /// <summary>
     /// Class OptionAttribute. This class cannot be inherited.
@@ -87,11 +88,11 @@
         private void CheckLongOption(string longOption)
         {
             if (string.IsNullOrWhiteSpace(longOption))
-                throw new ArgumentException("Long Option may not be empty", nameof(longOption));
+                throw new ArgumentException(CmdLineStrings.LongOptionMayNotBeEmpty, nameof(longOption));
 
             for (int i = 0; i < longOption.Length; i++) {
                 if (!IsValidLongOptionChar(i, longOption[i])) {
-                    string msg = string.Format("Long option has invalid character: {0}", longOption[i]);
+                    string msg = string.Format(CmdLineStrings.LongOptionInvalidChar, longOption[i]);
                     throw new ArgumentException(msg, nameof(longOption));
                 }
             }
@@ -111,7 +112,7 @@
         private void CheckShortOption(char shortOption)
         {
             if (!IsValidShortOptionChar(shortOption)) {
-                string message = string.Format("Short option '{0}' character not allowed", shortOption);
+                string message = string.Format(CmdLineStrings.ShortOptionInvalidChar, shortOption);
                 throw new ArgumentException(message, nameof(shortOption));
             }
         }

@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
     using System.Reflection;
+    using Resources;
 
     internal class OptionMember
     {
@@ -32,7 +33,7 @@
             set
             {
                 if (m_Set && !value)
-                    throw new InvalidOperationException("Internal Error: Setting an option to false, when it's already set");
+                    throw new InvalidOperationException(CmdLineStrings.InternalError_OptionIsAlreadySet);
 
                 m_Set = value;
             }
@@ -52,7 +53,7 @@
         public void AddValue(string value)
         {
             if (!IsList)
-                throw new InvalidOperationException("Adding a value to an option that is not a collection");
+                throw new ArgumentException(CmdLineStrings.ArgException_InvalidCollection, nameof(value));
 
             m_Field.Add(m_Options, ChangeType(value, m_Field.ListType));
         }

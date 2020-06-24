@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using Resources;
 
     /// <summary>
     /// A generic Option exception.
@@ -134,7 +135,7 @@
 
         private static string UnknownOptionMessage(string option)
         {
-            return string.Format("Unknown option '{0}'", option);
+            return string.Format(CmdLineStrings.OptionUnknown, option);
         }
 
         /// <summary>
@@ -207,7 +208,7 @@
 
         private static string MissingOptionMessage(string option)
         {
-            return string.Format("Missing argument for '{0}'", option);
+            return string.Format(CmdLineStrings.OptionMissingArgument, option);
         }
 
         /// <summary>
@@ -306,7 +307,7 @@
 
         private static string MissingOptionMessage(string option)
         {
-            return string.Format("Missing argument for options '{0}'", option);
+            return string.Format(CmdLineStrings.OptionMissingOption, option);
         }
 
         /// <summary>
@@ -392,7 +393,7 @@
 
         private static string DuplicateOptionMessage(string option)
         {
-            return string.Format("Option '{0}' provided multiple times", option);
+            return string.Format(CmdLineStrings.OptionMultipleTimes, option);
         }
 
         /// <summary>
@@ -480,7 +481,7 @@
 
         private static string IncorrectFormatOptionMessage(string option)
         {
-            return string.Format("Option '{0}' has incorrect format", option);
+            return string.Format(CmdLineStrings.OptionIncorrectFormat, option);
         }
 
         /// <summary>

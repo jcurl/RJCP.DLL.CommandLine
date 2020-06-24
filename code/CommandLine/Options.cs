@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Resources;
 
     /// <summary>
     /// The style of command line options to use.
@@ -251,13 +252,13 @@
             OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(memberInfo);
             if (argAttribute != null) {
                 if (m_ArgumentsField != null)
-                    throw new OptionException("OptionArgumentsAttribute assigned to multiple fields/properties");
+                    throw new OptionException(CmdLineStrings.OptionArguments_AssignedMultipleTimes);
 
                 m_ArgumentsField = new OptionField(memberInfo);
                 if (!m_ArgumentsField.IsList)
-                    throw new OptionException("OptionArgumentsAttribute must be assigned to a collection");
+                    throw new OptionException(CmdLineStrings.OptionArguments_RequiresCollection);
                 if (m_ArgumentsField.ListType != typeof(string) && m_ArgumentsField.ListType != typeof(object))
-                    throw new OptionException("OptionArgumentsAttribute collection must be type of string");
+                    throw new OptionException(CmdLineStrings.OptionArguments_GenTypeString);
             }
         }
 
@@ -266,11 +267,11 @@
             if (shortOption == (char) 0) return;
 
             if (m_ShortOptionList.ContainsKey(shortOption)) {
-                string message = string.Format("Option '{0}' was specified multiple times", shortOption);
+                string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, shortOption);
                 throw new OptionDuplicateException(message);
             }
             if (m_LongOptionList.ContainsKey(shortOption.ToString())) {
-                string message = string.Format("Option \"{0}\" was specified multiple times", shortOption);
+                string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, shortOption);
                 throw new OptionDuplicateException(message);
             }
         }
@@ -280,12 +281,12 @@
             if (longOption == null) return;
 
             if (m_LongOptionList.ContainsKey(longOption)) {
-                string message = string.Format("Option \"{0}\" was specified multiple times", longOption);
+                string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, longOption);
                 throw new OptionDuplicateException(message);
             }
             if (longOption.Length == 1) {
                 if (m_ShortOptionList.ContainsKey(longOption[0])) {
-                    string message = string.Format("Option '{0}' was specified multiple times", longOption);
+                    string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, longOption);
                     throw new OptionDuplicateException(message);
                 }
             }
@@ -310,7 +311,7 @@
             private set
             {
                 if (!Enum.IsDefined(typeof(OptionsStyle), value))
-                    throw new ArgumentException("Unknown Options Style", nameof(value));
+                    throw new ArgumentException(CmdLineStrings.OptionsStyleUnknown, nameof(value));
                 m_OptionsStyle = value;
             }
         }
@@ -338,7 +339,7 @@
                 parser = new WindowsOptionEnumerator(arguments);
                 break;
             default:
-                throw new ApplicationException("Unknown command style parser");
+                throw new InvalidOperationException(CmdLineStrings.OptionsStyleUnknown);
             }
 
             BuildOptionList(parser.LongOptionCaseInsensitive);
@@ -353,10 +354,10 @@
                     case OptionTokenKind.LongOption:
                         if (m_Arguments.Count > 0) {
                             if (lastOptionToken != null) {
-                                message = string.Format("Unexpected option '{0}', perhaps too many arguments after '{1}'",
+                                message = string.Format(CmdLineStrings.UnexpectedOptionNonZeroGeneralArgsLastToken,
                                     token.ToString(parser), lastOptionToken.ToString(parser));
                             } else {
-                                message = string.Format("Unexpected option '{0}'", token.ToString(parser));
+                                message = string.Format(CmdLineStrings.UnexpectedOptionNonZeroGeneralArgs, token.ToString(parser));
                             }
                             throw new OptionException(message);
                         }
@@ -368,11 +369,11 @@
                         break;
                     case OptionTokenKind.Value:
                         if (lastToken != null) {
-                            message = string.Format("Unexpected value for option {0} (argument {1})",
+                            message = string.Format(CmdLineStrings.UnexpectedValueForOptionLastToken,
                                 lastToken.ToString(parser), token);
                             throw new OptionException(message);
                         }
-                        message = string.Format("Unexpected value {0}", token);
+                        message = string.Format(CmdLineStrings.UnexpectedValueForOption, token);
                         throw new OptionException(message);
                     }
                     lastToken = token;
@@ -491,10 +492,10 @@
             } catch (Exception e) {
                 string message;
                 if (argument == null) {
-                    message = string.Format("Error parsing option '{0}'", token.ToString(parser));
+                    message = string.Format(CmdLineStrings.ErrorParsingOption, token.ToString(parser));
                     throw new OptionException(message);
                 }
-                message = string.Format("Wrong format '{0}' given to option {1}", argument, token.ToString(parser));
+                message = string.Format(CmdLineStrings.ErrorParsingOptionFormat, argument, token.ToString(parser));
                 throw new OptionFormatException(token.Value, message, e);
             }
         }
@@ -552,14 +553,14 @@
                 }
 
                 if (quote == (char)0 && quoted) {
-                    string message = string.Format("Invalid data after quoted list, expect '{0}' only", separationChar);
+                    string message = string.Format(CmdLineStrings.ListInvalidData, separationChar);
                     throw new OptionException(message);
                 }
             }
 
             if (escape) sb.Append('\\');
 
-            if (quote != (char)0) throw new OptionException("Missing quote in list");
+            if (quote != (char)0) throw new OptionException(CmdLineStrings.ListMissingQuote);
 
             // Add the trailing option
             sb.Append(value.Substring(schar));

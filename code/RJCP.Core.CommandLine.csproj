@@ -35,6 +35,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resources\CmdLineStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CmdLineStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="CommandLine\IOptionParser.cs" />
     <Compile Include="CommandLine\IOptions.cs" />
     <Compile Include="CommandLine\OptionArgumentsAttribute.cs" />
@@ -50,6 +55,15 @@
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CmdLineStrings.de.resx" />
+    <EmbeddedResource Include="Resources\CmdLineStrings.en-GB.resx" />
+    <EmbeddedResource Include="Resources\CmdLineStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CmdLineStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CmdLineStrings.ro.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

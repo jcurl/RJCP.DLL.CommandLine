@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Resources;
 
     internal sealed class UnixOptionParser : IOptionParser
     {
@@ -103,7 +104,7 @@
                     int equal = argument.IndexOf('=', 1);
                     if (equal >= 0) {
                         if (equal != 2) {
-                            string message = string.Format("Command line token {0} invalid, key value pairs must be isolated", argument);
+                            string message = string.Format(CmdLineStrings.UnixCmdLineToken, argument);
                             throw new ArgumentException(message);
                         }
                         m_Tokens.Enqueue(new OptionToken(OptionTokenKind.ShortOption, argument[1].ToString()));

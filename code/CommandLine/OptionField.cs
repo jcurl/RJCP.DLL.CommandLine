@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
+    using Resources;
 
     internal class OptionField
     {
@@ -14,7 +15,7 @@
             } else if (member is PropertyInfo property) {
                 Type = property.PropertyType;
             } else {
-                throw new ArgumentException("Not a property or field", nameof(member));
+                throw new ArgumentException(CmdLineStrings.ArgException_NotPropertyOrField, nameof(member));
             }
             Member = member;
 
@@ -22,7 +23,7 @@
 
 #if DEBUG
             if (ListType != null && m_ListAddMethod == null)
-                throw new ApplicationException("Collection identified without an Add method");
+                throw new ApplicationException(CmdLineStrings.ArgException_InvalidCollectionNoAdd);
 #endif
         }
 
@@ -32,7 +33,7 @@
         {
             if (type.IsGenericType) {
                 if (Type.IsGenericTypeDefinition)
-                    throw new ArgumentException("Member must be a concrete type, not a generic type definition", nameof(type));
+                    throw new ArgumentException(CmdLineStrings.ArgException_InvalidTypeNoGeneric, nameof(type));
                 if (type.GetGenericTypeDefinition() == typeof(ICollection<>)) {
                     ListType = GetCollectionTypeDirect(type);
                     m_ListAddMethod = GetCollectionMethodDirect(type, ListType);
@@ -58,7 +59,7 @@
         {
             Type[] typeParams = type.GetGenericArguments();
             if (typeParams.Length != 1)
-                throw new ArgumentException("Expected only one Generic parameter type argument", nameof(type));
+                throw new ArgumentException(CmdLineStrings.ArgException_InvalidTypeMultipleGenTypeParams, nameof(type));
             if (typeParams[0].IsGenericParameter) return null;
             return typeParams[0];
         }
@@ -84,7 +85,7 @@
             } else if (Member is PropertyInfo property) {
                 return property.GetValue(obj, null);
             } else {
-                throw new ApplicationException("Not a property or field");
+                throw new ApplicationException(CmdLineStrings.ArgException_NotPropertyOrField);
             }
         }
 
@@ -95,14 +96,14 @@
             } else if (Member is PropertyInfo property) {
                 property.SetValue(obj, value, null);
             } else {
-                throw new ApplicationException("Not a property or field");
+                throw new ApplicationException(CmdLineStrings.ArgException_NotPropertyOrField);
             }
         }
 
         public void Add(object obj, object value)
         {
             if (!IsList)
-                throw new InvalidOperationException("Adding a value to an option that is not a collection");
+                throw new InvalidOperationException(CmdLineStrings.ArgException_InvalidCollection);
 
             m_ListAddMethod.Invoke(GetValue(obj), new object[] { value });
         }

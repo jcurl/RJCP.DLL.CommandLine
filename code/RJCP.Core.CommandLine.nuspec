@@ -12,6 +12,9 @@
         <file src="bin\build\net40\RJCP.Core.CommandLine.dll" target="lib\net40" />
         <file src="bin\build\net40\RJCP.Core.CommandLine.pdb" target="lib\net40" />
         <file src="bin\build\net40\RJCP.Core.CommandLine.XML" target="lib\net40" />
+        <file src="bin\build\net40\de\RJCP.Core.CommandLine.resources.dll" target="lib\net40\de" />
+        <file src="bin\build\net40\en-GB\RJCP.Core.CommandLine.resources.dll" target="lib\net40\en-GB" />
+        <file src="bin\build\net40\ro\RJCP.Core.CommandLine.resources.dll" target="lib\net40\ro" />
         <file src="RJCP.Core.CommandLine.csproj" target="src" />
         <file src="**.cs" target="src" />
         <file src="..\*.md" target="doc" />
