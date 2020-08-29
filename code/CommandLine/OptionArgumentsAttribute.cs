@@ -6,7 +6,7 @@
     /// Indicates a property to contain the list of extra arguments for parsing.
     /// </summary>
     /// <remarks>
-    /// Decorate a single property that implements an <c>IList&lt;string&gt;</c> type.
+    /// Decorate a single property that implements a <see cref="System.Collections.Generic.IList{T}"/> type.
     /// </remarks>
     public sealed class OptionArgumentsAttribute : Attribute
     {

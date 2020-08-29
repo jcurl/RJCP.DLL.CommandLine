@@ -37,7 +37,7 @@
     /// <para>Instantiate your class and then pass the reference to the method <see cref="Parse(object, string[])"/> with
     /// the command line parameters provided by the main entry point.</para>
     /// <example>
-    /// <code>
+    /// <code language="csharp"><![CDATA[
     /// using System;
     /// namespace CommandLineTest {
     ///   class Program {
@@ -47,12 +47,12 @@
     ///     }
     ///   }
     /// }
-    /// </code>
+    /// ]]></code>
     /// </example>
     /// <para>The class <c>CmdLineOptions</c> needs to be defined by your project. Properties that should
     /// be set are decorated with the <see cref="OptionAttribute"/> attribute.</para>
     /// <example>
-    /// <code>
+    /// <code language="csharp"><![CDATA[
     /// private class CmdLineOptions {
     ///   [Option('a', "along", false)]
     ///   public bool OptionA;
@@ -63,7 +63,7 @@
     ///   [Option('c', "clong", false)]
     ///   public string OptionC;
     /// }
-    /// </code>
+    /// ]]></code>
     /// </example>
     /// <para>So if your program is given the option "-a", the property <c>CmdLineOptions.OptionA</c> is automatically
     /// set to <see langword="true"/>. The variable <c>OptionC</c> is set to the argument that follows, e.g. <c>-c mystring</c>.</para>
