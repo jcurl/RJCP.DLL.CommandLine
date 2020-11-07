@@ -1,4 +1,4 @@
-﻿namespace RJCP.Core.CommandLine.Resources
+﻿namespace RJCP.Core.Resources
 {
     using System;
     using System.Collections;
@@ -12,7 +12,7 @@
     [TestFixture(Category = "Utilities.CommandLine")]
     public class ResourcesPrintTest
     {
-        private const string CmdLineStringResources = "RJCP.Core.CommandLine.Resources.CmdLineStrings";
+        private const string CmdLineStringResources = "RJCP.Core.Resources.CmdLineStrings";
 
         private static readonly CultureInfo[] Cultures = new CultureInfo[] {
             new CultureInfo("en"),

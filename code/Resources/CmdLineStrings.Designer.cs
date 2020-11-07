@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RJCP.Core.CommandLine.Resources {
+namespace RJCP.Core.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace RJCP.Core.CommandLine.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RJCP.Core.CommandLine.Resources.CmdLineStrings", typeof(CmdLineStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RJCP.Core.Resources.CmdLineStrings", typeof(CmdLineStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -8,7 +8,7 @@
     <ProjectGuid>{134AD9C0-87E2-49F9-BDA8-55183FFADA58}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RJCP.Core.CommandLine</RootNamespace>
+    <RootNamespace>RJCP.Core</RootNamespace>
     <AssemblyName>RJCP.Core.CommandLineTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
