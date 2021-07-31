@@ -307,14 +307,6 @@
         public IList<string> OptionB { get { return m_OptionB; } }
     }
 
-    internal class EventWithOption
-    {
-        [Option('e', "event")]
-#pragma warning disable CS0067  // This field is set via reflection, so the compiler doesn't know
-        public event EventHandler<EventArgs> MyEvent;
-#pragma warning restore CS0067
-    }
-
     internal class DuplicateOptionsShort
     {
         [Option('a')]

@@ -1152,16 +1152,6 @@
         }
 
         [Test]
-        public void OptionOnEvent()
-        {
-            EventWithOption eventOption = new EventWithOption();
-
-            // The attribute "Option" is given on an event, which should be ignored.
-            Assert.That(() => { GetOptions(eventOption, new[] { "/e" }, new[] { "-e" }); },
-                Throws.TypeOf<OptionUnknownException>());
-        }
-
-        [Test]
         public void DuplicateShortOptionsNoArgs()
         {
             DuplicateOptionsShort options = new DuplicateOptionsShort();

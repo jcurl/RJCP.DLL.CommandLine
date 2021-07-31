@@ -8,6 +8,7 @@
     /// <remarks>
     /// Provides a default value for the option, if it is given without an argument.
     /// </remarks>
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class OptionDefaultAttribute : Attribute
     {
         /// <summary>

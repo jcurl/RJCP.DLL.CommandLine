@@ -11,6 +11,7 @@
     /// <see cref="Options"/> constructor. The fields where this attribute
     /// is applied will receive the value as on the command line.
     /// </remarks>
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class OptionAttribute : Attribute
     {
         /// <summary>

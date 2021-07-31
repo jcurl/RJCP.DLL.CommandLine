@@ -8,6 +8,7 @@
     /// <remarks>
     /// Decorate a single property that implements a <see cref="System.Collections.Generic.IList{T}"/> type.
     /// </remarks>
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class OptionArgumentsAttribute : Attribute
     {
         /// <summary>
