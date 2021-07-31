@@ -264,7 +264,7 @@
 
         private void CheckShortOption(char shortOption)
         {
-            if (shortOption == (char) 0) return;
+            if (shortOption == (char)0) return;
 
             if (m_ShortOptionList.ContainsKey(shortOption)) {
                 string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, shortOption);
@@ -416,7 +416,7 @@
         {
             if (message.Length != 0) message.Append(", ");
 
-            if (shortOption != (char) 0) {
+            if (shortOption != (char)0) {
                 message.Append(parser.ShortOptionPrefix).Append(shortOption);
                 if (missing != null) missing.Add(shortOption.ToString());
             } else if (longOption != null) {

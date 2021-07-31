@@ -1,45 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2D21A916-4F21-4AE2-8379-0919FA9BD32E}</ProjectGuid>
+    <TargetFrameworks>net40;netstandard2.1</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RJCP.Core</RootNamespace>
+    <Configurations>Debug;Release</Configurations>
+    <NeutralLanguage>en-US</NeutralLanguage>
+
     <AssemblyName>RJCP.Core.CommandLine</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <AssemblyTitle>RJCP.Core.CommandLine</AssemblyTitle>
+    <Product>RJCP.Core.CommandLine</Product>
+    <RootNamespace>RJCP.Core</RootNamespace>
+
+    <Authors>Jason Curl</Authors>
+    <Copyright>(C) 2011-2021, Jason Curl</Copyright>
+    <Company></Company>
+    <PackageId>RJCP.Core.CommandLine</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/jcurl</PackageProjectUrl>
+
+    <Description>Simplify the task of parsing the command line by specifying command line options using attributes on your class properties.</Description>
+    <Version>0.8.2</Version>
+
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>Default</AnalysisMode>
+    <AnalysisLevel>latest</AnalysisLevel>
+
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\RJCP.Core.CommandLine.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Resources\CmdLineStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CmdLineStrings.resx</DependentUpon>
-    </Compile>
     <Compile Include="CommandLine\IOptionParser.cs" />
     <Compile Include="CommandLine\IOptions.cs" />
     <Compile Include="CommandLine\OptionArgumentsAttribute.cs" />
@@ -53,10 +63,15 @@
     <Compile Include="CommandLine\Platform.cs" />
     <Compile Include="CommandLine\UnixEnumerator.cs" />
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\CmdLineStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CmdLineStrings.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup>
+
+ <ItemGroup>
     <EmbeddedResource Include="Resources\CmdLineStrings.de.resx" />
     <EmbeddedResource Include="Resources\CmdLineStrings.en-GB.resx" />
     <EmbeddedResource Include="Resources\CmdLineStrings.resx">
@@ -65,12 +80,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CmdLineStrings.ro.resx" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
 </Project>

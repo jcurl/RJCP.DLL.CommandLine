@@ -50,13 +50,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionDuplicateException"/> class.
         /// </summary>
-        public OptionDuplicateException() {}
+        public OptionDuplicateException() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionDuplicateException" /> class with a specified error message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public OptionDuplicateException(string message) : base(message) {}
+        public OptionDuplicateException(string message) : base(message) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionDuplicateException" /> class with a specified error
@@ -65,7 +65,7 @@
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception,
         ///  or a <see langword="null"/> reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public OptionDuplicateException(string message, Exception innerException) : base(message, innerException) {}
+        public OptionDuplicateException(string message, Exception innerException) : base(message, innerException) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionDuplicateException" /> class with serialized data.
@@ -74,7 +74,7 @@
         ///  that holds the serialized object data about the exception being thrown.</param>
         /// <param name="context">The <see cref="StreamingContext" />
         ///  that contains contextual information about the source or destination.</param>
-        protected OptionDuplicateException(SerializationInfo info, StreamingContext context) : base(info, context) {}
+        protected OptionDuplicateException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
     /// <summary>

@@ -1,6 +1,5 @@
 ﻿namespace RJCP.Core.CommandLine
 {
-    using System;
     using System.Collections.Generic;
 
     internal sealed class WindowsOptionEnumerator : IOptionParser
