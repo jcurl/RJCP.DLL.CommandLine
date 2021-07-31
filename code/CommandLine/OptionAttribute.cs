@@ -85,7 +85,7 @@
             Required = required;
         }
 
-        private void CheckLongOption(string longOption)
+        private static void CheckLongOption(string longOption)
         {
             if (string.IsNullOrWhiteSpace(longOption))
                 throw new ArgumentException(CmdLineStrings.LongOptionMayNotBeEmpty, nameof(longOption));
@@ -109,7 +109,7 @@
             return false;
         }
 
-        private void CheckShortOption(char shortOption)
+        private static void CheckShortOption(char shortOption)
         {
             if (!IsValidShortOptionChar(shortOption)) {
                 string message = string.Format(CmdLineStrings.ShortOptionInvalidChar, shortOption);

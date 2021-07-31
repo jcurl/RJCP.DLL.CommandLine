@@ -412,7 +412,7 @@
             if (options != null) options.Check();
         }
 
-        private void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, ICollection<string> missing)
+        private static void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, ICollection<string> missing)
         {
             if (message.Length != 0) message.Append(", ");
 
@@ -460,7 +460,7 @@
             if (m_ArgumentsField != null) m_ArgumentsField.Add(m_Options, token.Value);
         }
 
-        private void ParseOptionParameter(IOptionParser parser, OptionMember optionMember, OptionToken token)
+        private static void ParseOptionParameter(IOptionParser parser, OptionMember optionMember, OptionToken token)
         {
             string argument = null;
             try {
@@ -500,7 +500,7 @@
             }
         }
 
-        private void SplitList(OptionMember optionMember, char separationChar, string value)
+        private static void SplitList(OptionMember optionMember, char separationChar, string value)
         {
             StringBuilder sb = new StringBuilder();
             char quote = (char)0;
