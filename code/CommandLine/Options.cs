@@ -183,7 +183,7 @@
             return cmdLine;
         }
 
-        private object m_Options;
+        private readonly object m_Options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Options"/> class using the Windows style.
@@ -198,10 +198,10 @@
         }
 
         #region Inspecting and building command line options
-        private Dictionary<string, OptionMember> m_LongOptionList = new Dictionary<string, OptionMember>();
-        private Dictionary<char, OptionMember> m_ShortOptionList = new Dictionary<char, OptionMember>();
-        private List<OptionMember> m_OptionList = new List<OptionMember>();
-        private IList<string> m_Arguments = new List<string>();
+        private readonly Dictionary<string, OptionMember> m_LongOptionList = new Dictionary<string, OptionMember>();
+        private readonly Dictionary<char, OptionMember> m_ShortOptionList = new Dictionary<char, OptionMember>();
+        private readonly List<OptionMember> m_OptionList = new List<OptionMember>();
+        private readonly IList<string> m_Arguments = new List<string>();
         private OptionField m_ArgumentsField;
 
         private void BuildOptionList(bool longOptionCaseInsensitive)

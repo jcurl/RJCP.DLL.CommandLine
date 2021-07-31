@@ -7,8 +7,8 @@
 
     internal class OptionMember
     {
-        private object m_Options;
-        private OptionField m_Field;
+        private readonly object m_Options;
+        private readonly OptionField m_Field;
 
         public OptionMember(object options, OptionAttribute attribute, MemberInfo member)
         {

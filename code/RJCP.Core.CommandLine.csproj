@@ -63,6 +63,7 @@
     <Compile Include="CommandLine\Platform.cs" />
     <Compile Include="CommandLine\UnixEnumerator.cs" />
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\CmdLineStrings.Designer.cs">
       <AutoGen>True</AutoGen>

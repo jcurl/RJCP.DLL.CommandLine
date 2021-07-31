@@ -6,8 +6,8 @@
 
     internal sealed class UnixOptionParser : IOptionParser
     {
-        private string[] m_Arguments;
-        private Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
+        private readonly string[] m_Arguments;
+        private readonly Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
 
         public UnixOptionParser(string[] arguments)
         {

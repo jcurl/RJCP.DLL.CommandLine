@@ -28,12 +28,15 @@
     internal class RequiredArguments
     {
 #pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('i', "insensitive")]
         private bool m_CaseInsensitive;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('f', "printfiles")]
         private bool m_PrintFiles;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('s', "search")]
         private string m_SearchString;
 #pragma warning restore CS0649
@@ -200,7 +203,7 @@
         public string OptionC;
 #pragma warning restore CS0649
 
-        private List<string> m_Arguments = new List<string>();
+        private readonly List<string> m_Arguments = new List<string>();
 
         [OptionArguments]
         public IList<string> Arguments { get { return m_Arguments; } }
@@ -209,14 +212,14 @@
     internal class ArgumentsListGenericStringAttributeOptions
     {
         [OptionArguments]
-        private List<string> m_Arguments = new List<string>();
+        private readonly List<string> m_Arguments = new List<string>();
 
         public IList<string> Arguments { get { return m_Arguments; } }
     }
 
     internal class ArgumentsListCollGenericStringAttributeOptions
     {
-        private List<string> m_Arguments = new List<string>();
+        private readonly List<string> m_Arguments = new List<string>();
 
         [OptionArguments]
         public ICollection<string> Arguments { get { return m_Arguments; } }
@@ -224,7 +227,7 @@
 
     internal class ArgumentsListCollGenericIntAttributeOptions
     {
-        private List<int> m_Arguments = new List<int>();
+        private readonly List<int> m_Arguments = new List<int>();
 
         [OptionArguments]
         public ICollection<int> Arguments { get { return m_Arguments; } }
@@ -233,14 +236,14 @@
     internal class ArgumentsListAttributeOptions
     {
         [OptionArguments]
-        private ArrayList m_Arguments = new ArrayList();
+        private readonly ArrayList m_Arguments = new ArrayList();
 
         public IList Arguments { get { return m_Arguments; } }
     }
 
     internal class ArgumentsListCollAttributeOptions
     {
-        private ArrayList m_Arguments = new ArrayList();
+        private readonly ArrayList m_Arguments = new ArrayList();
 
         [OptionArguments]
         public ICollection Arguments { get { return m_Arguments; } }
@@ -248,6 +251,7 @@
 
     internal class BaseOptionsPrivate
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('a', "along")]
 #pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         private bool m_OptionA;
@@ -258,6 +262,7 @@
 
     internal class DerivedOptionsPrivate : BaseOptionsPrivate
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('b', "blong")]
 #pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         private bool m_OptionB;

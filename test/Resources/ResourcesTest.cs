@@ -51,7 +51,7 @@
             Assert.That(allTranslation, Is.True, "Some translations missing for {0}", culture.ToString());
         }
 
-        public static bool CheckMissingResources(string baseName, Assembly assembly, CultureInfo culture)
+        private static bool CheckMissingResources(string baseName, Assembly assembly, CultureInfo culture)
         {
             ResourceManager rsrc = new ResourceManager(baseName, assembly);
             ResourceSet set = rsrc.GetResourceSet(culture, true, true);

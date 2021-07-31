@@ -4,8 +4,8 @@
 
     internal sealed class WindowsOptionEnumerator : IOptionParser
     {
-        private string[] m_Arguments;
-        private Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
+        private readonly string[] m_Arguments;
+        private readonly Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
 
         public WindowsOptionEnumerator(string[] arguments)
         {
