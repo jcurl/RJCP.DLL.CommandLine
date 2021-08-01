@@ -1,6 +1,5 @@
 ﻿namespace RJCP.Core.CommandLine
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
 
