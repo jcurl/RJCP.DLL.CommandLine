@@ -50,6 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="RJCP.MSBuildTasks" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="CommandLine\IOptionParser.cs" />
     <Compile Include="CommandLine\IOptions.cs" />
     <Compile Include="CommandLine\OptionArgumentsAttribute.cs" />
