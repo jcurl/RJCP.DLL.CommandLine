@@ -90,7 +90,6 @@
                 Assert.Fail("Unknown options style");
                 return;
             }
-
         }
 
         [Test]
@@ -188,7 +187,6 @@
             Assert.That(options.Arguments.Count, Is.EqualTo(0));
         }
 
-
         [Test]
         public void OptionStringParameterSingleSlashTwoArgs()
         {
@@ -209,7 +207,6 @@
             Assert.That(options.Arguments.Count, Is.EqualTo(0));
         }
 
-
         [Test]
         public void OptionStringParameterSingleEqualTwoArgs()
         {
@@ -229,7 +226,6 @@
             Assert.That(myOptions.OptionC, Is.EqualTo(":"));
             Assert.That(options.Arguments.Count, Is.EqualTo(0));
         }
-
 
         [Test]
         public void OptionStringParameterSingleColonTwoArgs()

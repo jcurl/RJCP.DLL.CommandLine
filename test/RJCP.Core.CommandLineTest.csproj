@@ -57,6 +57,7 @@
     <Compile Include="CommandLine\CommandLineOptions.cs" />
     <Compile Include="CommandLine\CommandLineTest.cs" />
     <Compile Include="CommandLine\CommandLineUnixTest.cs" />
+    <Compile Include="CommandLine\Parse\WindowsTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Resources\ResourcesTest.cs" />
   </ItemGroup>
