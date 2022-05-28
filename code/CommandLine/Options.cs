@@ -522,7 +522,11 @@
                 if (c == '\\') {
                     // Copy from 'schar' to this character to cut out the
                     // escape character.
+#if NETFRAMEWORK
                     sb.Append(value.Substring(schar, i - schar));
+#else
+                    sb.Append(value.AsSpan(schar, i - schar));
+#endif
                     escape = true;
                     schar = i + 1;
                     continue;
@@ -537,14 +541,22 @@
                     }
                     if (quote == value[i]) {
                         // End of the quote
+#if NETFRAMEWORK
                         sb.Append(value.Substring(schar, i - schar));
+#else
+                        sb.Append(value.AsSpan(schar, i - schar));
+#endif
                         schar = i + 1;
                         quote = (char)0;
                         continue;
                     }
                 }
                 if (c == separationChar && quote == (char)0) {
+#if NETFRAMEWORK
                     sb.Append(value.Substring(schar, i - schar));
+#else
+                    sb.Append(value.AsSpan(schar, i - schar));
+#endif
                     optionMember.AddValue(sb.ToString());
                     sb.Clear();
                     schar = i + 1;
@@ -563,7 +575,11 @@
             if (quote != (char)0) throw new OptionException(CmdLineStrings.ListMissingQuote);
 
             // Add the trailing option
+#if NETFRAMEWORK
             sb.Append(value.Substring(schar));
+#else
+            sb.Append(value.AsSpan(schar));
+#endif
             optionMember.AddValue(sb.ToString());
         }
 
