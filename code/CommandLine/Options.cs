@@ -468,9 +468,8 @@
                     OptionToken argumentToken = parser.GetToken(true);
                     if (argumentToken == null) {
                         OptionDefaultAttribute defaultAttribute =
-                            GetAttribute<OptionDefaultAttribute>(optionMember.Member);
-                        if (defaultAttribute == null)
-                            throw new OptionMissingArgumentException(token.ToString(parser));
+                            GetAttribute<OptionDefaultAttribute>(optionMember.Member)
+                                ?? throw new OptionMissingArgumentException(token.ToString(parser));
                         argument = defaultAttribute.DefaultValue;
                     } else {
                         argument = argumentToken.Value;
