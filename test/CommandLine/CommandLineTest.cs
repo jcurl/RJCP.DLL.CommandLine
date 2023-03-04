@@ -3,8 +3,8 @@
     using System;
     using NUnit.Framework;
 
-    [TestFixture(OptionsStyle.Unix, Category = "Utilities.CommandLine")]
-    [TestFixture(OptionsStyle.Windows, Category = "Utilities.CommandLine")]
+    [TestFixture(OptionsStyle.Unix)]
+    [TestFixture(OptionsStyle.Windows)]
     public class CommandLineTest
     {
         public CommandLineTest(OptionsStyle style)

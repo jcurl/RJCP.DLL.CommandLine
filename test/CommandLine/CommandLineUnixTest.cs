@@ -2,7 +2,7 @@
 {
     using NUnit.Framework;
 
-    [TestFixture(Category = "Utilities.CommandLine")]
+    [TestFixture]
     public class CommandLineUnixTest
     {
         [Test]

@@ -9,7 +9,7 @@
     using System.Resources;
     using NUnit.Framework;
 
-    [TestFixture(Category = "Utilities.CommandLine")]
+    [TestFixture]
     public class ResourcesPrintTest
     {
         private const string CmdLineStringResources = "RJCP.Core.Resources.CmdLineStrings";

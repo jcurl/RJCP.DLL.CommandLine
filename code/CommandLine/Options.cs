@@ -7,6 +7,7 @@
     using System.Reflection;
     using System.Text;
     using Resources;
+    using RJCP.Core.Environment;
 
     /// <summary>
     /// The style of command line options to use.

@@ -2,8 +2,9 @@
 {
     using System;
     using NUnit.Framework;
+    using RJCP.Core.Environment;
 
-    [TestFixture(Category = "Utilities.CommandLine")]
+    [TestFixture]
     public class CommandLineCommonTest
     {
         [Test]

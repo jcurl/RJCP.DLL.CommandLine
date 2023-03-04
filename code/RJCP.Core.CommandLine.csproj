@@ -14,7 +14,7 @@
     <RootNamespace>RJCP.Core</RootNamespace>
 
     <Authors>Jason Curl</Authors>
-    <Copyright>(C) 2011-2021, Jason Curl</Copyright>
+    <Copyright>(C) 2011-2023, Jason Curl</Copyright>
     <Company></Company>
     <PackageId>RJCP.Core.CommandLine</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -57,6 +57,7 @@
     <PackageReference Include="RJCP.MSBuildTasks" Version="0.2.2">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <ProjectReference Include="..\..\environment\Environment\RJCP.Environment.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,7 +72,6 @@
     <Compile Include="CommandLine\Options.cs" />
     <Compile Include="CommandLine\OptionToken.cs" />
     <Compile Include="CommandLine\Parse\Windows.cs" />
-    <Compile Include="CommandLine\Platform.cs" />
     <Compile Include="CommandLine\UnixEnumerator.cs" />
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
     <Compile Include="GlobalSuppressions.cs" />
