@@ -21,21 +21,15 @@
         }
 
         [Test]
-        [Platform(Include = "Unix")]
-        public void OptionsType_Unix()
-        {
-            OptionalArguments myOptions = new OptionalArguments();
-            Options options = Options.Parse(myOptions, null);
-            Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Unix));
-        }
-
-        [Test]
-        [Platform(Include = "Win")]
         public void OptionsType_Windows()
         {
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, null);
-            Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Windows));
+            if (Platform.IsMSys() || Platform.IsUnix()) {
+                Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Unix));
+            } else {
+                Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Windows));
+            }
         }
     }
 }

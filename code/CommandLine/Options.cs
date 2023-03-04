@@ -79,6 +79,22 @@
     public class Options
     {
         /// <summary>
+        /// Gets the default options style if not overridden in the class constructors.
+        /// </summary>
+        /// <value>The default options style.</value>
+        public static OptionsStyle DefaultOptionsStyle
+        {
+            get
+            {
+                if (!Platform.IsWinNT() || Platform.IsMSys()) {
+                    return OptionsStyle.Unix;
+                } else {
+                    return OptionsStyle.Windows;
+                }
+            }
+        }
+
+        /// <summary>
         /// Parses the command line arguments writing to options.
         /// </summary>
         /// <param name="options">The options object to write to.</param>
@@ -124,14 +140,7 @@
         /// </remarks>
         public static Options Parse(object options, string[] arguments)
         {
-            Options cmdLine = new Options(options);
-            if (Platform.IsWinNT()) {
-                cmdLine.OptionsStyle = OptionsStyle.Windows;
-            } else {
-                cmdLine.OptionsStyle = OptionsStyle.Unix;
-            }
-            cmdLine.ParseCommandLine(arguments);
-            return cmdLine;
+            return Parse(options, arguments, DefaultOptionsStyle);
         }
 
         /// <summary>
