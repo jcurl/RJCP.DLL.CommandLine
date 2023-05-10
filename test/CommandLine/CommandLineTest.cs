@@ -32,7 +32,7 @@
         {
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, null, CommandLineStyle);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -40,7 +40,7 @@
         {
             OptionalArguments myOptions = new OptionalArguments();
             Options options = Options.Parse(myOptions, new string[0], CommandLineStyle);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -48,7 +48,7 @@
         {
             NoArguments myOptions = new NoArguments();
             Options options = Options.Parse(myOptions, null, CommandLineStyle);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -56,7 +56,7 @@
         {
             NoArguments myOptions = new NoArguments();
             Options options = Options.Parse(myOptions, new string[0], CommandLineStyle);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -68,7 +68,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.Null);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -77,7 +77,7 @@
             OptionalArguments myOptions = new OptionalArguments();
 
             Options options = GetOptions(myOptions, new[] { "/" }, new[] { "-" });
-            Assert.That(options.Arguments.Count, Is.EqualTo(1));
+            Assert.That(options.Arguments, Has.Count.EqualTo(1));
 
             switch (CommandLineStyle) {
             case OptionsStyle.Windows:
@@ -114,7 +114,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.OptionC, Is.Null);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -126,7 +126,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.OptionC, Is.Null);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -138,7 +138,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.OptionC, Is.Null);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -150,7 +150,7 @@
             Assert.That(myOptions.OptionA, Is.False);
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.EqualTo("foo"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -162,7 +162,7 @@
             Assert.That(myOptions.OptionA, Is.False);
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.EqualTo("foo"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -174,7 +174,7 @@
             Assert.That(myOptions.OptionA, Is.False);
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.EqualTo("foo"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -184,7 +184,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong:/" }, new[] { "--clong=/" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("/"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -194,7 +194,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong", "/" }, new[] { "--clong", "/" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("/"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -204,7 +204,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong:=" }, new[] { "--clong==" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("="));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -214,7 +214,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong", "=" }, new[] { "--clong", "=" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("="));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -224,7 +224,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong::" }, new[] { "--clong=:" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo(":"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -234,7 +234,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong", ":" }, new[] { "--clong", ":" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo(":"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -244,7 +244,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong://" }, new[] { "--clong=//" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("//"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -266,7 +266,7 @@
             case OptionsStyle.Unix:
                 options = Options.Parse(myOptions, new[] { "--clong", "//" }, OptionsStyle.Unix);
                 Assert.That(myOptions.OptionC, Is.EqualTo("//"));
-                Assert.That(options.Arguments.Count, Is.EqualTo(0));
+                Assert.That(options.Arguments, Is.Empty);
                 break;
             default:
                 Assert.Fail("Unknown options style");
@@ -281,7 +281,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong:-" }, new[] { "--clong=-" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -291,7 +291,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong", "-" }, new[] { "--clong", "-" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -301,7 +301,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong:--" }, new[] { "--clong=--" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("--"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -313,7 +313,7 @@
             case OptionsStyle.Windows:
                 options = Options.Parse(myOptions, new[] { "/clong", "--" }, OptionsStyle.Windows);
                 Assert.That(myOptions.OptionC, Is.EqualTo("--"));
-                Assert.That(options.Arguments.Count, Is.EqualTo(0));
+                Assert.That(options.Arguments, Is.Empty);
                 break;
             case OptionsStyle.Unix:
                 // This throws an exception, as following '--clong' is '--' which is interpreted as a new option. If you
@@ -338,7 +338,7 @@
             Options options = GetOptions(myOptions, new[] { "/clong:--x" }, new[] { "--clong=--x" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("--x"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -350,7 +350,7 @@
             case OptionsStyle.Windows:
                 options = Options.Parse(myOptions, new[] { "/clong", "--x" }, OptionsStyle.Windows);
                 Assert.That(myOptions.OptionC, Is.EqualTo("--x"));
-                Assert.That(options.Arguments.Count, Is.EqualTo(0));
+                Assert.That(options.Arguments, Is.Empty);
                 break;
             case OptionsStyle.Unix:
                 // This throws an exception, as following '--clong' is '--x' which is interpreted as a new option. If you
@@ -377,7 +377,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.True);
             Assert.That(myOptions.PrintFiles, Is.True);
             Assert.That(myOptions.SearchString, Is.EqualTo("string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -389,7 +389,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.True);
             Assert.That(myOptions.PrintFiles, Is.True);
             Assert.That(myOptions.SearchString, Is.EqualTo("string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -401,7 +401,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.True);
             Assert.That(myOptions.PrintFiles, Is.True);
             Assert.That(myOptions.SearchString, Is.EqualTo("string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -413,7 +413,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.True);
             Assert.That(myOptions.PrintFiles, Is.True);
             Assert.That(myOptions.SearchString, Is.EqualTo("string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -441,7 +441,7 @@
             Options options = GetOptions(myOptions, new[] { "/c:bar" }, new[] { "-c=bar" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("bar"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -453,7 +453,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.PrintFiles, Is.False);
             Assert.That(myOptions.SearchString, Is.EqualTo("string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -465,7 +465,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.PrintFiles, Is.False);
             Assert.That(myOptions.SearchString, Is.EqualTo("string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -477,7 +477,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.PrintFiles, Is.False);
             Assert.That(myOptions.SearchString, Is.EqualTo(" string "));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -489,7 +489,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.PrintFiles, Is.False);
             Assert.That(myOptions.SearchString, Is.EqualTo(" string"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -501,7 +501,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.PrintFiles, Is.False);
             Assert.That(myOptions.SearchString, Is.EqualTo("string "));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -513,7 +513,7 @@
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.PrintFiles, Is.False);
             Assert.That(myOptions.SearchString, Is.EqualTo(" string "));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -528,7 +528,7 @@
                 Assert.That(myOptions.SearchString, Is.EqualTo(":"));
             if (CommandLineStyle == OptionsStyle.Unix)
                 Assert.That(myOptions.SearchString, Is.EqualTo("="));
-            Assert.That(options.Arguments.Count, Is.EqualTo(1));
+            Assert.That(options.Arguments, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -543,7 +543,7 @@
                 Assert.That(myOptions.SearchString, Is.EqualTo(":"));
             if (CommandLineStyle == OptionsStyle.Unix)
                 Assert.That(myOptions.SearchString, Is.EqualTo("="));
-            Assert.That(options.Arguments.Count, Is.EqualTo(1));
+            Assert.That(options.Arguments, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -558,7 +558,7 @@
                 Assert.That(myOptions.SearchString, Is.EqualTo("="));
             if (CommandLineStyle == OptionsStyle.Unix)
                 Assert.That(myOptions.SearchString, Is.EqualTo(":"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(1));
+            Assert.That(options.Arguments, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -573,7 +573,7 @@
                 Assert.That(myOptions.SearchString, Is.EqualTo("="));
             if (CommandLineStyle == OptionsStyle.Unix)
                 Assert.That(myOptions.SearchString, Is.EqualTo(":"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(1));
+            Assert.That(options.Arguments, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -594,7 +594,7 @@
             Assert.That(myOptions.PrintFiles, Is.True);
             Assert.That(myOptions.CaseInsensitive, Is.False);
             Assert.That(myOptions.SearchString, Is.Null);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -607,7 +607,7 @@
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.OptionC, Is.Null);
             Assert.That(myOptions.Level42, Is.Null);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -688,7 +688,7 @@
             ShortOptionWithDigit myOptions = new ShortOptionWithDigit();
             Options options = GetOptions(myOptions, new[] { "/9" }, new[] { "-9" });
             Assert.That(myOptions.Level, Is.True);
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -706,11 +706,11 @@
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", "test1,test2,test3" }, new[] { "-l", "test1,test2,test3" });
 
-            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
             Assert.That(myOptions.List[1], Is.EqualTo("test2"));
             Assert.That(myOptions.List[2], Is.EqualTo("test3"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -719,9 +719,9 @@
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", "test1" }, new[] { "-l", "test1" });
 
-            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -730,11 +730,11 @@
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", "test1", "/l", "test2", "/l", "test3" }, new[] { "-l", "test1", "-l", "test2", "-l", "test3" });
 
-            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
             Assert.That(myOptions.List[1], Is.EqualTo("test2"));
             Assert.That(myOptions.List[2], Is.EqualTo("test3"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -743,11 +743,11 @@
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", @"test1,'test2','test 3'" }, new[] { "-l", @"test1,'test2','test 3'" });
 
-            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
             Assert.That(myOptions.List[1], Is.EqualTo("test2"));
             Assert.That(myOptions.List[2], Is.EqualTo("test 3"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -756,11 +756,11 @@
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", @"test1,'test2,test3b','test 3'" }, new[] { "-l", @"test1,'test2,test3b','test 3'" });
 
-            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
             Assert.That(myOptions.List[1], Is.EqualTo("test2,test3b"));
             Assert.That(myOptions.List[2], Is.EqualTo("test 3"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -777,9 +777,9 @@
         {
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", @"c:\users\homeuser" }, new[] { "-l", @"c:\users\homeuser" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo(@"c:\users\homeuser"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -787,11 +787,11 @@
         {
             ListOptions myOptions = new ListOptions();
             Options options = GetOptions(myOptions, new[] { "/l", @"test1,test2,testx\" }, new[] { "-l", @"test1,test2,testx\" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
             Assert.That(myOptions.List[1], Is.EqualTo("test2"));
             Assert.That(myOptions.List[2], Is.EqualTo(@"testx\"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -808,9 +808,9 @@
         {
             ListOptionsInterfaceGeneric myOptions = new ListOptionsInterfaceGeneric();
             Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo("item"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -818,9 +818,9 @@
         {
             ListOptionsInterface myOptions = new ListOptionsInterface();
             Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo("item"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -828,9 +828,9 @@
         {
             CollectionOptionsInterfaceGeneric myOptions = new CollectionOptionsInterfaceGeneric();
             Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List, Is.EquivalentTo(new[] { "item" }));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -849,9 +849,9 @@
         {
             ListOptionsIntegers myOptions = new ListOptionsIntegers();
             Options options = GetOptions(myOptions, new[] { "/l", "1" }, new[] { "-l", "1" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(1));
+            Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List, Is.EqualTo(new[] { 1 }));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -859,9 +859,9 @@
         {
             ListOptionsIntegers myOptions = new ListOptionsIntegers();
             Options options = GetOptions(myOptions, new[] { "/l", "3,1,4" }, new[] { "-l", "3,1,4" });
-            Assert.That(myOptions.List.Count, Is.EqualTo(3));
+            Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List, Is.EqualTo(new[] { 3, 1, 4 }));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -873,7 +873,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("3"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -885,7 +885,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("3"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -897,7 +897,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.False);
             Assert.That(myOptions.Verbosity, Is.EqualTo("b"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -909,7 +909,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("0"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -921,7 +921,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("2"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -933,7 +933,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("2"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -945,7 +945,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("0"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -957,7 +957,7 @@
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
             Assert.That(myOptions.Verbosity, Is.EqualTo("0"));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -967,7 +967,7 @@
             Options options = GetOptions(myOptions, new[] { "/c", "yellow" }, new[] { "-c", "yellow" });
 
             Assert.That(myOptions.Color, Is.EqualTo(BasicColor.Yellow));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -977,7 +977,7 @@
             Options options = GetOptions(myOptions, new[] { "/c", "4" }, new[] { "-c", "4" });
 
             Assert.That(myOptions.Color, Is.EqualTo(BasicColor.Cyan));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -987,7 +987,7 @@
             Options options = GetOptions(myOptions, new[] { "/O", "100" }, new[] { "-O", "100" });
 
             Assert.That(myOptions.Opacity, Is.EqualTo(100));
-            Assert.That(options.Arguments.Count, Is.EqualTo(0));
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]
@@ -1005,10 +1005,10 @@
             ArgumentsAttributeOptions myOptions = new ArgumentsAttributeOptions();
             Options options = GetOptions(myOptions, new[] { "/a", "arg1", "arg2" }, new[] { "-a", "arg1", "arg2" });
 
-            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments, Has.Count.EqualTo(2));
             Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
-            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments, Has.Count.EqualTo(2));
             Assert.That(myOptions.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(myOptions.Arguments[1], Is.EqualTo("arg2"));
         }
@@ -1019,10 +1019,10 @@
             ArgumentsListGenericStringAttributeOptions myOptions = new ArgumentsListGenericStringAttributeOptions();
             Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
 
-            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments, Has.Count.EqualTo(2));
             Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
-            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments, Has.Count.EqualTo(2));
             Assert.That(myOptions.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(myOptions.Arguments[1], Is.EqualTo("arg2"));
         }
@@ -1051,10 +1051,10 @@
             ArgumentsListCollGenericStringAttributeOptions myOptions = new ArgumentsListCollGenericStringAttributeOptions();
             Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
 
-            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments, Has.Count.EqualTo(2));
             Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
-            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments, Has.Count.EqualTo(2));
             Assert.That(myOptions.Arguments, Is.EquivalentTo(new[] { "arg1", "arg2" }));
         }
 
@@ -1064,10 +1064,10 @@
             ArgumentsListAttributeOptions myOptions = new ArgumentsListAttributeOptions();
             Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
 
-            Assert.That(options.Arguments.Count, Is.EqualTo(2));
+            Assert.That(options.Arguments, Has.Count.EqualTo(2));
             Assert.That(options.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(options.Arguments[1], Is.EqualTo("arg2"));
-            Assert.That(myOptions.Arguments.Count, Is.EqualTo(2));
+            Assert.That(myOptions.Arguments, Has.Count.EqualTo(2));
             Assert.That(myOptions.Arguments[0], Is.EqualTo("arg1"));
             Assert.That(myOptions.Arguments[1], Is.EqualTo("arg2"));
         }
@@ -1132,8 +1132,8 @@
             Options options = GetOptions(myOptions, new[] { "/a", "foo,bar" }, new[] { "-a", "foo,bar" });
 
             Assert.That(options, Is.Not.Null);
-            Assert.That(myOptions.OptionA.Count, Is.EqualTo(2));
-            Assert.That(myOptions.OptionB.Count, Is.EqualTo(0));
+            Assert.That(myOptions.OptionA, Has.Count.EqualTo(2));
+            Assert.That(myOptions.OptionB, Is.Empty);
         }
 
         [Test]
@@ -1143,8 +1143,8 @@
             Options options = GetOptions(myOptions, new[] { "/b", "foo,bar" }, new[] { "-b", "foo,bar" });
 
             Assert.That(options, Is.Not.Null);
-            Assert.That(myOptions.OptionA.Count, Is.EqualTo(0));
-            Assert.That(myOptions.OptionB.Count, Is.EqualTo(2));
+            Assert.That(myOptions.OptionA, Is.Empty);
+            Assert.That(myOptions.OptionB, Has.Count.EqualTo(2));
         }
 
         [Test]
