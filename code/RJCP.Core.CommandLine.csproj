@@ -19,10 +19,11 @@
     <PackageId>RJCP.Core.CommandLine</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/jcurl/RJCP.DLL.CommandLine</PackageProjectUrl>
 
     <Description>Simplify the task of parsing the command line by specifying command line options using attributes on your class properties.</Description>
-    <Version>0.8.2</Version>
+    <Version>0.8.3</Version>
 
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 
