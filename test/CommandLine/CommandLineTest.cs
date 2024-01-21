@@ -12,7 +12,7 @@
             CommandLineStyle = style;
         }
 
-        public OptionsStyle CommandLineStyle { get; private set; }
+        public OptionsStyle CommandLineStyle { get; }
 
         private Options GetOptions(object optionsConfig, string[] windowsArgs, string[] unixArgs)
         {
@@ -1181,6 +1181,73 @@
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/along" }, new[] { "--along" });
             }, Throws.TypeOf<OptionDuplicateException>());
+        }
+
+        [Test]
+        public void AllShortSymbols()
+        {
+            OptionShortSymbol options = new OptionShortSymbol();
+            _ = GetOptions(options, new string[] { }, new string[] { });
+        }
+
+        [Test]
+        public void ShortSymbolPlus()
+        {
+            OptionShortPlus options = new OptionShortPlus();
+            Assert.That(() => {
+                _ = GetOptions(options, new string[] { "/+" }, new string[] { "-+" });
+            }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
+        public void ShortSymbolMinus()
+        {
+            OptionShortMinus options = new OptionShortMinus();
+            Assert.That(() => {
+                _ = GetOptions(options, new string[] { "/-" }, new string[] { "--" });
+            }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
+        public void ShortSymbolUnder()
+        {
+            OptionShortUnder options = new OptionShortUnder();
+            Assert.That(() => {
+                _ = GetOptions(options, new string[] { "/_" }, new string[] { "-_" });
+            }, Throws.TypeOf<OptionException>());
+        }
+
+        [Test]
+        public void ShortSymbolHash()
+        {
+            OptionShortHash options = new OptionShortHash();
+            _ = GetOptions(options, new string[] { "/#" }, new string[] { "-#" });
+            Assert.That(options.Hash, Is.True);
+        }
+
+        [Test]
+        public void ShortSymbolBang()
+        {
+            OptionShortBang options = new OptionShortBang();
+            _ = GetOptions(options, new string[] { "/!" }, new string[] { "-!" });
+            Assert.That(options.Bang, Is.True);
+        }
+
+        [Test]
+        public void ShortSymbolHelp()
+        {
+            OptionShortHelp options = new OptionShortHelp();
+            _ = GetOptions(options, new string[] { "/?" }, new string[] { "-?" });
+            Assert.That(options.Help, Is.True);
+        }
+
+        [Test]
+        public void ShortSymbolInvalid()
+        {
+            OptionShortStar options = new OptionShortStar();
+            Assert.That(() => {
+                _ = GetOptions(options, new string[] { "/*" }, new string[] { "-*" });
+            }, Throws.TypeOf<OptionException>());
         }
     }
 }

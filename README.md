@@ -185,10 +185,10 @@ If the option must be provided, append `true` as the last argument:
 - `[Option('s', "short", required: true)]`.
 
 Short option names must be a letter (`a-z` or `A-Z`), a digit (`0-9`), or a
-symbol `!`, `+`, `?`, `#`.
+symbol `!`, `?`, `#`.
 
 Long option names may begin only with a letter (`a-z` or `A-Z`). Options may have
-letters, digits (`0-9`), a dash `-` or an underscore `_`.
+letters, digits (`0-9`), a dash `-`, dot `.` or an underscore `_`.
 
 The short options and long options must be unique for all options that are being
 parsed.

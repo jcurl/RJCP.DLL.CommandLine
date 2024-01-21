@@ -99,7 +99,7 @@
             }
         }
 
-        private static readonly char[] ValidLongOptionChars = new char[] { '-', '_' };
+        private static readonly char[] ValidLongOptionChars = new char[] { '-', '_', '.' };
 
         private static bool IsValidLongOptionChar(int pos, char longOptionChar)
         {
@@ -114,11 +114,11 @@
         {
             if (!IsValidShortOptionChar(shortOption)) {
                 string message = string.Format(CmdLineStrings.ShortOptionInvalidChar, shortOption);
-                throw new ArgumentException(message, nameof(shortOption));
+                throw new OptionException(message);
             }
         }
 
-        private static readonly char[] ValidShortOptionChars = new char[] { '-', '_', '!', '+', '?', '#' };
+        private static readonly char[] ValidShortOptionChars = new char[] { '!', '?', '#' };
 
         private static bool IsValidShortOptionChar(char shortOptionChar)
         {

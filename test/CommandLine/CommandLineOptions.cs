@@ -357,4 +357,58 @@
 
         public void Usage() { /* Nothing to show */ }
     }
+
+    internal class OptionShortSymbol
+    {
+        [Option('#', "hash")]
+        public bool Hash;
+
+        [Option('!', "bang")]
+        public bool Bang;
+
+        [Option('?', "help")]
+        public bool Help;
+    }
+
+    internal class OptionShortPlus
+    {
+        [Option('+', "plus")]
+        public bool Plus;
+    }
+
+    internal class OptionShortMinus
+    {
+        [Option('-', "minus")]
+        public bool Minus;
+    }
+
+    internal class OptionShortUnder
+    {
+        [Option('_', "under")]
+        public bool Under;
+    }
+
+    internal class OptionShortHash
+    {
+        [Option('#', "hash")]
+        public bool Hash;
+    }
+
+    internal class OptionShortBang
+    {
+        [Option('!', "bang")]
+        public bool Bang;
+    }
+
+    internal class OptionShortHelp
+    {
+        [Option('?', "help")]
+        public bool Help;
+    }
+
+    internal class OptionShortStar
+    {
+        [Option('*', "star")]
+        public bool Star;
+    }
 }
