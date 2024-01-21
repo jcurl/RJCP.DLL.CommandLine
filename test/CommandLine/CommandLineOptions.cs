@@ -411,4 +411,21 @@
         [Option('*', "star")]
         public bool Star;
     }
+
+    internal class OptionPropertySetRaiseError
+    {
+        private int m_Value;
+
+        [Option('v', "value")]
+        public int Value
+        {
+            get { return m_Value; }
+            set
+            {
+                if (value < 0)
+                    throw new OptionException("Value out of range");
+                m_Value = value;
+            }
+        }
+    }
 }

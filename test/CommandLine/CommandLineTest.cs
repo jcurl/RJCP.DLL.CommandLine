@@ -1249,5 +1249,14 @@
                 _ = GetOptions(options, new string[] { "/*" }, new string[] { "-*" });
             }, Throws.TypeOf<OptionException>());
         }
+
+        [Test]
+        public void OptionSetPropagateException()
+        {
+            OptionPropertySetRaiseError options = new OptionPropertySetRaiseError();
+            Assert.That(() => {
+                _ = GetOptions(options, new[] { "/value:-10" }, new[] { "--value=-10" });
+            }, Throws.TypeOf<OptionException>().With.Message.EqualTo("Value out of range"));
+        }
     }
 }

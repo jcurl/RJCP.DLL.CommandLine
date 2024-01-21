@@ -482,14 +482,21 @@
                 optionMember.IsSet = true;
             } catch (OptionException) {
                 throw;
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 string message;
                 if (argument == null) {
                     message = string.Format(CmdLineStrings.ErrorParsingOption, token.ToString(parser));
                     throw new OptionException(message);
                 }
+
+                if (ex is TargetInvocationException reflectEx) {
+                    // Exception is caused by setting the property through reflection.
+                    if (reflectEx.InnerException is OptionException)
+                        throw reflectEx.InnerException;
+                    ex = reflectEx;
+                }
                 message = string.Format(CmdLineStrings.ErrorParsingOptionFormat, argument, token.ToString(parser));
-                throw new OptionFormatException(token.Value, message, e);
+                throw new OptionFormatException(token.Value, message, ex);
             }
         }
 
