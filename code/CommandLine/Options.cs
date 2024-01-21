@@ -247,12 +247,7 @@
             if (argAttribute != null) {
                 if (m_ArgumentsField != null)
                     throw new OptionException(CmdLineStrings.OptionArguments_AssignedMultipleTimes);
-
-                m_ArgumentsField = new OptionField(memberInfo);
-                if (!m_ArgumentsField.IsList)
-                    throw new OptionException(CmdLineStrings.OptionArguments_RequiresCollection);
-                if (m_ArgumentsField.ListType != typeof(string) && m_ArgumentsField.ListType != typeof(object))
-                    throw new OptionException(CmdLineStrings.OptionArguments_GenTypeString);
+                m_ArgumentsField = new OptionField(memberInfo, true, typeof(string));
             }
         }
 

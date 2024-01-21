@@ -839,9 +839,9 @@
             CollectionOptionsInterface myOptions = new CollectionOptionsInterface();
             Assert.That(() => {
                 // Fails, because method List of of type ICollection, which doesn't have an 'Add' method. Collections
-                // must implement IList or ICollection<object>.
+                // must implement IList or ICollection<object>. So it's not seen as a list or a primitive type.
                 _ = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
-            }, Throws.TypeOf<OptionFormatException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1257,6 +1257,33 @@
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/value:-10" }, new[] { "--value=-10" });
             }, Throws.TypeOf<OptionException>().With.Message.EqualTo("Value out of range"));
+        }
+
+        [Test]
+        public void OptionSetGetterOnlyClass()
+        {
+            OptionOnlyGetterClass options = new OptionOnlyGetterClass();
+            Assert.That(() => {
+                _ = GetOptions(options, new[] { "/x" }, new[] { "-x" });
+            }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void OptionSetGetterOnlyStruct()
+        {
+            OptionOnlyGetterStruct options = new OptionOnlyGetterStruct();
+            Assert.That(() => {
+                _ = GetOptions(options, new[] { "/x" }, new[] { "-x" });
+            }, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void OptionSetReadOnlyStruct()
+        {
+            OptionOnlyReadOnlyStruct options = new OptionOnlyReadOnlyStruct();
+            Assert.That(() => {
+                _ = GetOptions(options, new[] { "/x" }, new[] { "-x" });
+            }, Throws.TypeOf<ArgumentException>());
         }
     }
 }

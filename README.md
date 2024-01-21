@@ -243,6 +243,13 @@ All exceptions derive from `OptionException`.
 - `OptionMissingException`
   - A mandatory option was not provided on the command line.
 
+Exceptions raised that are not caused by the user:
+
+- `ArgumentException`
+  - A property has no setter. To fix, ensure the property has a `set` method.
+  - A field is readonly. To fix, ensure the field is not `readonly` by removing
+    that keyword.
+
 ### 1.5. Extending with `IOptions`
 
 If the class for parsing options implements the interface `IOptions`, methods on

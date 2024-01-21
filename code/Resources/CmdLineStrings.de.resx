@@ -130,7 +130,7 @@
     <value>Das Feld muss ein konkreter Typ sein, keine generische Typdefinition</value>
   </data>
   <data name="ArgException_NotPropertyOrField" xml:space="preserve">
-    <value>Keine Eigenschaft oder ein Feld</value>
+    <value>Keine Eigenschaft oder kein Feld</value>
   </data>
   <data name="ErrorParsingOption" xml:space="preserve">
     <value>Fehler beim Parsen der Option '{0}'</value>
@@ -200,5 +200,20 @@
   </data>
   <data name="UnixCmdLineToken" xml:space="preserve">
     <value>Befehlszeiloption {0} ungültig, Schlüsselwertpaare müssen isoliert werden</value>
+  </data>
+  <data name="ArgException_ReadOnlyField" xml:space="preserve">
+    <value>Das schreibgeschützte Feld '{0}' kann nicht festgelegt werden</value>
+  </data>
+  <data name="ArgException_NotSettableProperty" xml:space="preserve">
+    <value>Die schreibgeschützte Eigenschaft '{0}' kann nicht gesetzt werden</value>
+  </data>
+  <data name="ArgException_FieldNotPrimitive" xml:space="preserve">
+    <value>Feld '{0}' muss ein primitiver Typ sein</value>
+  </data>
+  <data name="ArgException_PropertyNotPrimitive" xml:space="preserve">
+    <value>Eigenschaft '{0}' muss ein primitiver Typ sein</value>
+  </data>
+  <data name="ArgException_CollectionNotPrimitive" xml:space="preserve">
+    <value>Sammlung '{0}' muss ein primitiver Typ sein</value>
   </data>
 </root>

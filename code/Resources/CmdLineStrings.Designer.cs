@@ -19,7 +19,7 @@ namespace RJCP.Core.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class CmdLineStrings {
@@ -57,6 +57,24 @@ namespace RJCP.Core.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection &apos;{0}&apos; must contain a primitive type.
+        /// </summary>
+        internal static string ArgException_CollectionNotPrimitive {
+            get {
+                return ResourceManager.GetString("ArgException_CollectionNotPrimitive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; must be a primitive type.
+        /// </summary>
+        internal static string ArgException_FieldNotPrimitive {
+            get {
+                return ResourceManager.GetString("ArgException_FieldNotPrimitive", resourceCulture);
             }
         }
         
@@ -102,6 +120,33 @@ namespace RJCP.Core.Resources {
         internal static string ArgException_NotPropertyOrField {
             get {
                 return ResourceManager.GetString("ArgException_NotPropertyOrField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot set a non-writable property &apos;{0}&apos;.
+        /// </summary>
+        internal static string ArgException_NotSettableProperty {
+            get {
+                return ResourceManager.GetString("ArgException_NotSettableProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; must be a primitive type.
+        /// </summary>
+        internal static string ArgException_PropertyNotPrimitive {
+            get {
+                return ResourceManager.GetString("ArgException_PropertyNotPrimitive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot set a readonly field &apos;{0}&apos;.
+        /// </summary>
+        internal static string ArgException_ReadOnlyField {
+            get {
+                return ResourceManager.GetString("ArgException_ReadOnlyField", resourceCulture);
             }
         }
         

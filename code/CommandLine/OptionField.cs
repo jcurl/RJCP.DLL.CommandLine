@@ -10,28 +10,67 @@
     {
         public OptionField(MemberInfo member)
         {
+            InitializeOptionField(member, false, null);
+        }
+
+        public OptionField(MemberInfo member, bool expectList, Type listType)
+        {
+            InitializeOptionField(member, expectList, listType);
+        }
+
+        private void InitializeOptionField(MemberInfo member, bool expectList, Type listType)
+        {
+            bool isCollection;
             if (member is FieldInfo field) {
                 Type = field.FieldType;
+                isCollection = SetCollectionType(Type);
+                if (!isCollection) {
+                    if (expectList)
+                        throw new OptionException(CmdLineStrings.OptionArguments_RequiresCollection);
+                    if (!IsSimpleType(Type)) {
+                        string message = string.Format(CmdLineStrings.ArgException_FieldNotPrimitive, field.Name);
+                        throw new ArgumentException(message);
+                    }
+                    if (field.IsInitOnly) {
+                        string message = string.Format(CmdLineStrings.ArgException_ReadOnlyField, field.Name);
+                        throw new ArgumentException(message);
+                    }
+                } else if (!IsSimpleType(ListType)) {
+                    string message = string.Format(CmdLineStrings.ArgException_CollectionNotPrimitive, field.Name);
+                    throw new ArgumentException(message);
+                }
             } else if (member is PropertyInfo property) {
                 Type = property.PropertyType;
+                isCollection = SetCollectionType(Type);
+                if (!isCollection) {
+                    if (expectList)
+                        throw new OptionException(CmdLineStrings.OptionArguments_RequiresCollection);
+                    if (!IsSimpleType(Type)) {
+                        string message = string.Format(CmdLineStrings.ArgException_PropertyNotPrimitive, property.Name);
+                        throw new ArgumentException(message);
+                    }
+                    if (!property.CanWrite) {
+                        string message = string.Format(CmdLineStrings.ArgException_ReadOnlyField, property.Name);
+                        throw new ArgumentException(message);
+                    }
+                } else if (!IsSimpleType(ListType)) {
+                    string message = string.Format(CmdLineStrings.ArgException_CollectionNotPrimitive, property.Name);
+                    throw new ArgumentException(message);
+                }
             } else {
                 throw new ArgumentException(CmdLineStrings.ArgException_NotPropertyOrField, nameof(member));
             }
+
+            if (isCollection && expectList) {
+                if (ListType != typeof(object) && listType != null && !listType.IsAssignableFrom(ListType))
+                    throw new OptionException(CmdLineStrings.OptionArguments_GenTypeString);
+            }
             Member = member;
-
-            GetCollectionType(Type);
-
-#if DEBUG
-            // This should never be true, as `GetCollectionType()` always sets `ListType` and `m_ListAddMethod`
-            // together. So this check is a lint of our own code, and should not be caught by user code.
-            if (ListType != null && m_ListAddMethod == null)
-                throw new ApplicationException(CmdLineStrings.ArgException_InvalidCollectionNoAdd);
-#endif
         }
 
         private MethodInfo m_ListAddMethod;
 
-        private void GetCollectionType(Type type)
+        private bool SetCollectionType(Type type)
         {
             if (type.IsGenericType) {
                 if (Type.IsGenericTypeDefinition)
@@ -39,7 +78,7 @@
                 if (type.GetGenericTypeDefinition() == typeof(ICollection<>)) {
                     ListType = GetCollectionTypeDirect(type);
                     m_ListAddMethod = GetCollectionMethodDirect(type, ListType);
-                    return;
+                    return true;
                 }
             }
 
@@ -47,14 +86,17 @@
                 if (intf.IsGenericType && intf.GetGenericTypeDefinition() == typeof(ICollection<>)) {
                     ListType = GetCollectionTypeDirect(intf);
                     m_ListAddMethod = GetCollectionMethodDirect(intf, ListType);
-                    return;
+                    return true;
                 }
             }
 
             if (typeof(IList).IsAssignableFrom(type)) {
                 ListType = typeof(object);
                 m_ListAddMethod = GetCollectionMethodDirect(type, ListType);
+                return true;
             }
+
+            return false;
         }
 
         private static Type GetCollectionTypeDirect(Type type)
@@ -70,6 +112,15 @@
         {
             const string methodName = nameof(IList.Add);
             return type.GetMethod(methodName, new Type[] { valueType });
+        }
+        private static bool IsSimpleType(Type type)
+        {
+            if (type == typeof(bool)) return true;
+            if (type == typeof(string)) return true;
+            if (type.IsPrimitive) return true;
+            if (type.IsEnum) return true;
+            if (type == typeof(object)) return true;
+            return false;
         }
 
         public Type Type { get; private set; }
@@ -87,7 +138,7 @@
             } else if (Member is PropertyInfo property) {
                 return property.GetValue(obj, null);
             } else {
-                throw new ApplicationException(CmdLineStrings.ArgException_NotPropertyOrField);
+                throw new InvalidOperationException(CmdLineStrings.ArgException_NotPropertyOrField);
             }
         }
 
@@ -98,7 +149,7 @@
             } else if (Member is PropertyInfo property) {
                 property.SetValue(obj, value, null);
             } else {
-                throw new ApplicationException(CmdLineStrings.ArgException_NotPropertyOrField);
+                throw new InvalidOperationException(CmdLineStrings.ArgException_NotPropertyOrField);
             }
         }
 

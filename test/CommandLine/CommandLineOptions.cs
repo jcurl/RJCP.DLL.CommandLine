@@ -428,4 +428,23 @@
             }
         }
     }
+
+    internal class OptionOnlyGetterClass
+    {
+        [Option('x', "extended")]
+        public bool Extended { get; }
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0250:Make struct 'readonly'", Justification = "Test Case")]
+    internal struct OptionOnlyGetterStruct
+    {
+        [Option('x', "extended")]
+        public bool Extended { get; }
+    }
+
+    internal readonly struct OptionOnlyReadOnlyStruct
+    {
+        [Option('x', "extended")]
+        public readonly bool Extended;
+    }
 }
