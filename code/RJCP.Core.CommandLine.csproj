@@ -97,7 +97,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CmdLineStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\CmdLineStrings.ro.resx" />
   </ItemGroup>
 
   <ItemGroup>

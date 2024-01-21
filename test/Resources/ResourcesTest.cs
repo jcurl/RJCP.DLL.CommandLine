@@ -22,7 +22,6 @@
             new CultureInfo("de"),
             new CultureInfo("de-DE"),
             new CultureInfo("de-AT"),
-            new CultureInfo("ro")
         };
 
         private static CultureInfo GetNeutralResourceLanguage()
@@ -45,8 +44,8 @@
         [TestCaseSource(nameof(Cultures))]
         public void MissingResources(CultureInfo culture)
         {
-            bool allTranslation = true;
-            allTranslation &= CheckMissingResources(CmdLineStringResources, typeof(CommandLine.Options).Assembly, culture);
+            bool allTranslation =
+                CheckMissingResources(CmdLineStringResources, typeof(CommandLine.Options).Assembly, culture);
 
             Assert.That(allTranslation, Is.True, "Some translations missing for {0}", culture.ToString());
         }
