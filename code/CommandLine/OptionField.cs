@@ -22,6 +22,8 @@
             GetCollectionType(Type);
 
 #if DEBUG
+            // This should never be true, as `GetCollectionType()` always sets `ListType` and `m_ListAddMethod`
+            // together. So this check is a lint of our own code, and should not be caught by user code.
             if (ListType != null && m_ListAddMethod == null)
                 throw new ApplicationException(CmdLineStrings.ArgException_InvalidCollectionNoAdd);
 #endif

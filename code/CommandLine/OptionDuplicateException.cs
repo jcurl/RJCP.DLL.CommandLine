@@ -4,35 +4,36 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// A generic Option exception.
+    /// The same option was specified multiple times in the options class.
     /// </summary>
     [Serializable]
-    public class OptionException : Exception
+    public class OptionDuplicateException : OptionException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionException"/> class.
+        /// Initializes a new instance of the <see cref="OptionDuplicateException"/> class.
         /// </summary>
-        public OptionException() { }
+        public OptionDuplicateException() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionException"/> class with a specified error message.
+        /// Initializes a new instance of the <see cref="OptionDuplicateException"/> class with a specified error
+        /// message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public OptionException(string message) : base(message) { }
+        public OptionDuplicateException(string message) : base(message) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionException"/> class with a specified error message and a
-        /// reference to the inner exception that is the cause of this exception.
+        /// Initializes a new instance of the <see cref="OptionDuplicateException"/> class with a specified error
+        /// message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">
         /// The exception that is the cause of the current exception, or a <see langword="null"/> reference (Nothing in
         /// Visual Basic) if no inner exception is specified.
         /// </param>
-        public OptionException(string message, Exception innerException) : base(message, innerException) { }
+        public OptionDuplicateException(string message, Exception innerException) : base(message, innerException) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionException"/> class with serialized data.
+        /// Initializes a new instance of the <see cref="OptionDuplicateException"/> class with serialized data.
         /// </summary>
         /// <param name="info">
         /// The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.
@@ -40,6 +41,6 @@
         /// <param name="context">
         /// The <see cref="StreamingContext"/> that contains contextual information about the source or destination.
         /// </param>
-        protected OptionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        protected OptionDuplicateException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

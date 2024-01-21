@@ -10,22 +10,6 @@
     using RJCP.Core.Environment;
 
     /// <summary>
-    /// The style of command line options to use.
-    /// </summary>
-    public enum OptionsStyle
-    {
-        /// <summary>
-        /// Windows style.
-        /// </summary>
-        Windows,
-
-        /// <summary>
-        /// Unix style.
-        /// </summary>
-        Unix
-    }
-
-    /// <summary>
     /// Object to parse the command line options and set the fields within the class provided in the constructor.
     /// </summary>
     /// <remarks>
