@@ -26,7 +26,7 @@
                 isCollection = SetCollectionType(Type);
                 if (!isCollection) {
                     if (expectList)
-                        throw new OptionException(CmdLineStrings.OptionArguments_RequiresCollection);
+                        throw new ArgumentException(CmdLineStrings.ArgException_RequiresCollection);
                     if (!IsSimpleType(Type)) {
                         string message = string.Format(CmdLineStrings.ArgException_FieldNotPrimitive, field.Name);
                         throw new ArgumentException(message);
@@ -44,7 +44,7 @@
                 isCollection = SetCollectionType(Type);
                 if (!isCollection) {
                     if (expectList)
-                        throw new OptionException(CmdLineStrings.OptionArguments_RequiresCollection);
+                        throw new ArgumentException(CmdLineStrings.ArgException_RequiresCollection);
                     if (!IsSimpleType(Type)) {
                         string message = string.Format(CmdLineStrings.ArgException_PropertyNotPrimitive, property.Name);
                         throw new ArgumentException(message);
@@ -63,7 +63,7 @@
 
             if (isCollection && expectList) {
                 if (ListType != typeof(object) && listType != null && !listType.IsAssignableFrom(ListType))
-                    throw new OptionException(CmdLineStrings.OptionArguments_GenTypeString);
+                    throw new ArgumentException(CmdLineStrings.ArgException_GenTypeString);
             }
             Member = member;
         }

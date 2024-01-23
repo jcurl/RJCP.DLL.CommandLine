@@ -61,6 +61,15 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OptionArgumentsAttribute assigned to multiple fields/properties.
+        /// </summary>
+        internal static string ArgException_AssignedMultipleTimes {
+            get {
+                return ResourceManager.GetString("ArgException_AssignedMultipleTimes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection &apos;{0}&apos; must contain a primitive type.
         /// </summary>
         internal static string ArgException_CollectionNotPrimitive {
@@ -75,6 +84,15 @@ namespace RJCP.Core.Resources {
         internal static string ArgException_FieldNotPrimitive {
             get {
                 return ResourceManager.GetString("ArgException_FieldNotPrimitive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OptionArgumentsAttribute collection must be type of string.
+        /// </summary>
+        internal static string ArgException_GenTypeString {
+            get {
+                return ResourceManager.GetString("ArgException_GenTypeString", resourceCulture);
             }
         }
         
@@ -133,6 +151,15 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Option &apos;{0}&apos; was specified multiple times.
+        /// </summary>
+        internal static string ArgException_OptionMultipleTimesSpecified {
+            get {
+                return ResourceManager.GetString("ArgException_OptionMultipleTimesSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property &apos;{0}&apos; must be a primitive type.
         /// </summary>
         internal static string ArgException_PropertyNotPrimitive {
@@ -147,6 +174,15 @@ namespace RJCP.Core.Resources {
         internal static string ArgException_ReadOnlyField {
             get {
                 return ResourceManager.GetString("ArgException_ReadOnlyField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OptionArgumentsAttribute must be assigned to a collection.
+        /// </summary>
+        internal static string ArgException_RequiresCollection {
+            get {
+                return ResourceManager.GetString("ArgException_RequiresCollection", resourceCulture);
             }
         }
         
@@ -214,33 +250,6 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OptionArgumentsAttribute assigned to multiple fields/properties.
-        /// </summary>
-        internal static string OptionArguments_AssignedMultipleTimes {
-            get {
-                return ResourceManager.GetString("OptionArguments_AssignedMultipleTimes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to OptionArgumentsAttribute collection must be type of string.
-        /// </summary>
-        internal static string OptionArguments_GenTypeString {
-            get {
-                return ResourceManager.GetString("OptionArguments_GenTypeString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to OptionArgumentsAttribute must be assigned to a collection.
-        /// </summary>
-        internal static string OptionArguments_RequiresCollection {
-            get {
-                return ResourceManager.GetString("OptionArguments_RequiresCollection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Option &apos;{0}&apos; has incorrect format.
         /// </summary>
         internal static string OptionIncorrectFormat {
@@ -273,15 +282,6 @@ namespace RJCP.Core.Resources {
         internal static string OptionMultipleTimes {
             get {
                 return ResourceManager.GetString("OptionMultipleTimes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Option &apos;{0}&apos; was specified multiple times.
-        /// </summary>
-        internal static string OptionMultipleTimesSpecified {
-            get {
-                return ResourceManager.GetString("OptionMultipleTimesSpecified", resourceCulture);
             }
         }
         

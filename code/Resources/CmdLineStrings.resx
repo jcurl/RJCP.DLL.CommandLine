@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArgException_AssignedMultipleTimes" xml:space="preserve">
+    <value>OptionArgumentsAttribute assigned to multiple fields/properties</value>
+  </data>
   <data name="ArgException_CollectionNotPrimitive" xml:space="preserve">
     <value>Collection '{0}' must contain a primitive type</value>
   </data>
   <data name="ArgException_FieldNotPrimitive" xml:space="preserve">
     <value>Field '{0}' must be a primitive type</value>
+  </data>
+  <data name="ArgException_GenTypeString" xml:space="preserve">
+    <value>OptionArgumentsAttribute collection must be type of string</value>
   </data>
   <data name="ArgException_InvalidCollection" xml:space="preserve">
     <value>Adding a value to an option that is not a collection</value>
@@ -141,11 +147,17 @@
   <data name="ArgException_NotSettableProperty" xml:space="preserve">
     <value>Cannot set a non-writable property '{0}'</value>
   </data>
+  <data name="ArgException_OptionMultipleTimesSpecified" xml:space="preserve">
+    <value>Option '{0}' was specified multiple times</value>
+  </data>
   <data name="ArgException_PropertyNotPrimitive" xml:space="preserve">
     <value>Property '{0}' must be a primitive type</value>
   </data>
   <data name="ArgException_ReadOnlyField" xml:space="preserve">
     <value>Cannot set a readonly field '{0}'</value>
+  </data>
+  <data name="ArgException_RequiresCollection" xml:space="preserve">
+    <value>OptionArgumentsAttribute must be assigned to a collection</value>
   </data>
   <data name="ErrorParsingOption" xml:space="preserve">
     <value>Error parsing option '{0}'</value>
@@ -168,15 +180,6 @@
   <data name="LongOptionMayNotBeEmpty" xml:space="preserve">
     <value>Long Option may not be empty</value>
   </data>
-  <data name="OptionArguments_AssignedMultipleTimes" xml:space="preserve">
-    <value>OptionArgumentsAttribute assigned to multiple fields/properties</value>
-  </data>
-  <data name="OptionArguments_GenTypeString" xml:space="preserve">
-    <value>OptionArgumentsAttribute collection must be type of string</value>
-  </data>
-  <data name="OptionArguments_RequiresCollection" xml:space="preserve">
-    <value>OptionArgumentsAttribute must be assigned to a collection</value>
-  </data>
   <data name="OptionIncorrectFormat" xml:space="preserve">
     <value>Option '{0}' has incorrect format</value>
   </data>
@@ -188,9 +191,6 @@
   </data>
   <data name="OptionMultipleTimes" xml:space="preserve">
     <value>Option '{0}' provided multiple times</value>
-  </data>
-  <data name="OptionMultipleTimesSpecified" xml:space="preserve">
-    <value>Option '{0}' was specified multiple times</value>
   </data>
   <data name="OptionsStyleUnknown" xml:space="preserve">
     <value>Unknown Options Style</value>

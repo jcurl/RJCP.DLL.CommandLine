@@ -153,15 +153,6 @@
   <data name="LongOptionMayNotBeEmpty" xml:space="preserve">
     <value>Lange Option darf nicht leer sein</value>
   </data>
-  <data name="OptionArguments_AssignedMultipleTimes" xml:space="preserve">
-    <value>OptionArgumentsAttribute darf nicht mehreren Feldern / Eigenschaften zugewiesen werden</value>
-  </data>
-  <data name="OptionArguments_GenTypeString" xml:space="preserve">
-    <value>OptionArgumentsAttribute-Auflistung muss ein String-typ sein</value>
-  </data>
-  <data name="OptionArguments_RequiresCollection" xml:space="preserve">
-    <value>OptionArgumentsAttribute muss einer Sammlung zugewiesen werden</value>
-  </data>
   <data name="OptionIncorrectFormat" xml:space="preserve">
     <value>Option '{0}' hat ein ungültiges Format</value>
   </data>
@@ -173,9 +164,6 @@
   </data>
   <data name="OptionMultipleTimes" xml:space="preserve">
     <value>Option '{0}' mehrfach bereitgestellt</value>
-  </data>
-  <data name="OptionMultipleTimesSpecified" xml:space="preserve">
-    <value>Option '{0}' wurde mehrfach angegeben</value>
   </data>
   <data name="OptionsStyleUnknown" xml:space="preserve">
     <value>Unbekannter Optionstyp</value>
@@ -215,5 +203,17 @@
   </data>
   <data name="ArgException_CollectionNotPrimitive" xml:space="preserve">
     <value>Sammlung '{0}' muss ein primitiver Typ sein</value>
+  </data>
+  <data name="ArgException_AssignedMultipleTimes" xml:space="preserve">
+    <value>OptionArgumentsAttribute darf nicht mehreren Feldern / Eigenschaften zugewiesen werden</value>
+  </data>
+  <data name="ArgException_GenTypeString" xml:space="preserve">
+    <value>OptionArgumentsAttribute-Auflistung muss ein String-typ sein</value>
+  </data>
+  <data name="ArgException_RequiresCollection" xml:space="preserve">
+    <value>OptionArgumentsAttribute muss einer Sammlung zugewiesen werden</value>
+  </data>
+  <data name="ArgException_OptionMultipleTimesSpecified" xml:space="preserve">
+    <value>Option '{0}' wurde mehrfach angegeben</value>
   </data>
 </root>

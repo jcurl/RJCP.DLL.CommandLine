@@ -1033,7 +1033,7 @@
             ArgumentsListCollGenericIntAttributeOptions myOptions = new ArgumentsListCollGenericIntAttributeOptions();
             Assert.That(() => {
                 _ = GetOptions(myOptions, new[] { "1", "2" }, new[] { "1", "2" });
-            }, Throws.TypeOf<OptionException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1042,7 +1042,7 @@
             ArgumentsListCollGenericIntAttributeOptions myOptions = new ArgumentsListCollGenericIntAttributeOptions();
             Assert.That(() => {
                 _ = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
-            }, Throws.TypeOf<OptionException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1078,7 +1078,7 @@
             ArgumentsListCollAttributeOptions myOptions = new ArgumentsListCollAttributeOptions();
             Assert.That(() => {
                 _ = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
-            }, Throws.TypeOf<OptionException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1153,7 +1153,7 @@
             DuplicateOptionsShort options = new DuplicateOptionsShort();
             Assert.That(() => {
                 _ = GetOptions(options, new string[0], new string[0]);
-            }, Throws.TypeOf<OptionDuplicateException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1162,7 +1162,7 @@
             DuplicateOptionsShort options = new DuplicateOptionsShort();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/a" }, new[] { "-a" });
-            }, Throws.TypeOf<OptionDuplicateException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1171,7 +1171,7 @@
             DuplicateOptionsLong options = new DuplicateOptionsLong();
             Assert.That(() => {
                 _ = GetOptions(options, new string[0], new string[0]);
-            }, Throws.TypeOf<OptionDuplicateException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -1180,7 +1180,7 @@
             DuplicateOptionsLong options = new DuplicateOptionsLong();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/along" }, new[] { "--along" });
-            }, Throws.TypeOf<OptionDuplicateException>());
+            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]

@@ -212,27 +212,12 @@ For the current version, options must occur before the default arguments.
 All exceptions derive from `OptionException`.
 
 - `OptionException`
-  - The `OptionArgumentsAttribute` is used more than once. Must be fixed in the
-    program.
-  - The `OptionArgumentsAttribute` must be assigned to a collection property.
-    Must be fixed in the program.
-  - The `OptionArgumentsAttribute` is assigned to a collection of non-strings.
-    Must be fixed in the program.
   - Error parsing the option. This indicates a program error.
   - User provided an option after a general argument has been seen on the
     command line.
   - User provided a list but quotes are not formatted correctly, or missing
     quotes.
   - User provided an unexpected value to an option.
-- `OptionDuplicateException`
-  - The short option from `OptionAttribute` is used on more than one field or
-    property. Must be fixed in the program. Note, single character long options
-    are included in this check, as for example, Windows has the same character
-    `/` for short and long options.
-  - The long option from `OptionAttribute` is used on more than one field or
-    property. Must be fixed in the program. Note, a single character long
-    options must be unique also when checked against short options, as for
-    example, Windows has the same character `/` for short and long options.
 - `OptionUnknownException`
   - User provided an option on the command line that is unknown.
 - `OptionAssignedException`
@@ -249,6 +234,21 @@ Exceptions raised that are not caused by the user:
   - A property has no setter. To fix, ensure the property has a `set` method.
   - A field is readonly. To fix, ensure the field is not `readonly` by removing
     that keyword.
+  - The `OptionArgumentsAttribute` is used more than once. To fix only use once.
+  - The `OptionArgumentsAttribute` must be assigned to a collection property. To
+    fix, assign to a list property of strings.
+  - The `OptionArgumentsAttribute` is assigned to a collection of non-strings.
+    To fix, assign to a list property of strings.
+  - The short option from `OptionAttribute` is used on more than one field or
+    property. Must be fixed in the program. Note, single character long options
+    are included in this check, as for example, Windows has the same character
+    `/` for short and long options.
+  - The long option from `OptionAttribute` is used on more than one field or
+    property. Must be fixed in the program. Note, a single character long
+    options must be unique also when checked against short options, as for
+    example, Windows has the same character `/` for short and long options.
+  - Types must be simple types (primitive types, `bool` or `string` types),
+    which apply also to collections.
 
 ### 1.5. Extending with `IOptions`
 

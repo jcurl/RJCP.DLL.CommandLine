@@ -14,7 +14,7 @@
     <RootNamespace>RJCP.Core</RootNamespace>
 
     <Authors>Jason Curl</Authors>
-    <Copyright>(C) 2011-2023, Jason Curl</Copyright>
+    <Copyright>(C) 2011-2024, Jason Curl</Copyright>
     <Company></Company>
     <PackageId>RJCP.Core.CommandLine</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,7 +23,7 @@
     <PackageProjectUrl>https://github.com/jcurl/RJCP.DLL.CommandLine</PackageProjectUrl>
 
     <Description>Simplify the task of parsing the command line by specifying command line options using attributes on your class properties.</Description>
-    <Version>0.8.3</Version>
+    <Version>0.9.0</Version>
 
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 
@@ -66,7 +66,6 @@
     <Compile Include="CommandLine\OptionAssignedException.cs" />
     <Compile Include="CommandLine\OptionAttribute.cs" />
     <Compile Include="CommandLine\OptionDefaultAttribute.cs" />
-    <Compile Include="CommandLine\OptionDuplicateException.cs" />
     <Compile Include="CommandLine\OptionException.cs" />
     <Compile Include="CommandLine\OptionField.cs" />
     <Compile Include="CommandLine\OptionFormatException.cs" />

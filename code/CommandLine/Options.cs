@@ -87,25 +87,22 @@
         /// <exception cref="ArgumentNullException"><paramref name="options"/> may not be <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// Not a property or field - An <see cref="OptionAttribute"/> was assigned to something that wasn't a property or a field.
-        /// </exception>
-        /// <exception cref="OptionException">
-        /// <see cref="OptionArgumentsAttribute"/> assigned to multiple fields / properties. You may only assign optional arguments
-        /// to a single field / property.
         /// <para>- or -</para>
-        /// Unexpected option provided.
+        /// <see cref="OptionArgumentsAttribute"/> assigned more than once, to multiple fields / properties
         /// <para>- or -</para>
-        /// Unexpected value for option provided.
+        /// <see cref="OptionArgumentsAttribute"/> may not be assigned to a <c>readonly</c> field
         /// <para>- or -</para>
-        /// Error parsing option.
+        /// <see cref="OptionArgumentsAttribute"/> is not a collection, or is not a collection of strings
         /// <para>- or -</para>
-        /// Wrong format given to option.
+        /// A property has no setter
         /// <para>- or -</para>
-        /// Invalid data after quoted list.
+        /// A field is readonly
         /// <para>- or -</para>
-        /// Missing quote in list.
-        /// </exception>
-        /// <exception cref="OptionDuplicateException">
-        /// The same short option or long option was specified with the <see cref="OptionAttribute"/> multiple times.
+        /// The short option from <see cref="OptionAttribute"/> is used on more than one field or property
+        /// <para>- or -</para>
+        /// The long option from <see cref="OptionAttribute"/> is used on more than one field or property
+        /// <para>- or -</para>
+        /// Types must be simple types (primitive types, bool or string types), which apply also to collections.
         /// </exception>
         /// <exception cref="OptionMissingException">
         /// Mandatory options were not provided on the command line.
@@ -115,6 +112,13 @@
         /// </exception>
         /// <exception cref="OptionAssignedException">
         /// Option has already been provided where only one instance allowed.
+        /// </exception>
+        /// <exception cref="OptionException">
+        /// User provided an option after a general argument has been seen on the command line.
+        /// <para>- or -</para>
+        /// User provided a list but quotes are not formatted correctly, or missing quotes.
+        /// <para>- or -</para>
+        /// User provided an unexpected value to an option.
         /// </exception>
         /// <remarks>
         /// The default style used for command line options is dependent on the operating system that this program is
@@ -138,26 +142,21 @@
         /// <exception cref="ArgumentException">
         /// Not a property or field - An <see cref="OptionAttribute"/> was assigned to something that wasn't a property or a field.
         /// <para>- or -</para>
-        /// An unknown value for <paramref name="style"/> was given.
-        /// </exception>
-        /// <exception cref="OptionException">
-        /// <see cref="OptionArgumentsAttribute"/> assigned to multiple fields / properties. You may only assign optional arguments
-        /// to a single field / property.
+        /// <see cref="OptionArgumentsAttribute"/> assigned more than once, to multiple fields / properties
         /// <para>- or -</para>
-        /// Unexpected option provided.
+        /// <see cref="OptionArgumentsAttribute"/> may not be assigned to a <c>readonly</c> field
         /// <para>- or -</para>
-        /// Unexpected value for option provided.
+        /// <see cref="OptionArgumentsAttribute"/> is not a collection, or is not a collection of strings
         /// <para>- or -</para>
-        /// Error parsing option.
+        /// A property has no setter
         /// <para>- or -</para>
-        /// Wrong format given to option.
+        /// A field is readonly
         /// <para>- or -</para>
-        /// Invalid data after quoted list.
+        /// The short option from <see cref="OptionAttribute"/> is used on more than one field or property
         /// <para>- or -</para>
-        /// Missing quote in list.
-        /// </exception>
-        /// <exception cref="OptionDuplicateException">
-        /// The same short option or long option was specified with the <see cref="OptionAttribute"/> multiple times.
+        /// The long option from <see cref="OptionAttribute"/> is used on more than one field or property
+        /// <para>- or -</para>
+        /// Types must be simple types (primitive types, bool or string types), which apply also to collections.
         /// </exception>
         /// <exception cref="OptionMissingException">
         /// Mandatory options were not provided on the command line.
@@ -167,6 +166,13 @@
         /// </exception>
         /// <exception cref="OptionAssignedException">
         /// Option has already been provided where only one instance allowed.
+        /// </exception>
+        /// <exception cref="OptionException">
+        /// User provided an option after a general argument has been seen on the command line.
+        /// <para>- or -</para>
+        /// User provided a list but quotes are not formatted correctly, or missing quotes.
+        /// <para>- or -</para>
+        /// User provided an unexpected value to an option.
         /// </exception>
         public static Options Parse(object options, string[] arguments, OptionsStyle style)
         {
@@ -246,7 +252,7 @@
             OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(memberInfo);
             if (argAttribute != null) {
                 if (m_ArgumentsField != null)
-                    throw new OptionException(CmdLineStrings.OptionArguments_AssignedMultipleTimes);
+                    throw new ArgumentException(CmdLineStrings.ArgException_AssignedMultipleTimes);
                 m_ArgumentsField = new OptionField(memberInfo, true, typeof(string));
             }
         }
@@ -256,12 +262,12 @@
             if (shortOption == (char)0) return;
 
             if (m_ShortOptionList.ContainsKey(shortOption)) {
-                string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, shortOption);
-                throw new OptionDuplicateException(message);
+                string message = string.Format(CmdLineStrings.ArgException_OptionMultipleTimesSpecified, shortOption);
+                throw new ArgumentException(message);
             }
             if (m_LongOptionList.ContainsKey(shortOption.ToString())) {
-                string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, shortOption);
-                throw new OptionDuplicateException(message);
+                string message = string.Format(CmdLineStrings.ArgException_OptionMultipleTimesSpecified, shortOption);
+                throw new ArgumentException(message);
             }
         }
 
@@ -270,13 +276,13 @@
             if (longOption == null) return;
 
             if (m_LongOptionList.ContainsKey(longOption)) {
-                string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, longOption);
-                throw new OptionDuplicateException(message);
+                string message = string.Format(CmdLineStrings.ArgException_OptionMultipleTimesSpecified, longOption);
+                throw new ArgumentException(message);
             }
             if (longOption.Length == 1) {
                 if (m_ShortOptionList.ContainsKey(longOption[0])) {
-                    string message = string.Format(CmdLineStrings.OptionMultipleTimesSpecified, longOption);
-                    throw new OptionDuplicateException(message);
+                    string message = string.Format(CmdLineStrings.ArgException_OptionMultipleTimesSpecified, longOption);
+                    throw new ArgumentException(message);
                 }
             }
         }
