@@ -313,6 +313,33 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hanging indent exceeds left boundary of indent.
+        /// </summary>
+        internal static string TerminalHangArgOutOfRange {
+            get {
+                return ResourceManager.GetString("TerminalHangArgOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent must be positive.
+        /// </summary>
+        internal static string TerminalIndentArgOutOfRange {
+            get {
+                return ResourceManager.GetString("TerminalIndentArgOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal error, unknown token type.
+        /// </summary>
+        internal static string TerminalParseError {
+            get {
+                return ResourceManager.GetString("TerminalParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected option &apos;{0}&apos;.
         /// </summary>
         internal static string UnexpectedOptionNonZeroGeneralArgs {

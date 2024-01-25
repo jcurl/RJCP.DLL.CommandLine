@@ -1,0 +1,12 @@
+@startuml VirtualTerminal
+interface ITerminal
+interface ITerminalOut
+class VirtualTerminal
+class VirtualOutput
+
+ITerminal <|.d. VirtualTerminal
+ITerminalOut <|.d. VirtualOutput
+VirtualTerminal *-r- VirtualOutput : <<stdout>>\n<<stderr>>
+
+VirtualOutput *-d- Format
+@enduml

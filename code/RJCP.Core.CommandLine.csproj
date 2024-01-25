@@ -81,12 +81,21 @@
     <Compile Include="CommandLine\UnixEnumerator.cs" />
     <Compile Include="CommandLine\WindowsEnumerator.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Native\Win32\SafeConsoleHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\CmdLineStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CmdLineStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Terminal\ConsoleFormat.cs" />
+    <Compile Include="Terminal\ConsoleTerminal.cs" />
+    <Compile Include="Terminal\Format.cs" />
+    <Compile Include="Terminal\ITerminal.cs" />
+    <Compile Include="Terminal\ITerminalOut.cs" />
+    <Compile Include="Terminal\StdErr.cs" />
+    <Compile Include="Terminal\StdOut.cs" />
+    <Compile Include="Terminal\StdOutBase.cs" />
   </ItemGroup>
 
  <ItemGroup>
@@ -101,6 +110,7 @@
   <ItemGroup>
     <None Include="..\LICENSE.md" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <Compile Include="Native\Win32\Kernel32.cs" />
   </ItemGroup>
 
 </Project>

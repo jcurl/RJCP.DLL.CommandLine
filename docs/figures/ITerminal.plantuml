@@ -1,0 +1,100 @@
+@startuml ITerminal
+rectangle {
+interface ITerminal {
+    +StdErr: ITerminalOut <<get>>
+    +StdOut: ITerminalOut <<get>>
+    +Width: int <<get>>
+    +Height: int <<get>>
+    +ForegroundColor: ConsoleColor <<get, set>>
+    +BackgroundColor: ConsoleColor <<get, set>>
+}
+
+interface ITerminalOut {
+    +Write(line: string)
+    +Write(format: string, args: object[])
+    +WriteLine(line: string)
+    +WriteLine(format: string, args: object[])
+    +WrapLine(line: string)
+    +WrapLine(format: string, args: object[])
+    +WrapLine(indent: int, line: string)
+    +WrapLine(indent: int, format: string, args: object[])
+    +WrapLine(indent: int, hang: int, line: string)
+    +WrapLine(indent: int, hang: int, format: string, args: object[])
+}
+
+ITerminal o-r- ITerminalOut
+}
+
+abstract class StdOutBase <<internal>> {
+    ~StdOutBase(format: Format)
+    ..
+    -m_Format: Format
+    ..
+    {abstract} +Write(line: string)
+    {abstract} +WriteLine(line: string)
+    +Write(format: string, args: object[])
+    +WriteLine(format: string, args: object[])
+    +WrapLine(line: string)
+    +WrapLine(format: string, args: object[])
+    +WrapLine(indent: int, line: string)
+    +WrapLine(indent: int, format: string, args: object[])
+    +WrapLine(indent: int, hang: int, line: string)
+    +WrapLine(indent: int, hang: int, format: string, args: object[])
+}
+class StdOut <<internal>> {
+    ~StdOut(format: Format)
+    ..
+    +Write(line: string)
+    +WriteLine(line: string)
+}
+note left {
+    StdOut and StdErr
+    Knows how to write
+    to the console
+}
+class StdErr <<internal>> {
+    ~StdErr(format: Format)
+    ..
+    +Write(line: string)
+    +WriteLine(line: string)
+}
+
+ITerminalOut <|.d. StdOutBase
+StdOutBase <|-d- StdErr
+StdOutBase <|-d- StdOut
+
+class ConsoleTerminal {
+    -m_Format: Format
+}
+ITerminal <|.d. ConsoleTerminal
+ConsoleTerminal *-u- StdErr
+ConsoleTerminal *-u- StdOut
+
+abstract class Format <<internal>> {
+    {abstract} +Width: int <<get>>
+    {abstract} +Height: int <<get>>
+    +WrapLine(line: string): IReadOnlyList<string>
+    +WrapLine(indent: int, line: string): IReadOnlyList<string>
+    +WrapLine(indent: int, hang: int, line: string): IReadOnlyList<string>
+}
+note right {
+    On .NET 4.0 `WrapLine`
+    returns `IList<string>`
+}
+
+class ConsoleFormat <<internal>> {
+    +IsRedirected: bool <<get>>
+    +Width: int <<get>>
+    +Height: int <<get>>
+}
+note right {
+  Provides the width
+  and height of the
+  console.
+}
+
+Format <|-d- ConsoleFormat
+ConsoleTerminal *-r- ConsoleFormat
+
+StdOutBase o-d- Format
+@enduml

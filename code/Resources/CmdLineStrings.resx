@@ -201,6 +201,15 @@
   <data name="ShortOptionInvalidChar" xml:space="preserve">
     <value>Short option '{0}' character not allowed</value>
   </data>
+  <data name="TerminalHangArgOutOfRange" xml:space="preserve">
+    <value>Hanging indent exceeds left boundary of indent</value>
+  </data>
+  <data name="TerminalIndentArgOutOfRange" xml:space="preserve">
+    <value>Indent must be positive</value>
+  </data>
+  <data name="TerminalParseError" xml:space="preserve">
+    <value>Internal error, unknown token type</value>
+  </data>
   <data name="UnexpectedOptionNonZeroGeneralArgs" xml:space="preserve">
     <value>Unexpected option '{0}'</value>
   </data>

@@ -216,4 +216,13 @@
   <data name="ArgException_OptionMultipleTimesSpecified" xml:space="preserve">
     <value>Option '{0}' wurde mehrfach angegeben</value>
   </data>
+  <data name="TerminalParseError" xml:space="preserve">
+    <value>Internen Fehler, unbekannter Tokentyp</value>
+  </data>
+  <data name="TerminalHangArgOutOfRange" xml:space="preserve">
+    <value>'hang' überschreitet den linken Rand von 'indent'</value>
+  </data>
+  <data name="TerminalIndentArgOutOfRange" xml:space="preserve">
+    <value>'indent' muss Null (0) oder größer sein</value>
+  </data>
 </root>

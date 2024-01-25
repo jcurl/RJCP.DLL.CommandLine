@@ -72,6 +72,7 @@
     <Compile Include="CommandLine\Parse\WindowsTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Resources\ResourcesTest.cs" />
+    <Compile Include="Terminal\ConsoleTerminalTest.cs" />
   </ItemGroup>
 
   <!-- Implicit top import required explicitly to change build output path -->
