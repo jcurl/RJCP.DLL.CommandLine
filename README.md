@@ -1,5 +1,8 @@
 # RJCP.Core.CommandLine <!-- omit in toc -->
 
+This library parses command line options, and abstracts wrapping text to the
+console.
+
 - [1. Parsing Command Line](#1-parsing-command-line)
   - [1.1. Simple Usage Walkthrough](#11-simple-usage-walkthrough)
   - [1.2. Defining the Options Style](#12-defining-the-options-style)
@@ -11,7 +14,20 @@
     - [1.3.3. Remaining Arguments](#133-remaining-arguments)
   - [1.4. Exceptions while Parsing](#14-exceptions-while-parsing)
   - [1.5. Extending with `IOptions`](#15-extending-with-ioptions)
-- [Converting Windows Command Line](#converting-windows-command-line)
+- [2. Converting Windows Command Line](#2-converting-windows-command-line)
+- [3. Terminal Formatting](#3-terminal-formatting)
+  - [3.1. Sample Usage](#31-sample-usage)
+    - [3.1.1. Wrapping Lines (simply)](#311-wrapping-lines-simply)
+    - [3.1.2. Indenting](#312-indenting)
+    - [3.1.3. Indented Paragraphs](#313-indented-paragraphs)
+    - [3.1.4. Hanging Indented Paragraphs](#314-hanging-indented-paragraphs)
+    - [3.1.5. New Lines with Wrapping Lines](#315-new-lines-with-wrapping-lines)
+  - [3.2. Setting Colours](#32-setting-colours)
+  - [3.3. Test Cases with Dependency Injection](#33-test-cases-with-dependency-injection)
+  - [3.4. Limitations](#34-limitations)
+    - [3.4.1. No Escape Sequences](#341-no-escape-sequences)
+    - [3.4.2. Fixed Width on Linux with Mono](#342-fixed-width-on-linux-with-mono)
+    - [3.4.3. Mixing Write and WriteLine with WrapLine](#343-mixing-write-and-writeline-with-wrapline)
 
 ## 1. Parsing Command Line
 
@@ -271,7 +287,7 @@ can raise an exception.
 The guidelines towards providing an `IOptions` interface is to allow all code
 related to option handling and checks, as well as help, to be in a single class.
 
-## Converting Windows Command Line
+## 2. Converting Windows Command Line
 
 When windows starts a process, it does not preprocess any of the text given on
 the command line. This is contrary to Linux where the shell typically splits the
@@ -289,3 +305,209 @@ and was tested on Windows 10 and Windows 11.
 
 The implementation however does not depend on any Windows API, and as such, may
 not match the behaviour of future Windows versions.
+
+## 3. Terminal Formatting
+
+Often with command line programs comes the requirement to provide feedback on
+the terminal. This library provides a very simple implementation for formatting
+information on the console.
+
+There is the object `Terminal` that can write information to the console that
+can wrap on the console width, for both `StdErr` and `StdOut`.
+
+### 3.1. Sample Usage
+
+#### 3.1.1. Wrapping Lines (simply)
+
+As a simple usage of the functionality is given: The line being wrapped is a
+single string. Often these strings are obtained from a string resource and is
+not available directly in code. It might have translations.
+
+```csharp
+ConsoleTerminal terminal = new ConsoleTerminal();
+terminal.StdOut.WrapLine(
+  "This is a line that should be more " +
+  "than eighty-characters long, so that it can " +
+  "be checked if the line is really being " +
+  "wrapped into multiple lines. The proper " +
+  "test will need to be done using a virtual " +
+  "console so that we can check the " +
+  "precise behaviour of wrapping.");
+```
+
+The output will be:
+
+```text
+         1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
+    5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+This is a line that should be more than eighty-characters long, so that it can
+be checked if the line is really being wrapped into multiple lines. The proper
+test will need to be done using a virtual console so that we can check the
+precise behaviour of wrapping.
+```
+
+When lines wrap, they do so one character before the width of the console. So if
+the console has a width of 80 characters, it will print up to 79 characters and
+then start on the next line.
+
+#### 3.1.2. Indenting
+
+It is possible to format the strings so there is an indent.
+
+```csharp
+terminal.StdOut.WrapLine(indent: 4,
+  "This is a line that should be more " +
+  "than eighty-characters long, so that it can " +
+  "be checked if the line is really being " +
+  "wrapped into multiple lines. The proper " +
+  "test will need to be done using a virtual " +
+  "console so that we can check the " +
+  "precise behaviour of wrapping.");
+```
+
+The output will be:
+
+```text
+         1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
+    5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    This is a line that should be more than eighty-characters long, so that it
+    can be checked if the line is really being wrapped into multiple lines. The
+    proper test will need to be done using a virtual console so that we can
+    check the precise behaviour of wrapping.
+```
+
+#### 3.1.3. Indented Paragraphs
+
+It is possible to format the strings so that the first line is indented. This is
+using a hanging indent, but the offset is negative.
+
+```csharp
+terminal.StdOut.WrapLine(indent: 2, hang: -2,
+  "This is a line that should be more " +
+  "than eighty-characters long, so that it can " +
+  "be checked if the line is really being " +
+  "wrapped into multiple lines. The proper " +
+  "test will need to be done using a virtual " +
+  "console so that we can check the " +
+  "precise behaviour of wrapping.");
+```
+
+The output will be:
+
+```text
+         1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
+    5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+  This is a line that should be more than eighty-characters long, so that it
+can be checked if the line is really being wrapped into multiple lines. The
+proper test will need to be done using a virtual console so that we can check
+the precise behaviour of wrapping.
+```
+
+#### 3.1.4. Hanging Indented Paragraphs
+
+When printing help information, you might want to print bullet point
+information. To do this, hanging indented paragraphs are useful. A hanging
+indent is given by a positive value for the hang parameter:
+
+```csharp
+terminal.StdOut.WrapLine(indent: 2, hang: 2,
+  "* If the return value is 1, this indicates " +
+  "there was a problem processing the file. Check "+
+  "that no other process is using the file and " +
+  "try again.");
+```
+
+The output will be:
+
+```text
+         1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
+    5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+* If the return value is 1, this indicates there was a problem processing the
+  file. Check that no other process is using the file and try again.
+```
+
+You'll notice on the output, the second line is indented.
+
+#### 3.1.5. New Lines with Wrapping Lines
+
+You can insert new lines in the string for starting a new line. The indent and
+hanging values are reset and applied to the new line again. If you want to start
+the line with the hanging indent, then simply insert a space as the first
+character.
+
+This allows to have a resource file with multiple paragraphs for an option, that
+makes it much easier for translators concentrate on a single resource entry.
+
+```csharp
+terminal.StdOut.WrapLine(indent: 0, hang: 2,
+  "* If the return value is 1, this indicates " +
+  "there was a problem processing the file.\n\n" +
+  // Note the space here to use the hanging indent on the new line
+  " Check that no other process is using the file " +
+  "and try again.\n\n" +
+  // This will start at the indent on the far left
+  "* If the return value is 255, there was a " +
+  "bug in the program. Please report it to the " +
+  "author at:\n\n" +
+  " author@mycompany.com");
+```
+
+The output will be:
+
+```text
+         1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
+    5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+* If the return value is 1, this indicates there was a problem processing the
+  file.
+
+  Check that no other process is using the file and try again.
+
+* If the return value is 255, there was a bug in the program. Please report it
+  to the author at
+
+  author@mycompany.com
+```
+
+### 3.2. Setting Colours
+
+Colours can be set on a single line. Use the functions
+
+```csharp
+ConsoleTerminal terminal = new ConsoleTerminal();
+terminal.ForegroundColor = ConsoleColor.White;
+terminal.BackgroundColor = ConsoleColor.Blue;
+```
+
+### 3.3. Test Cases with Dependency Injection
+
+There is an implementation of `VirtualTerminal` that is intended to simulate a
+terminal for test cases. At the end of the test case, the user can check the
+content of the terminal.
+
+For design information, see [DESIGN_Termina.md](./docs/DESIGN_Terminal.md).
+
+### 3.4. Limitations
+
+#### 3.4.1. No Escape Sequences
+
+The implementation is simple, it doesn't support escape sequences when wrapping.
+Nor are there any tests.
+
+#### 3.4.2. Fixed Width on Linux with Mono
+
+On .NET 4.0 on Linux, it's not possible to determine the width of the console,
+so it defaults to 80 characters wide. To get full functionality, it's
+recommended to use .NET Framework 4.6.2 or .NET Core instead.
+
+#### 3.4.3. Mixing Write and WriteLine with WrapLine
+
+The two sets of APIs are not intended to be used with each other. The
+`WrapLine()` function is assumed to always start at the beginning of the line.
+Use `Write()` and `WriteLine()` for more control over writing on the console.
+The latter two are calling the `Console.Write()` and `Console.WriteLine()`
+directly and are provided to allow testing with a `VirtualTerminal`.

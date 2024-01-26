@@ -26,12 +26,13 @@
         /// </remarks>
         public static string[] SplitCommandLine(string arguments)
         {
-            if (string.IsNullOrWhiteSpace(arguments))
-#if NETFRAMEWORK
-                return new string[0];
-#else
+            if (string.IsNullOrWhiteSpace(arguments)) {
+#if NET45_OR_GREATER || NETSTANDARD2_1_OR_GREATER
                 return Array.Empty<string>();
+#else
+                return new string[0];
 #endif
+            }
 
             StringBuilder arg = new StringBuilder();
             List<string> args = new List<string>();
