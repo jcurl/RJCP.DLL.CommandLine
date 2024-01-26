@@ -225,4 +225,10 @@
   <data name="TerminalIndentArgOutOfRange" xml:space="preserve">
     <value>'indent' muss Null (0) oder größer sein</value>
   </data>
+  <data name="TerminalVirtualHeightRange" xml:space="preserve">
+    <value>Die Höhe des Terminals muss mindestens eine Zeile betragen</value>
+  </data>
+  <data name="TerminalVirtualWidthRange" xml:space="preserve">
+    <value>Die Breite des Terminals muss mindestens ein Zeichen betragen</value>
+  </data>
 </root>

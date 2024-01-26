@@ -340,6 +340,24 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Terminal height must be one line or greater.
+        /// </summary>
+        internal static string TerminalVirtualHeightRange {
+            get {
+                return ResourceManager.GetString("TerminalVirtualHeightRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terminal width must be one character or greater.
+        /// </summary>
+        internal static string TerminalVirtualWidthRange {
+            get {
+                return ResourceManager.GetString("TerminalVirtualWidthRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected option &apos;{0}&apos;.
         /// </summary>
         internal static string UnexpectedOptionNonZeroGeneralArgs {

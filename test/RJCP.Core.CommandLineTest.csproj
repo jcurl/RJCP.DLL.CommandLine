@@ -62,6 +62,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Resources\ResourcesTest.cs" />
     <Compile Include="Terminal\ConsoleTerminalTest.cs" />
+    <Compile Include="Terminal\VirtualTerminalTest.cs" />
   </ItemGroup>
 
 </Project>

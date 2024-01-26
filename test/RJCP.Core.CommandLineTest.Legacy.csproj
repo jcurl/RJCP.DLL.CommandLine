@@ -73,6 +73,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Resources\ResourcesTest.cs" />
     <Compile Include="Terminal\ConsoleTerminalTest.cs" />
+    <Compile Include="Terminal\VirtualTerminalTest.cs" />
   </ItemGroup>
 
   <!-- Implicit top import required explicitly to change build output path -->

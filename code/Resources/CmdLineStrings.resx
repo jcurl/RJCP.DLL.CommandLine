@@ -210,6 +210,12 @@
   <data name="TerminalParseError" xml:space="preserve">
     <value>Internal error, unknown token type</value>
   </data>
+  <data name="TerminalVirtualHeightRange" xml:space="preserve">
+    <value>Terminal height must be one line or greater</value>
+  </data>
+  <data name="TerminalVirtualWidthRange" xml:space="preserve">
+    <value>Terminal width must be one character or greater</value>
+  </data>
   <data name="UnexpectedOptionNonZeroGeneralArgs" xml:space="preserve">
     <value>Unexpected option '{0}'</value>
   </data>

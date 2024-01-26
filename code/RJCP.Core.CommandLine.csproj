@@ -96,6 +96,9 @@
     <Compile Include="Terminal\StdErr.cs" />
     <Compile Include="Terminal\StdOut.cs" />
     <Compile Include="Terminal\StdOutBase.cs" />
+    <Compile Include="Terminal\VirtualFormat.cs" />
+    <Compile Include="Terminal\VirtualOutput.cs" />
+    <Compile Include="Terminal\VirtualTerminal.cs" />
   </ItemGroup>
 
  <ItemGroup>

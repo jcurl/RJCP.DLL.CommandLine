@@ -1,12 +1,42 @@
 @startuml VirtualTerminal
+rectangle {
 interface ITerminal
 interface ITerminalOut
-class VirtualTerminal
-class VirtualOutput
+}
 
-ITerminal <|.d. VirtualTerminal
-ITerminalOut <|.d. VirtualOutput
+class VirtualTerminal {
+    +StdErr: ITerminalOut <<get>>
+    +StdErrLines: IList<string> <<get>>
+    +StdOut: ITerminalOut <<get>>
+    +StdOutLines: IList<string> <<get>>
+    +Width: int <<get, set>>
+    +Height: int <<get, set>>
+    +ForegroundColor: ConsoleColor <<get, set>>
+    +BackgroundColor: ConsoleColor <<get, set>>
+}
+abstract class StdOutBase <<internal>>
+class VirtualOutput <<internal>> {
+    +Lines: List<string> <<get>>
+    +Write(line: string)
+    +WriteLine(line: string)
+}
+class Format <<internal>> {
+    {abstract} +Width: int <<get>>
+    {abstract} +Height: int <<get>>
+}
+class VirtualFormat <<internal>> {
+    +Width: int <<get>>
+    +SetWidth(width: int)
+    +Height: int <<get>>
+    +SetHeight(height: int)
+}
+
+ITerminal <|.d.. VirtualTerminal
+ITerminalOut <|.d. StdOutBase
+
 VirtualTerminal *-r- VirtualOutput : <<stdout>>\n<<stderr>>
 
-VirtualOutput *-d- Format
+StdOutBase <|-d- VirtualOutput
+VirtualOutput *-r- VirtualFormat
+Format <|-d- VirtualFormat
 @enduml
