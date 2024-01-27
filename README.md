@@ -228,9 +228,6 @@ For the current version, options must occur before the default arguments.
 All exceptions derive from `OptionException`.
 
 - `OptionException`
-  - Error parsing the option. This indicates a program error.
-  - User provided an option after a general argument has been seen on the
-    command line.
   - User provided a list but quotes are not formatted correctly, or missing
     quotes.
   - User provided an unexpected value to an option.

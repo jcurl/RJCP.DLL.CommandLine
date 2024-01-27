@@ -295,6 +295,36 @@
         }
 
         [Test]
+        public void OptionStringParameterSingleDashShort()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/c", "-" }, new[] { "-c-" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("-"));
+            Assert.That(options.Arguments, Is.Empty);
+        }
+
+        [Test]
+        public void OptionStringParameterSingleDashShortTwoArgs()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/c", "-", "arg" }, new[] { "-c", "-", "arg" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("-"));
+            Assert.That(options.Arguments, Is.EqualTo(new[] { "arg" }));
+        }
+
+        [Test]
+        public void OptionStringParameterSingleDashShortTwoArgsEqual()
+        {
+            OptionHandling myOptions = new OptionHandling();
+            Options options = GetOptions(myOptions, new[] { "/c:-" }, new[] { "-c=-" });
+
+            Assert.That(myOptions.OptionC, Is.EqualTo("-"));
+            Assert.That(options.Arguments, Is.Empty);
+        }
+
+        [Test]
         public void OptionStringParameterDualDash()
         {
             OptionHandling myOptions = new OptionHandling();
@@ -695,9 +725,48 @@
         public void ExtraArgument()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Assert.That(() => {
-                GetOptions(myOptions, new[] { "/a", "/b", "argument", "/c" }, new[] { "-ab", "argument", "-c" });
-            }, Throws.TypeOf<OptionException>());
+            Options options = null;
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                Assert.That(() => {
+                    _ = Options.Parse(myOptions, new[] { "/a", "/b", "argument", "/c", "arg" }, OptionsStyle.Windows);
+                }, Throws.TypeOf<OptionException>());
+                break;
+            case OptionsStyle.Unix:
+                options = Options.Parse(myOptions, new[] { "-ab", "argument", "-c", "arg" }, OptionsStyle.Unix);
+                Assert.That(myOptions.OptionA, Is.True);
+                Assert.That(myOptions.OptionB, Is.True);
+                Assert.That(myOptions.OptionC, Is.EqualTo("arg"));
+                Assert.That(options.Arguments, Is.EqualTo(new[] { "argument" }));
+                break;
+            default:
+                Assert.Fail("Unknown options style");
+                break;
+            }
+        }
+
+        [Test]
+        public void ExtraArgumentAtStart()
+        {
+            OptionalArguments myOptions = new OptionalArguments();
+            Options options = null;
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                Assert.That(() => {
+                    _ = Options.Parse(myOptions, new[] { "input.txt", "/a", "/b", "/c", "arg" }, OptionsStyle.Windows);
+                }, Throws.TypeOf<OptionException>());
+                break;
+            case OptionsStyle.Unix:
+                options = Options.Parse(myOptions, new[] { "argument", "-ab", "-c", "arg" }, OptionsStyle.Unix);
+                Assert.That(myOptions.OptionA, Is.True);
+                Assert.That(myOptions.OptionB, Is.True);
+                Assert.That(myOptions.OptionC, Is.EqualTo("arg"));
+                Assert.That(options.Arguments, Is.EqualTo(new[] { "argument" }));
+                break;
+            default:
+                Assert.Fail("Unknown options style");
+                break;
+            }
         }
 
         [Test]

@@ -106,7 +106,7 @@
             if (char.IsLetter(longOptionChar)) return true;
             if (pos == 0) return false;
             if (char.IsDigit(longOptionChar)) return true;
-            if (Array.IndexOf<char>(ValidLongOptionChars, longOptionChar) != -1) return true;
+            if (Array.IndexOf(ValidLongOptionChars, longOptionChar) != -1) return true;
             return false;
         }
 
