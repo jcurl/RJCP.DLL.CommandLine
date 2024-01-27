@@ -1,5 +1,6 @@
 ﻿namespace RJCP.Core.CommandLine
 {
+    using System;
     using System.Collections.Generic;
     using Resources;
 
@@ -41,12 +42,9 @@
     /// </remarks>
     internal sealed class UnixOptionParser : IOptionParser
     {
-        private readonly string[] m_Arguments;
+        private string[] m_Arguments;
 
-        public UnixOptionParser(string[] arguments)
-        {
-            m_Arguments = arguments;
-        }
+        public OptionsStyle Style { get { return OptionsStyle.Unix; } }
 
         public bool LongOptionCaseInsensitive { get { return true; } }
 
@@ -56,11 +54,20 @@
 
         public string LongOptionPrefix { get { return "--"; } }
 
+        public string AssignmentSymbol { get { return "="; } }
+
         private readonly Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
         private readonly Queue<OptionToken> m_NonOptArgs = new Queue<OptionToken>();
         private bool m_ArgumentsOnly;
         private int m_ArgumentPosition;
         private int m_ArgumentCharPosition = -1;
+
+        public void AddArguments(string[] arguments)
+        {
+            if (m_Arguments != null)
+                throw new InvalidOperationException();
+            m_Arguments = arguments;
+        }
 
         public OptionToken GetToken(bool expectValue)
         {

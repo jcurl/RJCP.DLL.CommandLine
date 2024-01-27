@@ -81,12 +81,15 @@
         /// <summary>
         /// Parses the command line arguments writing to options.
         /// </summary>
-        /// <param name="options">The options object to write to.</param>
+        /// <param name="options">
+        /// The options object to write to. If <see langword="null"/> the returns an "empty" options object. No
+        /// arguments are parsed. This is useful to get properties about the commandline.
+        /// </param>
         /// <param name="arguments">The argument list to parse.</param>
         /// <returns>An instance of this object.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="options"/> may not be <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
-        /// Not a property or field - An <see cref="OptionAttribute"/> was assigned to something that wasn't a property or a field.
+        /// Not a property or field - An <see cref="OptionAttribute"/> was assigned to something that wasn't a property
+        /// or a field.
         /// <para>- or -</para>
         /// <see cref="OptionArgumentsAttribute"/> assigned more than once, to multiple fields / properties
         /// <para>- or -</para>
@@ -104,12 +107,8 @@
         /// <para>- or -</para>
         /// Types must be simple types (primitive types, bool or string types), which apply also to collections.
         /// </exception>
-        /// <exception cref="OptionMissingException">
-        /// Mandatory options were not provided on the command line.
-        /// </exception>
-        /// <exception cref="OptionUnknownException">
-        /// Unknown option provided on the command line.
-        /// </exception>
+        /// <exception cref="OptionMissingException">Mandatory options were not provided on the command line.</exception>
+        /// <exception cref="OptionUnknownException">Unknown option provided on the command line.</exception>
         /// <exception cref="OptionAssignedException">
         /// Option has already been provided where only one instance allowed.
         /// </exception>
@@ -134,11 +133,13 @@
         /// <summary>
         /// Parses the specified options.
         /// </summary>
-        /// <param name="options">The options object to write to.</param>
+        /// <param name="options">
+        /// The options object to write to. If <see langword="null"/> the returns an "empty" options object. No
+        /// arguments are parsed. This is useful to get properties about the commandline.
+        /// </param>
         /// <param name="arguments">The argument list to parse.</param>
         /// <param name="style">The option style to use.</param>
         /// <returns>An instance of this object.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="options"/> may not be <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">
         /// Not a property or field - An <see cref="OptionAttribute"/> was assigned to something that wasn't a property or a field.
         /// <para>- or -</para>
@@ -176,22 +177,34 @@
         /// </exception>
         public static Options Parse(object options, string[] arguments, OptionsStyle style)
         {
-            Options cmdLine = new Options(options) {
-                OptionsStyle = style
-            };
+            Options cmdLine = new Options(options, style);
             cmdLine.ParseCommandLine(arguments);
             return cmdLine;
         }
 
         private readonly object m_Options;
+        private readonly IOptionParser m_Parser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Options"/> class using the Windows style.
         /// </summary>
-        /// <param name="options">The object to receive the options for.</param>
-        private Options(object options)
+        /// <param name="options">
+        /// The options object to write to. If <see langword="null"/> the returns an "empty" options object. No
+        /// arguments are parsed. This is useful to get properties about the commandline.
+        /// </param>
+        /// <param name="style">The option style to use.</param>
+        private Options(object options, OptionsStyle style)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            switch (style) {
+            case OptionsStyle.Unix:
+                m_Parser = new UnixOptionParser();
+                break;
+            case OptionsStyle.Windows:
+                m_Parser = new WindowsOptionEnumerator();
+                break;
+            default:
+                throw new InvalidOperationException(CmdLineStrings.OptionsStyleUnknown);
+            }
             m_Options = options;
 
             Arguments = new ReadOnlyCollection<string>(m_Arguments);
@@ -293,23 +306,29 @@
         }
         #endregion
 
-        private OptionsStyle m_OptionsStyle;
+        /// <summary>
+        /// The prefix for short options.
+        /// </summary>
+        /// <value>The short option prefix.</value>
+        public string ShortOptionPrefix { get { return m_Parser.ShortOptionPrefix; } }
+
+        /// <summary>
+        /// The prefix for long options.
+        /// </summary>
+        /// <value>The long option prefix.</value>
+        public string LongOptionPrefix { get { return m_Parser.LongOptionPrefix; } }
+
+        /// <summary>
+        /// Gets the assignment symbol.
+        /// </summary>
+        /// <value>The assignment symbol.</value>
+        public string AssignmentSymbol { get { return m_Parser.AssignmentSymbol; } }
 
         /// <summary>
         /// Gets or sets the options style to use when parsing the command line.
         /// </summary>
         /// <value>The options style to use when parsing the command line.</value>
-        /// <exception cref="ArgumentException">Unknown Options Style</exception>
-        public OptionsStyle OptionsStyle
-        {
-            get { return m_OptionsStyle; }
-            private set
-            {
-                if (!Enum.IsDefined(typeof(OptionsStyle), value))
-                    throw new ArgumentException(CmdLineStrings.OptionsStyleUnknown, nameof(value));
-                m_OptionsStyle = value;
-            }
-        }
+        public OptionsStyle OptionsStyle { get { return m_Parser.Style; } }
 
         /// <summary>
         /// Parses the command line arguments.
@@ -321,28 +340,20 @@
         /// </remarks>
         private void ParseCommandLine(string[] arguments)
         {
+            // Nothing to parse.
+            if (m_Options == null) return;
+
             OptionToken token;
             OptionToken lastToken = null;
             OptionToken lastOptionToken = null;
-            IOptionParser parser;
 
-            switch (m_OptionsStyle) {
-            case OptionsStyle.Unix:
-                parser = new UnixOptionParser(arguments);
-                break;
-            case OptionsStyle.Windows:
-                parser = new WindowsOptionEnumerator(arguments);
-                break;
-            default:
-                throw new InvalidOperationException(CmdLineStrings.OptionsStyleUnknown);
-            }
-
-            BuildOptionList(parser.LongOptionCaseInsensitive);
+            m_Parser.AddArguments(arguments);
+            BuildOptionList(m_Parser.LongOptionCaseInsensitive);
             IOptions options = m_Options as IOptions;
             try {
                 do {
                     string message;
-                    token = parser.GetToken(false);
+                    token = m_Parser.GetToken(false);
                     if (token == null) continue;
                     switch (token.Token) {
                     case OptionTokenKind.ShortOption:
@@ -350,13 +361,13 @@
                         if (m_Arguments.Count > 0) {
                             if (lastOptionToken != null) {
                                 message = string.Format(CmdLineStrings.UnexpectedOptionNonZeroGeneralArgsLastToken,
-                                    token.ToString(parser), lastOptionToken.ToString(parser));
+                                    token.ToString(m_Parser), lastOptionToken.ToString(m_Parser));
                             } else {
-                                message = string.Format(CmdLineStrings.UnexpectedOptionNonZeroGeneralArgs, token.ToString(parser));
+                                message = string.Format(CmdLineStrings.UnexpectedOptionNonZeroGeneralArgs, token.ToString(m_Parser));
                             }
                             throw new OptionException(message);
                         }
-                        ParseOption(parser, token);
+                        ParseOption(m_Parser, token);
                         lastOptionToken = token;
                         break;
                     case OptionTokenKind.Argument:
@@ -365,7 +376,7 @@
                     case OptionTokenKind.Value:
                         if (lastToken != null) {
                             message = string.Format(CmdLineStrings.UnexpectedValueForOptionLastToken,
-                                lastToken.ToString(parser), token);
+                                lastToken.ToString(m_Parser), token);
                             throw new OptionException(message);
                         }
                         message = string.Format(CmdLineStrings.UnexpectedValueForOption, token);
@@ -392,7 +403,7 @@
             List<string> optionList = new List<string>();
             foreach (OptionMember optionMember in m_OptionList) {
                 if (optionMember.Attribute.Required && !optionMember.IsSet) {
-                    MissingOption(parser,
+                    MissingOption(m_Parser,
                         optionMember.Attribute.ShortOption,
                         optionMember.Attribute.LongOption,
                         sb, optionList);

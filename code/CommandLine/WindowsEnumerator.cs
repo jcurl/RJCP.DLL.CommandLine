@@ -1,15 +1,13 @@
 ﻿namespace RJCP.Core.CommandLine
 {
+    using System;
     using System.Collections.Generic;
 
     internal sealed class WindowsOptionEnumerator : IOptionParser
     {
-        private readonly string[] m_Arguments;
+        private string[] m_Arguments;
 
-        public WindowsOptionEnumerator(string[] arguments)
-        {
-            m_Arguments = arguments;
-        }
+        public OptionsStyle Style { get { return OptionsStyle.Windows; } }
 
         public bool LongOptionCaseInsensitive { get { return true; } }
 
@@ -19,8 +17,17 @@
 
         public string LongOptionPrefix { get { return "/"; } }
 
+        public string AssignmentSymbol { get { return ":"; } }
+
         private readonly Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
         private readonly Queue<OptionToken> m_NonOptArgs = new Queue<OptionToken>();
+
+        public void AddArguments(string[] arguments)
+        {
+            if (m_Arguments != null)
+                throw new InvalidOperationException();
+            m_Arguments = arguments;
+        }
 
         public OptionToken GetToken(bool expectValue)
         {

@@ -1,6 +1,5 @@
 ﻿namespace RJCP.Core.CommandLine
 {
-    using System;
     using NUnit.Framework;
     using RJCP.Core.Environment;
 
@@ -10,7 +9,16 @@
         [Test]
         public void NullOptions()
         {
-            Assert.That(() => { Options.Parse(null, null); }, Throws.TypeOf<ArgumentNullException>());
+            Options options = Options.Parse(null, null);
+            Assert.That(options, Is.Not.Null);
+        }
+
+        [Test]
+        public void NullOptionsWithArgs()
+        {
+            Options options = Options.Parse(null, new string[] { "arg" });
+            Assert.That(options, Is.Not.Null);
+            Assert.That(options.Arguments, Is.Empty);
         }
 
         [Test]

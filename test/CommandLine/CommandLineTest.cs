@@ -60,6 +60,25 @@
         }
 
         [Test]
+        public void OptionSymbols()
+        {
+            Options options = GetOptions(null, null, null);
+            Assert.That(options.OptionsStyle, Is.EqualTo(CommandLineStyle));
+            switch (CommandLineStyle) {
+            case OptionsStyle.Windows:
+                Assert.That(options.ShortOptionPrefix, Is.EqualTo("/"));
+                Assert.That(options.LongOptionPrefix, Is.EqualTo("/"));
+                Assert.That(options.AssignmentSymbol, Is.EqualTo(":"));
+                return;
+            case OptionsStyle.Unix:
+                Assert.That(options.ShortOptionPrefix, Is.EqualTo("-"));
+                Assert.That(options.LongOptionPrefix, Is.EqualTo("--"));
+                Assert.That(options.AssignmentSymbol, Is.EqualTo("="));
+                return;
+            }
+        }
+
+        [Test]
         public void SingleShortOption()
         {
             OptionalArguments myOptions = new OptionalArguments();

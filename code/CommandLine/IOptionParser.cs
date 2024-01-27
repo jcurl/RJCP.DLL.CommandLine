@@ -6,11 +6,23 @@
     internal interface IOptionParser
     {
         /// <summary>
+        /// Adds the arguments that are on the command line.
+        /// </summary>
+        /// <param name="arguments">The arguments.</param>
+        void AddArguments(string[] arguments);
+
+        /// <summary>
         /// Gets the next token, where the specified token type is expected.
         /// </summary>
         /// <param name="expectValue"><see langword="true"/> if the next token type should be a value for an option.</param>
         /// <returns>The token describing the next token.</returns>
         OptionToken GetToken(bool expectValue);
+
+        /// <summary>
+        /// Gets the options style this parser implements.
+        /// </summary>
+        /// <value>The options style this parser implements.</value>
+        OptionsStyle Style { get; }
 
         /// <summary>
         /// Gets a value indicating whether long options are case insensitive (lower case).
@@ -35,5 +47,11 @@
         /// </summary>
         /// <value>The long option prefix.</value>
         string LongOptionPrefix { get; }
+
+        /// <summary>
+        /// Gets the assignment symbol.
+        /// </summary>
+        /// <value>The assignment symbol.</value>
+        string AssignmentSymbol { get; }
     }
 }
