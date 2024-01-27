@@ -19,9 +19,11 @@
                 if (handle.IsInvalid || !Kernel32.GetConsoleMode(handle, out int _)) {
                     IsRedirected = true;
                 }
+            } else {
+                if (Console.BufferWidth == 0) {
+                    IsRedirected = true;
+                }
             }
-
-            // On Linux with Mono running .NET 4.0, we don't know.
 #endif
         }
 

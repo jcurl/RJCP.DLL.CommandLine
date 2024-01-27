@@ -10,7 +10,7 @@
         [Test]
         public void WriteConsoleDefault()
         {
-            ITerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new ConsoleTerminal();
             Assert.That(console.StdOut, Is.Not.Null);
             Assert.That(console.StdErr, Is.Not.Null);
 
@@ -34,9 +34,12 @@
         [Test]
         public void ConsoleColors()
         {
-            ITerminal console = new ConsoleTerminal();
-            ConsoleColor foreground = Console.ForegroundColor;
-            ConsoleColor background = Console.BackgroundColor;
+            if (!TestOsColoursFirst())
+                Assert.Ignore("OS Console Colour has undefined behaviour.");
+
+            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleColor foreground = console.ForegroundColor;
+            ConsoleColor background = console.BackgroundColor;
             Assert.That(console.ForegroundColor, Is.EqualTo(foreground));
             Assert.That(console.BackgroundColor, Is.EqualTo(background));
 
@@ -55,38 +58,70 @@
             Assert.That(console.BackgroundColor, Is.EqualTo(background));
         }
 
+        private static bool TestOsColoursFirst()
+        {
+#if NET45_OR_GREATER || NETCOREAPP
+            // We don't test the System.Console implementation as we're redirecting. Then we
+            // have our own shadow copy.
+            if (Console.IsOutputRedirected) {
+                Console.WriteLine("Redirection enabled, so ignoring OS test");
+                return true;
+            }
+#endif
+
+            // Mono sources have -1 as an "UnknownColor" when tracking.
+            // See https://github.com/mono/mono/blob/38b0227c1ce0c53058a5d78d080923435132773a/mcs/class/corlib/System/Console.cs#L787
+            if (!Enum.IsDefined(typeof(ConsoleColor), Console.ForegroundColor)) return false;
+            if (!Enum.IsDefined(typeof(ConsoleColor), Console.BackgroundColor)) return false;
+
+            // Just make sure we can set it and it isn't ignored when not redirecting.
+            ConsoleColor foreground = Console.ForegroundColor;
+            ConsoleColor background = Console.BackgroundColor;
+            try {
+                foreach (ConsoleColor newFg in Enum.GetValues(typeof(ConsoleColor))) {
+                    Console.ForegroundColor = newFg;
+                    if (Console.ForegroundColor != newFg)
+                        return false;
+                }
+            } finally {
+                Console.ForegroundColor = foreground;
+                Console.BackgroundColor = background;
+            }
+            return true;
+        }
+
         [Test]
         public void WriteConsole()
         {
-            ITerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new ConsoleTerminal();
             console.StdOut.Write("This is a line");
         }
 
         [Test]
         public void WriteConsoleErr()
         {
-            ITerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new ConsoleTerminal();
             console.StdErr.Write("This is an error line");
         }
 
         [Test]
         public void WriteLineConsole()
         {
-            ITerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new ConsoleTerminal();
             console.StdOut.WriteLine("This is a line");
         }
 
         [Test]
         public void WriteLineConsoleErr()
         {
-            ITerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new ConsoleTerminal();
             console.StdErr.WriteLine("This is an error line");
         }
 
         [Test]
         public void WrapLineConsole()
         {
-            ITerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new ConsoleTerminal();
             console.StdOut.WrapLine(
                 "This is a line that should be more than eighty-characters long, so that " +
                 "it can be checked if the line is really being wrapped into multiple lines. " +

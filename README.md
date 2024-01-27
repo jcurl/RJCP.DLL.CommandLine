@@ -500,8 +500,9 @@ Nor are there any tests.
 
 #### 3.4.2. Fixed Width on Linux with Mono
 
-On .NET 4.0 on Linux, it's not possible to determine the width of the console,
-so it defaults to 80 characters wide. To get full functionality, it's
+On .NET 4.0 on Linux, it may not be possible to detect if redirection is
+occurring on the console. The library depends on undefined behaviour that the
+console width is zero in redirection. To get full functionality, it's
 recommended to use .NET Framework 4.6.2 or .NET Core instead.
 
 #### 3.4.3. Mixing Write and WriteLine with WrapLine
