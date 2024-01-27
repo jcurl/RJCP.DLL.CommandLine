@@ -2,6 +2,7 @@
 {
     using System;
     using NUnit.Framework;
+    using RJCP.Core.Terminal.Log;
 
     [TestFixture]
     internal class ConsoleTerminalTest
@@ -91,6 +92,75 @@
                 "it can be checked if the line is really being wrapped into multiple lines. " +
                 "The proper test will need to be done using a virtual console so that we can " +
                 "check the precise behaviour of wrapping.");
+        }
+
+        [Test]
+        public void WriteEvent()
+        {
+            ConsoleTerminal console = new ConsoleTerminal();
+
+            TerminalWriteEventArgs args = null;
+            console.ConsoleWriteEvent += (s, e) => {
+                args = e;
+            };
+
+            console.StdOut.Write("Line");
+            Assert.That(args, Is.Not.Null);
+            Assert.That(args.Channel, Is.EqualTo(ConsoleLogChannel.StdOut));
+            Assert.That(args.NewLine, Is.False);
+            Assert.That(args.Line, Is.EqualTo("Line"));
+
+            console.StdErr.Write("Line Error");
+            Assert.That(args, Is.Not.Null);
+            Assert.That(args.Channel, Is.EqualTo(ConsoleLogChannel.StdErr));
+            Assert.That(args.NewLine, Is.False);
+            Assert.That(args.Line, Is.EqualTo("Line Error"));
+        }
+
+        [Test]
+        public void WriteLineEvent()
+        {
+            ConsoleTerminal console = new ConsoleTerminal();
+
+            TerminalWriteEventArgs args = null;
+            console.ConsoleWriteEvent += (s, e) => {
+                args = e;
+            };
+
+            console.StdOut.WriteLine("Line");
+            Assert.That(args, Is.Not.Null);
+            Assert.That(args.Channel, Is.EqualTo(ConsoleLogChannel.StdOut));
+            Assert.That(args.NewLine, Is.True);
+            Assert.That(args.Line, Is.EqualTo("Line"));
+
+            console.StdErr.WriteLine("Line Error");
+            Assert.That(args, Is.Not.Null);
+            Assert.That(args.Channel, Is.EqualTo(ConsoleLogChannel.StdErr));
+            Assert.That(args.NewLine, Is.True);
+            Assert.That(args.Line, Is.EqualTo("Line Error"));
+        }
+
+        [Test]
+        public void WrapLineEvent()
+        {
+            ConsoleTerminal console = new ConsoleTerminal();
+
+            TerminalWriteEventArgs args = null;
+            console.ConsoleWriteEvent += (s, e) => {
+                args = e;
+            };
+
+            console.StdOut.WrapLine("This is a Line");
+            Assert.That(args, Is.Not.Null);
+            Assert.That(args.Channel, Is.EqualTo(ConsoleLogChannel.StdOut));
+            Assert.That(args.NewLine, Is.True);
+            Assert.That(args.Line, Is.Not.Null.And.Length.GreaterThan(0));
+
+            console.StdErr.WriteLine("This is a Line for an Error");
+            Assert.That(args, Is.Not.Null);
+            Assert.That(args.Channel, Is.EqualTo(ConsoleLogChannel.StdErr));
+            Assert.That(args.NewLine, Is.True);
+            Assert.That(args.Line, Is.Not.Null.And.Length.GreaterThan(0));
         }
     }
 }

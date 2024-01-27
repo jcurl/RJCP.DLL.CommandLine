@@ -93,6 +93,8 @@
     <Compile Include="Terminal\Format.cs" />
     <Compile Include="Terminal\ITerminal.cs" />
     <Compile Include="Terminal\ITerminalOut.cs" />
+    <Compile Include="Terminal\Log\ConsoleLogChannel.cs" />
+    <Compile Include="Terminal\Log\TerminalWriteEventArgs.cs" />
     <Compile Include="Terminal\StdErr.cs" />
     <Compile Include="Terminal\StdOut.cs" />
     <Compile Include="Terminal\StdOutBase.cs" />

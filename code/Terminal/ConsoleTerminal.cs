@@ -1,6 +1,7 @@
 ﻿namespace RJCP.Core.Terminal
 {
     using System;
+    using Log;
 
     /// <summary>
     /// A <see cref="ITerminal"/> class that writes to the console.
@@ -87,6 +88,26 @@
                 } else {
                     Console.BackgroundColor = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Get a notification when a line to a console channel is written.
+        /// </summary>
+        /// <remarks>
+        /// Do not use the sender parameter of the event, it has no meaning.
+        /// </remarks>
+        public event EventHandler<TerminalWriteEventArgs> ConsoleWriteEvent
+        {
+            add
+            {
+                ((StdOut)StdOut).ConsoleWriteEvent += value;
+                ((StdErr)StdErr).ConsoleWriteEvent += value;
+            }
+            remove
+            {
+                ((StdOut)StdOut).ConsoleWriteEvent -= value;
+                ((StdErr)StdErr).ConsoleWriteEvent -= value;
             }
         }
     }
