@@ -725,48 +725,22 @@
         public void ExtraArgument()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = null;
-            switch (CommandLineStyle) {
-            case OptionsStyle.Windows:
-                Assert.That(() => {
-                    _ = Options.Parse(myOptions, new[] { "/a", "/b", "argument", "/c", "arg" }, OptionsStyle.Windows);
-                }, Throws.TypeOf<OptionException>());
-                break;
-            case OptionsStyle.Unix:
-                options = Options.Parse(myOptions, new[] { "-ab", "argument", "-c", "arg" }, OptionsStyle.Unix);
-                Assert.That(myOptions.OptionA, Is.True);
-                Assert.That(myOptions.OptionB, Is.True);
-                Assert.That(myOptions.OptionC, Is.EqualTo("arg"));
-                Assert.That(options.Arguments, Is.EqualTo(new[] { "argument" }));
-                break;
-            default:
-                Assert.Fail("Unknown options style");
-                break;
-            }
+            Options options = GetOptions(myOptions, new[] { "/a", "/b", "argument", "/c", "arg" }, new[] { "-ab", "argument", "-c", "arg" });
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.OptionC, Is.EqualTo("arg"));
+            Assert.That(options.Arguments, Is.EqualTo(new[] { "argument" }));
         }
 
         [Test]
         public void ExtraArgumentAtStart()
         {
             OptionalArguments myOptions = new OptionalArguments();
-            Options options = null;
-            switch (CommandLineStyle) {
-            case OptionsStyle.Windows:
-                Assert.That(() => {
-                    _ = Options.Parse(myOptions, new[] { "input.txt", "/a", "/b", "/c", "arg" }, OptionsStyle.Windows);
-                }, Throws.TypeOf<OptionException>());
-                break;
-            case OptionsStyle.Unix:
-                options = Options.Parse(myOptions, new[] { "argument", "-ab", "-c", "arg" }, OptionsStyle.Unix);
-                Assert.That(myOptions.OptionA, Is.True);
-                Assert.That(myOptions.OptionB, Is.True);
-                Assert.That(myOptions.OptionC, Is.EqualTo("arg"));
-                Assert.That(options.Arguments, Is.EqualTo(new[] { "argument" }));
-                break;
-            default:
-                Assert.Fail("Unknown options style");
-                break;
-            }
+            Options options = GetOptions(myOptions, new[] { "input.txt", "/a", "/b", "/c", "arg" }, new[] { "input.txt", "-ab", "-c", "arg" });
+            Assert.That(myOptions.OptionA, Is.True);
+            Assert.That(myOptions.OptionB, Is.True);
+            Assert.That(myOptions.OptionC, Is.EqualTo("arg"));
+            Assert.That(options.Arguments, Is.EqualTo(new[] { "input.txt" }));
         }
 
         [Test]
