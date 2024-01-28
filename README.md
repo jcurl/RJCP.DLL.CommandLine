@@ -27,7 +27,8 @@ console.
   - [3.4. Limitations](#34-limitations)
     - [3.4.1. No Escape Sequences](#341-no-escape-sequences)
     - [3.4.2. Fixed Width on Linux with Mono](#342-fixed-width-on-linux-with-mono)
-    - [3.4.3. Mixing Write and WriteLine with WrapLine](#343-mixing-write-and-writeline-with-wrapline)
+    - [3.4.3. Fixed Width on Windows MSYS2 (Git Bash)](#343-fixed-width-on-windows-msys2-git-bash)
+    - [3.4.4. Mixing Write and WriteLine with WrapLine](#344-mixing-write-and-writeline-with-wrapline)
 
 ## 1. Parsing Command Line
 
@@ -502,7 +503,14 @@ occurring on the console. The library depends on undefined behaviour that the
 console width is zero in redirection. To get full functionality, it's
 recommended to use .NET Framework 4.6.2 or .NET Core instead.
 
-#### 3.4.3. Mixing Write and WriteLine with WrapLine
+#### 3.4.3. Fixed Width on Windows MSYS2 (Git Bash)
+
+Testing with MSYS2 (Git Bash for Windows), the width is fixed at 80 characters.
+This is because the bash shell does redirection and the Windows Subsystem cannot
+determine the width of the shell. This problem doesn't seem to occur on
+Cygwin64.
+
+#### 3.4.4. Mixing Write and WriteLine with WrapLine
 
 The two sets of APIs are not intended to be used with each other. The
 `WrapLine()` function is assumed to always start at the beginning of the line.

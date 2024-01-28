@@ -70,7 +70,7 @@
         {
             get
             {
-                if (!Platform.IsWinNT() || Platform.IsMSys()) {
+                if (!Platform.IsWinNT() || Platform.IsMSys() || Platform.IsCygwin()) {
                     return OptionsStyle.Unix;
                 } else {
                     return OptionsStyle.Windows;
