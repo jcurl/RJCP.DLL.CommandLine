@@ -20,8 +20,13 @@
                     IsRedirected = true;
                 }
             } else {
-                if (Console.BufferWidth == 0) {
-                    IsRedirected = true;
+                try {
+                    if (Console.BufferWidth == 0) {
+                        IsRedirected = true;
+                    }
+                } catch (Exception) {
+                    // Nothing to do. The console handle must be invalid to raise an exception, so it's being
+                    // redirected.
                 }
             }
 #endif
