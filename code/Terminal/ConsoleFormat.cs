@@ -11,7 +11,7 @@
     {
         public ConsoleFormat()
         {
-#if NET45_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
             IsRedirected = Console.IsOutputRedirected && Console.IsErrorRedirected;
 #else
             if (Platform.IsWinNT()) {

@@ -27,7 +27,7 @@
         public static string[] SplitCommandLine(string arguments)
         {
             if (string.IsNullOrWhiteSpace(arguments)) {
-#if NET45_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
                 return Array.Empty<string>();
 #else
                 return new string[0];

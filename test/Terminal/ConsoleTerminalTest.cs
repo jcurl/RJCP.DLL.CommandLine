@@ -60,7 +60,7 @@
 
         private static bool TestOsColoursFirst()
         {
-#if NET45_OR_GREATER || NETCOREAPP
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
             // We don't test the System.Console implementation as we're redirecting. Then we
             // have our own shadow copy.
             if (Console.IsOutputRedirected) {

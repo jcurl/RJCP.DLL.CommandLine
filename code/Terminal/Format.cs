@@ -7,7 +7,7 @@
 
     // Use type aliasing to ensure a more restrictive type in newer .NET versions. Improves code safety. In client code, use
     // `var` to automatically get the type.
-#if NET45_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+#if NET45_OR_GREATER || NET6_0_OR_GREATER
     using IList = System.Collections.Generic.IReadOnlyList<string>;
 #else
     using IList = System.Collections.Generic.IList<string>;
@@ -196,7 +196,7 @@
                 case TokenType.Word:
                     if (char.IsWhiteSpace(c) || char.IsControl(c) || char.IsSeparator(c) || c == '\r' || c == '\n') {
                         token.Word =
-#if NETSTANDARD2_1_OR_GREATER
+#if NET6_0_OR_GREATER
                             line[offset..i];
 #else
                             line.Substring(offset, i - offset);
@@ -219,7 +219,7 @@
                 return token;
             case TokenType.Word:
                 token.Word =
-#if NETSTANDARD2_1_OR_GREATER
+#if NET6_0_OR_GREATER
                     line[offset..];
 #else
                     line.Substring(offset);

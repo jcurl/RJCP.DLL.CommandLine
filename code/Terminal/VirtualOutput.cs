@@ -85,7 +85,7 @@
 
         private void AddLine(string line, int offset, int length)
         {
-#if NETSTANDARD2_1_OR_GREATER
+#if NET6_0_OR_GREATER
             string lineSpan = line[offset..(offset + length)];
             if (m_NewLine) {
                 m_Lines.Add(lineSpan);
