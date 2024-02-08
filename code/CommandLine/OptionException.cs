@@ -1,12 +1,16 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+#if NETFRAMEWORK
     using System.Runtime.Serialization;
+#endif
 
     /// <summary>
     /// A generic Option exception.
     /// </summary>
+#if NETFRAMEWORK
     [Serializable]
+#endif
     public class OptionException : Exception
     {
         /// <summary>
@@ -31,6 +35,7 @@
         /// </param>
         public OptionException(string message, Exception innerException) : base(message, innerException) { }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionException"/> class with serialized data.
         /// </summary>
@@ -41,5 +46,6 @@
         /// The <see cref="StreamingContext"/> that contains contextual information about the source or destination.
         /// </param>
         protected OptionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+#endif
     }
 }

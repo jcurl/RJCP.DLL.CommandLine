@@ -1,16 +1,25 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using Resources;
+#if NETFRAMEWORK
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using RJCP.Core.Resources;
+#endif
 
     /// <summary>
     /// An option was specified on the command line multiple times and it's not a list type.
     /// </summary>
+#if NETFRAMEWORK
     [Serializable]
+#endif
     public class OptionAssignedException : OptionException
     {
+        private static string DuplicateOptionMessage(string option)
+        {
+            return string.Format(CmdLineStrings.OptionMultipleTimes, option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionAssignedException"/> class.
         /// </summary>
@@ -53,6 +62,7 @@
             Option = option;
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionAssignedException"/> class with serialized data.
         /// </summary>
@@ -66,11 +76,6 @@
             : base(info, context)
         {
             Option = info.GetString("option");
-        }
-
-        private static string DuplicateOptionMessage(string option)
-        {
-            return string.Format(CmdLineStrings.OptionMultipleTimes, option);
         }
 
         /// <summary>
@@ -90,6 +95,7 @@
             info.AddValue("option", Option);
             base.GetObjectData(info, context);
         }
+#endif
 
         /// <summary>
         /// Gets the option that is specified multiple times.

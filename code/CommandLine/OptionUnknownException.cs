@@ -1,16 +1,25 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using Resources;
+#if NETFRAMEWORK
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using RJCP.Core.Resources;
+#endif
 
     /// <summary>
     /// An option was provided on the command line that is not defined.
     /// </summary>
+#if NETFRAMEWORK
     [Serializable]
+#endif
     public class OptionUnknownException : OptionException
     {
+        private static string UnknownOptionMessage(string option)
+        {
+            return string.Format(CmdLineStrings.OptionUnknown, option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionUnknownException"/> class.
         /// </summary>
@@ -51,6 +60,7 @@
             Option = option;
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionUnknownException"/> class with serialized data.
         /// </summary>
@@ -63,11 +73,6 @@
         protected OptionUnknownException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             Option = info.GetString("option");
-        }
-
-        private static string UnknownOptionMessage(string option)
-        {
-            return string.Format(CmdLineStrings.OptionUnknown, option);
         }
 
         /// <summary>
@@ -87,6 +92,7 @@
             info.AddValue("option", Option);
             base.GetObjectData(info, context);
         }
+#endif
 
         /// <summary>
         /// Gets the option that was unknown.

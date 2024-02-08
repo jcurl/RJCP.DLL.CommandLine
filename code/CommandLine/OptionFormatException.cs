@@ -1,14 +1,18 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using Resources;
+#if NETFRAMEWORK
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using RJCP.Core.Resources;
+#endif
 
     /// <summary>
     /// An option takes a parameter, but that parameter couldn't be converted to the correct type.
     /// </summary>
+#if NETFRAMEWORK
     [Serializable]
+#endif
     public class OptionFormatException : OptionException
     {
         private static string IncorrectFormatOptionMessage(string option)
@@ -72,6 +76,7 @@
             Option = option;
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionFormatException"/> class with serialized data.
         /// </summary>
@@ -104,6 +109,7 @@
             info.AddValue("option", Option);
             base.GetObjectData(info, context);
         }
+#endif
 
         /// <summary>
         /// Gets the option that is in an invalid format.

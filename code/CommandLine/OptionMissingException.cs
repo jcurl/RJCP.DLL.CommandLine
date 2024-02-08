@@ -1,16 +1,25 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using Resources;
+#if NETFRAMEWORK
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using RJCP.Core.Resources;
+#endif
 
     /// <summary>
     /// A mandatory option was not specified on the command line.
     /// </summary>
+#if NETFRAMEWORK
     [Serializable]
+#endif
     public class OptionMissingException : OptionException
     {
+        private static string MissingOptionMessage(string option)
+        {
+            return string.Format(CmdLineStrings.OptionMissingOption, option);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingException"/> class.
         /// </summary>
@@ -52,6 +61,7 @@
             Options = options;
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingException"/> class with serialized data.
         /// </summary>
@@ -65,11 +75,6 @@
             : base(info, context)
         {
             Options = info.GetString("option");
-        }
-
-        private static string MissingOptionMessage(string option)
-        {
-            return string.Format(CmdLineStrings.OptionMissingOption, option);
         }
 
         /// <summary>
@@ -89,6 +94,7 @@
             info.AddValue("option", Options);
             base.GetObjectData(info, context);
         }
+#endif
 
         /// <summary>
         /// Gets the option that was missing.

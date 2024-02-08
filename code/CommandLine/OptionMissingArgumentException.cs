@@ -1,14 +1,18 @@
 ﻿namespace RJCP.Core.CommandLine
 {
     using System;
+    using Resources;
+#if NETFRAMEWORK
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using RJCP.Core.Resources;
+#endif
 
     /// <summary>
     /// An option was specified on the command line and is missing a mandatory argument.
     /// </summary>
+#if NETFRAMEWORK
     [Serializable]
+#endif
     public class OptionMissingArgumentException : OptionException
     {
         /// <summary>
@@ -58,6 +62,7 @@
             return string.Format(CmdLineStrings.OptionMissingArgument, option);
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionMissingArgumentException"/> class with serialized data.
         /// </summary>
@@ -90,6 +95,7 @@
             info.AddValue("option", Option);
             base.GetObjectData(info, context);
         }
+#endif
 
         /// <summary>
         /// Gets the option that was missing an argument.
