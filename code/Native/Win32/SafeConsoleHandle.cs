@@ -1,8 +1,10 @@
 ﻿namespace RJCP.Core.Native.Win32
 {
     using System;
-    using System.Runtime.ConstrainedExecution;
     using System.Runtime.InteropServices;
+#if NETFRAMEWORK
+    using System.Runtime.ConstrainedExecution;
+#endif
 
     internal class SafeConsoleHandle : SafeHandle
     {
@@ -16,7 +18,9 @@
             }
         }
 
+#if NETFRAMEWORK
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+#endif
         protected override bool ReleaseHandle()
         {
             // Nothing to release.
