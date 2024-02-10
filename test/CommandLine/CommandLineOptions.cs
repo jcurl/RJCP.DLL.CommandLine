@@ -1,18 +1,17 @@
-﻿namespace RJCP.Core.CommandLine
+﻿#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
+
+namespace RJCP.Core.CommandLine
 {
     using System.Collections;
     using System.Collections.Generic;
 
     internal class NoArguments
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         public bool NoOption;
-#pragma warning restore CS0649
     }
 
     internal class OptionalArguments
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option('a', "along", false)]
         public bool OptionA;
 
@@ -21,12 +20,10 @@
 
         [Option('c', "clong", false)]
         public string OptionC;
-#pragma warning restore CS0649
     }
 
     internal class RequiredArguments
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('i', "insensitive")]
         private bool m_CaseInsensitive;
@@ -38,7 +35,6 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('s', "search")]
         private string m_SearchString;
-#pragma warning restore CS0649
 
         public bool CaseInsensitive { get { return m_CaseInsensitive; } }
 
@@ -114,7 +110,6 @@
 
     internal class OptionalLongArguments
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option("along")]
         public bool OptionA;
 
@@ -126,31 +121,24 @@
 
         [Option("level42")]
         public string Level42;
-#pragma warning restore CS0649
     }
 
     internal class InvalidLongArgumentWithDigit1
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option("6502")]
         public bool Option6502;
-#pragma warning restore CS0649
     }
 
     internal class InvalidLongArgumentWithDigit2
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option("6502level")]
         public bool Option6502;
-#pragma warning restore CS0649
     }
 
     internal class ShortOptionWithDigit
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option('9')]
         public bool Level;
-#pragma warning restore CS0649
     }
 
     internal class DefaultValueOption
@@ -161,11 +149,9 @@
         [Option('b', "blong", false)]
         public bool OptionB { get; set; }
 
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option('v', "verbosity")]
         [OptionDefault("0")]
         public string Verbosity;
-#pragma warning restore CS0649
     }
 
     internal enum BasicColor
@@ -191,7 +177,6 @@
 
     internal class ArgumentsAttributeOptions
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option('a', "along", false)]
         public bool OptionA;
 
@@ -200,7 +185,6 @@
 
         [Option('c', "clong", false)]
         public string OptionC;
-#pragma warning restore CS0649
 
         private readonly List<string> m_Arguments = new List<string>();
 
@@ -252,9 +236,7 @@
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('a', "along")]
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         private bool m_OptionA;
-#pragma warning restore CS0649
 
         public bool OptionA { get { return m_OptionA; } }
     }
@@ -263,9 +245,7 @@
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Set on reflection")]
         [Option('b', "blong")]
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         private bool m_OptionB;
-#pragma warning restore CS0649
 
         public bool OptionB { get { return m_OptionB; } }
     }
@@ -273,9 +253,7 @@
     internal class BaseOptionsProtected
     {
         [Option('a', "along")]
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         protected bool m_OptionA;
-#pragma warning restore CS0649
 
         public bool OptionA { get { return m_OptionA; } }
     }
@@ -283,9 +261,7 @@
     internal class DerivedOptionsProtected : BaseOptionsProtected
     {
         [Option('b', "blong")]
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         protected bool m_OptionB;
-#pragma warning restore CS0649
 
         public bool OptionB { get { return m_OptionB; } }
     }
@@ -326,7 +302,6 @@
 
     internal class OptionHandling : IOptions
     {
-#pragma warning disable CS0649  // This field is set via reflection, so the compiler doesn't know
         [Option('a', "along", false)]
         public bool OptionA;
 
@@ -335,7 +310,6 @@
 
         [Option('c', "clong", false)]
         public string OptionC;
-#pragma warning restore CS0649
 
         public void Check() { /* Nothing to check */ }
 
