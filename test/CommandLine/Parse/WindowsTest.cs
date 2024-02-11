@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
     using System.Runtime.InteropServices;
+    using System.Runtime.Versioning;
     using NUnit.Framework;
 
     [TestFixture]
@@ -61,14 +62,17 @@
             Assert.That(cmdLine, Is.EqualTo(joined));
         }
 
+        [SupportedOSPlatform("windows")]
         [DllImport("shell32.dll", SetLastError = true)]
         private static extern IntPtr CommandLineToArgvW(
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
+        [SupportedOSPlatform("windows")]
         [DllImport("kernel32.dll")]
         private static extern IntPtr LocalFree(IntPtr hMem);
 
+        [SupportedOSPlatform("windows")]
         private static string[] WindowsNativeSplitCommandLine(string arguments)
         {
             IntPtr ptrToSplitArgs = IntPtr.Zero;
@@ -94,6 +98,7 @@
         [TestCaseSource(nameof(ArgumentTestList))]
         [TestCaseSource(nameof(JoinedArguments))]
         [Platform(Include = "Win32")]
+        [SupportedOSPlatform("windows")]
         public void SplitArgumentWin32Native(string arguments, string[] expected)
         {
             // The first parameter must look like a "program"

@@ -2,10 +2,12 @@
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Runtime.Versioning;
 #if NETFRAMEWORK
     using System.Runtime.ConstrainedExecution;
 #endif
 
+    [SupportedOSPlatform("windows")]
     internal class SafeConsoleHandle : SafeHandle
     {
         public SafeConsoleHandle() : base(IntPtr.Zero, false) { }

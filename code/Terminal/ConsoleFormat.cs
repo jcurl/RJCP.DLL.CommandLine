@@ -15,9 +15,10 @@
             IsRedirected = Console.IsOutputRedirected && Console.IsErrorRedirected;
 #else
             if (Platform.IsWinNT()) {
-                SafeConsoleHandle handle = Kernel32.GetConsoleWindow();
-                if (handle.IsInvalid || !Kernel32.GetConsoleMode(handle, out int _)) {
-                    IsRedirected = true;
+                using (SafeConsoleHandle handle = Kernel32.GetConsoleWindow()) {
+                    if (handle.IsInvalid || !Kernel32.GetConsoleMode(handle, out int _)) {
+                        IsRedirected = true;
+                    }
                 }
             } else {
                 try {
