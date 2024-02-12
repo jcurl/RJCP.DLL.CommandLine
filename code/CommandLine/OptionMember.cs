@@ -12,9 +12,9 @@
 
         public OptionMember(object options, OptionAttribute attribute, MemberInfo member)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
-            if (attribute == null) throw new ArgumentNullException(nameof(attribute));
-            if (member == null) throw new ArgumentNullException(nameof(member));
+            ThrowHelper.ThrowIfNull(options);
+            ThrowHelper.ThrowIfNull(attribute);
+            ThrowHelper.ThrowIfNull(member);
 
             m_Field = new OptionField(member);
             m_Options = options;
