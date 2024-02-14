@@ -38,7 +38,7 @@
         private void OnWriteEvent(object sender, TerminalWriteEventArgs eventArgs)
         {
             EventHandler<TerminalWriteEventArgs> handler = ConsoleWriteEvent;
-            if (handler != null) handler(sender, eventArgs);
+            if (handler is not null) handler(sender, eventArgs);
         }
     }
 }

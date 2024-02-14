@@ -30,7 +30,7 @@
         [Test]
         public void NullArguments()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, null, CommandLineStyle);
             Assert.That(options.Arguments, Is.Empty);
         }
@@ -38,7 +38,7 @@
         [Test]
         public void NoArguments()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, new string[0], CommandLineStyle);
             Assert.That(options.Arguments, Is.Empty);
         }
@@ -46,7 +46,7 @@
         [Test]
         public void NullArgumentsEmptyOptions()
         {
-            NoArguments myOptions = new NoArguments();
+            NoArguments myOptions = new();
             Options options = Options.Parse(myOptions, null, CommandLineStyle);
             Assert.That(options.Arguments, Is.Empty);
         }
@@ -54,7 +54,7 @@
         [Test]
         public void NoArgumentsEmptyOptions()
         {
-            NoArguments myOptions = new NoArguments();
+            NoArguments myOptions = new();
             Options options = Options.Parse(myOptions, new string[0], CommandLineStyle);
             Assert.That(options.Arguments, Is.Empty);
         }
@@ -81,7 +81,7 @@
         [Test]
         public void SingleShortOption()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -93,7 +93,7 @@
         [Test]
         public void EmptyOption()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
 
             Options options = GetOptions(myOptions, new[] { "/" }, new[] { "-" });
             Assert.That(options.Arguments, Has.Count.EqualTo(1));
@@ -114,7 +114,7 @@
         [Test]
         public void ShortOptionsJoined()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options;
             switch (CommandLineStyle) {
             case OptionsStyle.Windows:
@@ -139,7 +139,7 @@
         [Test]
         public void ShortOptionsSeparated()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b" }, new[] { "-a", "-b" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -151,7 +151,7 @@
         [Test]
         public void ShortOptionsOnProperties()
         {
-            PropertyOptions myOptions = new PropertyOptions();
+            PropertyOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b" }, new[] { "-a", "-b" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -163,7 +163,7 @@
         [Test]
         public void ShortOptionsStringOneArg()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c:foo" }, new[] { "-cfoo" });
 
             Assert.That(myOptions.OptionA, Is.False);
@@ -175,7 +175,7 @@
         [Test]
         public void ShortOptionsStringOneArgAssigned()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c:foo" }, new[] { "-c=foo" });
 
             Assert.That(myOptions.OptionA, Is.False);
@@ -187,7 +187,7 @@
         [Test]
         public void ShortOptionsStringTwoArgs()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c", "foo" }, new[] { "-c", "foo" });
 
             Assert.That(myOptions.OptionA, Is.False);
@@ -199,7 +199,7 @@
         [Test]
         public void OptionStringParameterSingleSlash()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong:/" }, new[] { "--clong=/" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("/"));
@@ -209,7 +209,7 @@
         [Test]
         public void OptionStringParameterSingleSlashTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong", "/" }, new[] { "--clong", "/" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("/"));
@@ -219,7 +219,7 @@
         [Test]
         public void OptionStringParameterSingleEqual()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong:=" }, new[] { "--clong==" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("="));
@@ -229,7 +229,7 @@
         [Test]
         public void OptionStringParameterSingleEqualTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong", "=" }, new[] { "--clong", "=" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("="));
@@ -239,7 +239,7 @@
         [Test]
         public void OptionStringParameterSingleColon()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong::" }, new[] { "--clong=:" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo(":"));
@@ -249,7 +249,7 @@
         [Test]
         public void OptionStringParameterSingleColonTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong", ":" }, new[] { "--clong", ":" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo(":"));
@@ -259,7 +259,7 @@
         [Test]
         public void OptionStringParameterDualSlash()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong://" }, new[] { "--clong=//" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("//"));
@@ -269,7 +269,7 @@
         [Test]
         public void OptionStringParameterDualSlashTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = null;
             switch (CommandLineStyle) {
             case OptionsStyle.Windows:
@@ -296,7 +296,7 @@
         [Test]
         public void OptionStringParameterSingleDash()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong:-" }, new[] { "--clong=-" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
@@ -306,7 +306,7 @@
         [Test]
         public void OptionStringParameterSingleDashTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong", "-" }, new[] { "--clong", "-" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
@@ -316,7 +316,7 @@
         [Test]
         public void OptionStringParameterSingleDashShort()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c", "-" }, new[] { "-c-" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
@@ -326,7 +326,7 @@
         [Test]
         public void OptionStringParameterSingleDashShortTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c", "-", "arg" }, new[] { "-c", "-", "arg" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
@@ -336,7 +336,7 @@
         [Test]
         public void OptionStringParameterSingleDashShortTwoArgsEqual()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c:-" }, new[] { "-c=-" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("-"));
@@ -346,7 +346,7 @@
         [Test]
         public void OptionStringParameterDualDash()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong:--" }, new[] { "--clong=--" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("--"));
@@ -356,7 +356,7 @@
         [Test]
         public void OptionStringParameterDualDashTwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = null;
             switch (CommandLineStyle) {
             case OptionsStyle.Windows:
@@ -383,7 +383,7 @@
         [Test]
         public void OptionStringParameterDualDash2()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/clong:--x" }, new[] { "--clong=--x" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("--x"));
@@ -393,7 +393,7 @@
         [Test]
         public void OptionStringParameterDualDash2TwoArgs()
         {
-            OptionHandling myOptions = new OptionHandling();
+            OptionHandling myOptions = new();
             Options options = null;
             switch (CommandLineStyle) {
             case OptionsStyle.Windows:
@@ -420,7 +420,7 @@
         [Test]
         public void ShortOptionsRequired()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/i", "/f", "/s", "string" }, new[] { "-ifs", "string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.True);
@@ -432,7 +432,7 @@
         [Test]
         public void ShortOptionsRequiredOneArgument1()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/i", "/f", "/s:string" }, new[] { "-ifsstring" });
 
             Assert.That(myOptions.CaseInsensitive, Is.True);
@@ -444,7 +444,7 @@
         [Test]
         public void ShortOptionsRequiredOneArgument2()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/i", "/f", "/s:string" }, new[] { "-if", "-sstring" });
 
             Assert.That(myOptions.CaseInsensitive, Is.True);
@@ -456,7 +456,7 @@
         [Test]
         public void ShortOptionsRequiredOneArgument3()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/i", "/f", "/s:string" }, new[] { "-if", "-s=string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.True);
@@ -468,7 +468,7 @@
         [Test]
         public void ShortOptionsRequiredMissingArgument()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/i", "/f", "/s" }, new[] { "-ifs" });
             }, Throws.TypeOf<OptionMissingArgumentException>());
@@ -477,7 +477,7 @@
         [Test]
         public void MissingOption()
         {
-            RequiredOptions myOptions = new RequiredOptions();
+            RequiredOptions myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/a", "/b" }, new[] { "-ab" });
             }, Throws.TypeOf<OptionMissingException>());
@@ -486,7 +486,7 @@
         [Test]
         public void RequiredOption()
         {
-            RequiredOptions myOptions = new RequiredOptions();
+            RequiredOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c:bar" }, new[] { "-c=bar" });
 
             Assert.That(myOptions.OptionC, Is.EqualTo("bar"));
@@ -496,7 +496,7 @@
         [Test]
         public void LongOptionOneArgument()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search:string" }, new[] { "--search=string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -508,7 +508,7 @@
         [Test]
         public void LongOptionTwoArguments()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search", "string" }, new[] { "--search", "string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -520,7 +520,7 @@
         [Test]
         public void LongOptionWithSpace()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search: string " }, new[] { "--search= string " });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -532,7 +532,7 @@
         [Test]
         public void LongOptionWithSpace2()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search: string" }, new[] { "--search= string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -544,7 +544,7 @@
         [Test]
         public void LongOptionWithSpace3()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search:string " }, new[] { "--search=string " });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -556,7 +556,7 @@
         [Test]
         public void LongOptionWithSpace4()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search", " string " }, new[] { "--search", " string " });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -568,7 +568,7 @@
         [Test]
         public void LongOptionWithSpace5()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search", ":", "string" }, new[] { "--search", "=", "string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -583,7 +583,7 @@
         [Test]
         public void LongOptionWithSpace6()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search", ":", " string " }, new[] { "--search", "=", " string " });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -598,7 +598,7 @@
         [Test]
         public void LongOptionWithSpace7()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search", "=", "string" }, new[] { "--search", ":", "string" });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -613,7 +613,7 @@
         [Test]
         public void LongOptionWithSpace8()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/search", "=", " string " }, new[] { "--search", ":", " string " });
 
             Assert.That(myOptions.CaseInsensitive, Is.False);
@@ -628,7 +628,7 @@
         [Test]
         public void LongOptionsRequiredMissingArgument()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/search" }, new[] { "--search" });
             }, Throws.TypeOf<OptionMissingArgumentException>());
@@ -637,7 +637,7 @@
         [Test]
         public void LongOptionsBoolean()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/printfiles" }, new[] { "--printfiles" });
 
             Assert.That(myOptions.PrintFiles, Is.True);
@@ -649,7 +649,7 @@
         [Test]
         public void LongOptionOnly()
         {
-            OptionalLongArguments myOptions = new OptionalLongArguments();
+            OptionalLongArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/along" }, new[] { "--along" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -662,7 +662,7 @@
         [Test]
         public void LongOptionOnlyShort()
         {
-            OptionalLongArguments myOptions = new OptionalLongArguments();
+            OptionalLongArguments myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
             }, Throws.TypeOf<OptionUnknownException>());
@@ -671,7 +671,7 @@
         [Test]
         public void UnknownOption1()
         {
-            RequiredArguments myOptions = new RequiredArguments();
+            RequiredArguments myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/search", "string", "/a", "/b", "/c" }, new[] { "--search", "string", "-ab", "-c" });
             }, Throws.TypeOf<OptionUnknownException>());
@@ -680,7 +680,7 @@
         [Test]
         public void UnknownOption2()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/d", "/a", "/b", "/c" }, new[] { "-dabc" });
             }, Throws.TypeOf<OptionUnknownException>());
@@ -689,7 +689,7 @@
         [Test]
         public void UnknownLongOption()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/foobar" }, new[] { "--foobar" });
             }, Throws.TypeOf<OptionUnknownException>());
@@ -698,7 +698,7 @@
         [Test]
         public void InvalidLongOption1a()
         {
-            InvalidLongArgumentWithDigit1 myOptions = new InvalidLongArgumentWithDigit1();
+            InvalidLongArgumentWithDigit1 myOptions = new();
             Assert.That(() => {
                 Options.Parse(myOptions, new string[] { }, CommandLineStyle);
             }, Throws.TypeOf<ArgumentException>());
@@ -707,7 +707,7 @@
         [Test]
         public void InvalidLongOption1b()
         {
-            InvalidLongArgumentWithDigit1 myOptions = new InvalidLongArgumentWithDigit1();
+            InvalidLongArgumentWithDigit1 myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/6502" }, new[] { "--6502" });
             }, Throws.TypeOf<ArgumentException>());
@@ -716,7 +716,7 @@
         [Test]
         public void InvalidLongOption2a()
         {
-            InvalidLongArgumentWithDigit2 myOptions = new InvalidLongArgumentWithDigit2();
+            InvalidLongArgumentWithDigit2 myOptions = new();
             Assert.That(() => {
                 Options.Parse(myOptions, new string[] { }, CommandLineStyle);
             }, Throws.TypeOf<ArgumentException>());
@@ -725,7 +725,7 @@
         [Test]
         public void InvalidLongOption2b()
         {
-            InvalidLongArgumentWithDigit2 myOptions = new InvalidLongArgumentWithDigit2();
+            InvalidLongArgumentWithDigit2 myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/6502level" }, new[] { "--6502level" });
             }, Throws.TypeOf<ArgumentException>());
@@ -734,7 +734,7 @@
         [Test]
         public void ShortOptionWithDigit()
         {
-            ShortOptionWithDigit myOptions = new ShortOptionWithDigit();
+            ShortOptionWithDigit myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/9" }, new[] { "-9" });
             Assert.That(myOptions.Level, Is.True);
             Assert.That(options.Arguments, Is.Empty);
@@ -743,7 +743,7 @@
         [Test]
         public void ExtraArgument()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "argument", "/c", "arg" }, new[] { "-ab", "argument", "-c", "arg" });
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
@@ -754,7 +754,7 @@
         [Test]
         public void ExtraArgumentAtStart()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = GetOptions(myOptions, new[] { "input.txt", "/a", "/b", "/c", "arg" }, new[] { "input.txt", "-ab", "-c", "arg" });
             Assert.That(myOptions.OptionA, Is.True);
             Assert.That(myOptions.OptionB, Is.True);
@@ -765,7 +765,7 @@
         [Test]
         public void ListOption()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "test1,test2,test3" }, new[] { "-l", "test1,test2,test3" });
 
             Assert.That(myOptions.List, Has.Count.EqualTo(3));
@@ -778,7 +778,7 @@
         [Test]
         public void ListOptionSingleElement()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "test1" }, new[] { "-l", "test1" });
 
             Assert.That(myOptions.List, Has.Count.EqualTo(1));
@@ -789,7 +789,7 @@
         [Test]
         public void ListOptionMultipleArguments()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "test1", "/l", "test2", "/l", "test3" }, new[] { "-l", "test1", "-l", "test2", "-l", "test3" });
 
             Assert.That(myOptions.List, Has.Count.EqualTo(3));
@@ -802,7 +802,7 @@
         [Test]
         public void ListOptionQuoted1()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", @"test1,'test2','test 3'" }, new[] { "-l", @"test1,'test2','test 3'" });
 
             Assert.That(myOptions.List, Has.Count.EqualTo(3));
@@ -815,7 +815,7 @@
         [Test]
         public void ListOptionQuoted2()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", @"test1,'test2,test3b','test 3'" }, new[] { "-l", @"test1,'test2,test3b','test 3'" });
 
             Assert.That(myOptions.List, Has.Count.EqualTo(3));
@@ -828,7 +828,7 @@
         [Test]
         public void ListOptionQuotedInvalid1()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/l", @"test1:'test2:test3b':'test 3'x" }, new[] { "-l", @"test1,'test2,test3b','test 3'x" });
             }, Throws.TypeOf<OptionException>());
@@ -837,7 +837,7 @@
         [Test]
         public void ListOptionWindowsPath()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", @"c:\users\homeuser" }, new[] { "-l", @"c:\users\homeuser" });
             Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo(@"c:\users\homeuser"));
@@ -847,7 +847,7 @@
         [Test]
         public void ListOptionQuotedEndEscape()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", @"test1,test2,testx\" }, new[] { "-l", @"test1,test2,testx\" });
             Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List[0], Is.EqualTo("test1"));
@@ -859,7 +859,7 @@
         [Test]
         public void ListOptionQuotedInvalid3()
         {
-            ListOptions myOptions = new ListOptions();
+            ListOptions myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/l", "test1:test2:\"test3" }, new[] { "-l", "test1,test2,\"test3" });
             }, Throws.TypeOf<OptionException>());
@@ -868,7 +868,7 @@
         [Test]
         public void ListOptionWithGenericStringInterface()
         {
-            ListOptionsInterfaceGeneric myOptions = new ListOptionsInterfaceGeneric();
+            ListOptionsInterfaceGeneric myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
             Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo("item"));
@@ -878,7 +878,7 @@
         [Test]
         public void ListOptionWithInterface()
         {
-            ListOptionsInterface myOptions = new ListOptionsInterface();
+            ListOptionsInterface myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
             Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List[0], Is.EqualTo("item"));
@@ -888,7 +888,7 @@
         [Test]
         public void ListCollectionOptionWithGenericStringInterface()
         {
-            CollectionOptionsInterfaceGeneric myOptions = new CollectionOptionsInterfaceGeneric();
+            CollectionOptionsInterfaceGeneric myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "item" }, new[] { "-l", "item" });
             Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List, Is.EquivalentTo(new[] { "item" }));
@@ -898,7 +898,7 @@
         [Test]
         public void ListCollectionOptionWithInterface()
         {
-            CollectionOptionsInterface myOptions = new CollectionOptionsInterface();
+            CollectionOptionsInterface myOptions = new();
             Assert.That(() => {
                 // Fails, because method List of of type ICollection, which doesn't have an 'Add' method. Collections
                 // must implement IList or ICollection<object>. So it's not seen as a list or a primitive type.
@@ -909,7 +909,7 @@
         [Test]
         public void ListOptionWithInteger()
         {
-            ListOptionsIntegers myOptions = new ListOptionsIntegers();
+            ListOptionsIntegers myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "1" }, new[] { "-l", "1" });
             Assert.That(myOptions.List, Has.Count.EqualTo(1));
             Assert.That(myOptions.List, Is.EqualTo(new[] { 1 }));
@@ -919,7 +919,7 @@
         [Test]
         public void ListOptionWithIntegers()
         {
-            ListOptionsIntegers myOptions = new ListOptionsIntegers();
+            ListOptionsIntegers myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/l", "3,1,4" }, new[] { "-l", "3,1,4" });
             Assert.That(myOptions.List, Has.Count.EqualTo(3));
             Assert.That(myOptions.List, Is.EqualTo(new[] { 3, 1, 4 }));
@@ -929,7 +929,7 @@
         [Test]
         public void DefaultValueProvidedShort()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "/v:3" }, new[] { "-abv3" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -941,7 +941,7 @@
         [Test]
         public void DefaultValueProvidedShort2()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "/v", "3" }, new[] { "-abv", "3" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -953,7 +953,7 @@
         [Test]
         public void DefaultValueShortProvidedExistingOption()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/v:b" }, new[] { "-avb" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -965,7 +965,7 @@
         [Test]
         public void DefaultValueShort()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "/v" }, new[] { "-abv" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -977,7 +977,7 @@
         [Test]
         public void DefaultValueProvidedLongEquals()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "/verbosity:2" }, new[] { "-ab", "--verbosity=2" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -989,7 +989,7 @@
         [Test]
         public void DefaultValueProvidedLong()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "/verbosity", "2" }, new[] { "-ab", "--verbosity", "2" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -1001,7 +1001,7 @@
         [Test]
         public void DefaultValueLong()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "/b", "/verbosity" }, new[] { "-ab", "--verbosity" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -1013,7 +1013,7 @@
         [Test]
         public void DefaultValueLong2()
         {
-            DefaultValueOption myOptions = new DefaultValueOption();
+            DefaultValueOption myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/verbosity", "/a", "/b" }, new[] { "--verbosity", "-ab" });
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -1025,7 +1025,7 @@
         [Test]
         public void TypesEnum()
         {
-            TypesOptions myOptions = new TypesOptions();
+            TypesOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c", "yellow" }, new[] { "-c", "yellow" });
 
             Assert.That(myOptions.Color, Is.EqualTo(BasicColor.Yellow));
@@ -1035,7 +1035,7 @@
         [Test]
         public void TypesEnumInt()
         {
-            TypesOptions myOptions = new TypesOptions();
+            TypesOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/c", "4" }, new[] { "-c", "4" });
 
             Assert.That(myOptions.Color, Is.EqualTo(BasicColor.Cyan));
@@ -1045,7 +1045,7 @@
         [Test]
         public void TypesInt()
         {
-            TypesOptions myOptions = new TypesOptions();
+            TypesOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/O", "100" }, new[] { "-O", "100" });
 
             Assert.That(myOptions.Opacity, Is.EqualTo(100));
@@ -1055,7 +1055,7 @@
         [Test]
         public void TypesIntInvalid()
         {
-            TypesOptions myOptions = new TypesOptions();
+            TypesOptions myOptions = new();
             Assert.That(() => {
                 GetOptions(myOptions, new[] { "/O", "xxx" }, new[] { "-O", "xxx" });
             }, Throws.TypeOf<OptionFormatException>());
@@ -1064,7 +1064,7 @@
         [Test]
         public void ArgumentsAttribute()
         {
-            ArgumentsAttributeOptions myOptions = new ArgumentsAttributeOptions();
+            ArgumentsAttributeOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "arg1", "arg2" }, new[] { "-a", "arg1", "arg2" });
 
             Assert.That(options.Arguments, Has.Count.EqualTo(2));
@@ -1078,7 +1078,7 @@
         [Test]
         public void ArgumentsAttributeList()
         {
-            ArgumentsListGenericStringAttributeOptions myOptions = new ArgumentsListGenericStringAttributeOptions();
+            ArgumentsListGenericStringAttributeOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
 
             Assert.That(options.Arguments, Has.Count.EqualTo(2));
@@ -1092,7 +1092,7 @@
         [Test]
         public void ArgumentsAttributeListInt()
         {
-            ArgumentsListCollGenericIntAttributeOptions myOptions = new ArgumentsListCollGenericIntAttributeOptions();
+            ArgumentsListCollGenericIntAttributeOptions myOptions = new();
             Assert.That(() => {
                 _ = GetOptions(myOptions, new[] { "1", "2" }, new[] { "1", "2" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1101,7 +1101,7 @@
         [Test]
         public void ArgumentsAttributeListIntInvalidType()
         {
-            ArgumentsListCollGenericIntAttributeOptions myOptions = new ArgumentsListCollGenericIntAttributeOptions();
+            ArgumentsListCollGenericIntAttributeOptions myOptions = new();
             Assert.That(() => {
                 _ = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1110,7 +1110,7 @@
         [Test]
         public void ArgumentsAttributeListCollection()
         {
-            ArgumentsListCollGenericStringAttributeOptions myOptions = new ArgumentsListCollGenericStringAttributeOptions();
+            ArgumentsListCollGenericStringAttributeOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
 
             Assert.That(options.Arguments, Has.Count.EqualTo(2));
@@ -1123,7 +1123,7 @@
         [Test]
         public void ArgumentsAttributeListNonGeneric()
         {
-            ArgumentsListAttributeOptions myOptions = new ArgumentsListAttributeOptions();
+            ArgumentsListAttributeOptions myOptions = new();
             Options options = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
 
             Assert.That(options.Arguments, Has.Count.EqualTo(2));
@@ -1137,7 +1137,7 @@
         [Test]
         public void ArgumentsAttributeListCollNonGeneric()
         {
-            ArgumentsListCollAttributeOptions myOptions = new ArgumentsListCollAttributeOptions();
+            ArgumentsListCollAttributeOptions myOptions = new();
             Assert.That(() => {
                 _ = GetOptions(myOptions, new[] { "arg1", "arg2" }, new[] { "arg1", "arg2" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1146,7 +1146,7 @@
         [Test]
         public void DerivedOptionsPrivate1()
         {
-            DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
+            DerivedOptionsPrivate myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
 
             Assert.That(options, Is.Not.Null);
@@ -1157,7 +1157,7 @@
         [Test]
         public void DerivedOptionsPrivate2()
         {
-            DerivedOptionsPrivate myOptions = new DerivedOptionsPrivate();
+            DerivedOptionsPrivate myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/b" }, new[] { "-b" });
 
             Assert.That(options, Is.Not.Null);
@@ -1168,7 +1168,7 @@
         [Test]
         public void DerivedOptionsProtected1()
         {
-            DerivedOptionsProtected myOptions = new DerivedOptionsProtected();
+            DerivedOptionsProtected myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a" }, new[] { "-a" });
 
             Assert.That(options, Is.Not.Null);
@@ -1179,7 +1179,7 @@
         [Test]
         public void DerivedOptionsProtected2()
         {
-            DerivedOptionsProtected myOptions = new DerivedOptionsProtected();
+            DerivedOptionsProtected myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/b" }, new[] { "-b" });
 
             Assert.That(options, Is.Not.Null);
@@ -1190,7 +1190,7 @@
         [Test]
         public void DerivedOptionsProtectedList1()
         {
-            DerivedOptionsProtectedList myOptions = new DerivedOptionsProtectedList();
+            DerivedOptionsProtectedList myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/a", "foo,bar" }, new[] { "-a", "foo,bar" });
 
             Assert.That(options, Is.Not.Null);
@@ -1201,7 +1201,7 @@
         [Test]
         public void DerivedOptionsProtectedList2()
         {
-            DerivedOptionsProtectedList myOptions = new DerivedOptionsProtectedList();
+            DerivedOptionsProtectedList myOptions = new();
             Options options = GetOptions(myOptions, new[] { "/b", "foo,bar" }, new[] { "-b", "foo,bar" });
 
             Assert.That(options, Is.Not.Null);
@@ -1212,7 +1212,7 @@
         [Test]
         public void DuplicateShortOptionsNoArgs()
         {
-            DuplicateOptionsShort options = new DuplicateOptionsShort();
+            DuplicateOptionsShort options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new string[0], new string[0]);
             }, Throws.TypeOf<ArgumentException>());
@@ -1221,7 +1221,7 @@
         [Test]
         public void DuplicateShortOptionsWithArgs()
         {
-            DuplicateOptionsShort options = new DuplicateOptionsShort();
+            DuplicateOptionsShort options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/a" }, new[] { "-a" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1230,7 +1230,7 @@
         [Test]
         public void DuplicateLongOptionsNoArgs()
         {
-            DuplicateOptionsLong options = new DuplicateOptionsLong();
+            DuplicateOptionsLong options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new string[0], new string[0]);
             }, Throws.TypeOf<ArgumentException>());
@@ -1239,7 +1239,7 @@
         [Test]
         public void DuplicateLongOptionsWithArgs()
         {
-            DuplicateOptionsLong options = new DuplicateOptionsLong();
+            DuplicateOptionsLong options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/along" }, new[] { "--along" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1248,14 +1248,14 @@
         [Test]
         public void AllShortSymbols()
         {
-            OptionShortSymbol options = new OptionShortSymbol();
+            OptionShortSymbol options = new();
             _ = GetOptions(options, new string[] { }, new string[] { });
         }
 
         [Test]
         public void ShortSymbolPlus()
         {
-            OptionShortPlus options = new OptionShortPlus();
+            OptionShortPlus options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new string[] { "/+" }, new string[] { "-+" });
             }, Throws.TypeOf<OptionException>());
@@ -1264,7 +1264,7 @@
         [Test]
         public void ShortSymbolMinus()
         {
-            OptionShortMinus options = new OptionShortMinus();
+            OptionShortMinus options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new string[] { "/-" }, new string[] { "--" });
             }, Throws.TypeOf<OptionException>());
@@ -1273,7 +1273,7 @@
         [Test]
         public void ShortSymbolUnder()
         {
-            OptionShortUnder options = new OptionShortUnder();
+            OptionShortUnder options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new string[] { "/_" }, new string[] { "-_" });
             }, Throws.TypeOf<OptionException>());
@@ -1282,7 +1282,7 @@
         [Test]
         public void ShortSymbolHash()
         {
-            OptionShortHash options = new OptionShortHash();
+            OptionShortHash options = new();
             _ = GetOptions(options, new string[] { "/#" }, new string[] { "-#" });
             Assert.That(options.Hash, Is.True);
         }
@@ -1290,7 +1290,7 @@
         [Test]
         public void ShortSymbolBang()
         {
-            OptionShortBang options = new OptionShortBang();
+            OptionShortBang options = new();
             _ = GetOptions(options, new string[] { "/!" }, new string[] { "-!" });
             Assert.That(options.Bang, Is.True);
         }
@@ -1298,7 +1298,7 @@
         [Test]
         public void ShortSymbolHelp()
         {
-            OptionShortHelp options = new OptionShortHelp();
+            OptionShortHelp options = new();
             _ = GetOptions(options, new string[] { "/?" }, new string[] { "-?" });
             Assert.That(options.Help, Is.True);
         }
@@ -1306,7 +1306,7 @@
         [Test]
         public void ShortSymbolInvalid()
         {
-            OptionShortStar options = new OptionShortStar();
+            OptionShortStar options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new string[] { "/*" }, new string[] { "-*" });
             }, Throws.TypeOf<OptionException>());
@@ -1315,7 +1315,7 @@
         [Test]
         public void OptionSetPropagateException()
         {
-            OptionPropertySetRaiseError options = new OptionPropertySetRaiseError();
+            OptionPropertySetRaiseError options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/value:-10" }, new[] { "--value=-10" });
             }, Throws.TypeOf<OptionException>().With.Message.EqualTo("Value out of range"));
@@ -1324,7 +1324,7 @@
         [Test]
         public void OptionSetGetterOnlyClass()
         {
-            OptionOnlyGetterClass options = new OptionOnlyGetterClass();
+            OptionOnlyGetterClass options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/x" }, new[] { "-x" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1333,7 +1333,7 @@
         [Test]
         public void OptionSetGetterOnlyStruct()
         {
-            OptionOnlyGetterStruct options = new OptionOnlyGetterStruct();
+            OptionOnlyGetterStruct options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/x" }, new[] { "-x" });
             }, Throws.TypeOf<ArgumentException>());
@@ -1342,7 +1342,7 @@
         [Test]
         public void OptionSetReadOnlyStruct()
         {
-            OptionOnlyReadOnlyStruct options = new OptionOnlyReadOnlyStruct();
+            OptionOnlyReadOnlyStruct options = new();
             Assert.That(() => {
                 _ = GetOptions(options, new[] { "/x" }, new[] { "-x" });
             }, Throws.TypeOf<ArgumentException>());

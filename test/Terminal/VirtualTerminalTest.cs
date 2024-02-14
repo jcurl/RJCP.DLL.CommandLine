@@ -9,7 +9,7 @@
         [Test]
         public void TerminalDefault()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             Assert.That(terminal.Width, Is.EqualTo(80));
             Assert.That(terminal.Height, Is.EqualTo(25));
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(0));
@@ -23,7 +23,7 @@
         [Test]
         public void ConsoleColors()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             ConsoleColor foreground = terminal.ForegroundColor;
             ConsoleColor background = terminal.BackgroundColor;
 
@@ -46,7 +46,7 @@
         [TestCase(1)]
         public void ConsoleWidthSet(int width)
         {
-            VirtualTerminal terminal = new VirtualTerminal() {
+            VirtualTerminal terminal = new() {
                 Width = width
             };
             Assert.That(terminal.Width, Is.EqualTo(width));
@@ -56,7 +56,7 @@
         [TestCase(1)]
         public void ConsoleHeightSet(int height)
         {
-            VirtualTerminal terminal = new VirtualTerminal() {
+            VirtualTerminal terminal = new() {
                 Height = height
             };
             Assert.That(terminal.Height, Is.EqualTo(height));
@@ -66,7 +66,7 @@
         [TestCase(-1)]
         public void ConsoleWidthInvalid(int width)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             Assert.That(() => {
                 terminal.Width = width;
             }, Throws.TypeOf<ArgumentOutOfRangeException>());
@@ -76,7 +76,7 @@
         [TestCase(-1)]
         public void ConsoleHeightInvalid(int height)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             Assert.That(() => {
                 terminal.Height = height;
             }, Throws.TypeOf<ArgumentOutOfRangeException>());
@@ -85,7 +85,7 @@
         [Test]
         public void WriteConsole()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.Write("This is a line");
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(1));
             Assert.That(terminal.StdErrLines, Has.Count.EqualTo(0));
@@ -100,7 +100,7 @@
         [Test]
         public void WriteConsoleErr()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdErr.Write("This is an error line");
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(0));
             Assert.That(terminal.StdErrLines, Has.Count.EqualTo(1));
@@ -115,7 +115,7 @@
         [Test]
         public void WriteLineConsole()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.WriteLine("This is a line");
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(1));
             Assert.That(terminal.StdErrLines, Has.Count.EqualTo(0));
@@ -131,7 +131,7 @@
         [Test]
         public void WriteLineConsoleErr()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdErr.WriteLine("This is an error line");
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(0));
             Assert.That(terminal.StdErrLines, Has.Count.EqualTo(1));
@@ -149,7 +149,7 @@
         [TestCase("\r\n")]
         public void WriteWithNewLine(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.Write($"This is a line with{sep}newlines{sep}in it.{sep}{sep}Thank you. ");
@@ -169,7 +169,7 @@
         [TestCase("\r\n")]
         public void WriteLineWithNewLine(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WriteLine($"This is a line with{sep}newlines{sep}in it.{sep}{sep}Thank you.");
@@ -185,7 +185,7 @@
         [TestCase(null)]
         public void WriteEmpty(string line)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.Write(line);
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(0));
         }
@@ -194,7 +194,7 @@
         [TestCase(null)]
         public void WriteLineEmpty(string line)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.WriteLine(line);
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(1));
             Assert.That(terminal.StdOutLines[0], Is.Empty);
@@ -204,7 +204,7 @@
         [TestCase(null)]
         public void WrapLineEmpty(string line)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.WrapLine(line);
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(1));
             Assert.That(terminal.StdOutLines[0], Is.Empty);
@@ -214,7 +214,7 @@
         [TestCase(null)]
         public void WriteEmptyMiddle(string line)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.Write("Lorem ipsum dolor sit amet, ");
             terminal.StdOut.Write(line);
             terminal.StdOut.Write("duo accumsan scripserit ad");
@@ -226,7 +226,7 @@
         [TestCase(null)]
         public void WriteLineEmptyMiddle(string line)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.WriteLine("Lorem ipsum dolor sit amet, ");
             terminal.StdOut.WriteLine(line);
             terminal.StdOut.WriteLine("duo accumsan scripserit ad");
@@ -240,7 +240,7 @@
         [TestCase(null)]
         public void WrapLineEmptyMiddle(string line)
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.WrapLine("Lorem ipsum dolor sit amet, ");
             terminal.StdOut.WrapLine(line);
             terminal.StdOut.WrapLine("duo accumsan scripserit ad");
@@ -253,7 +253,7 @@
         [Test]
         public void WrapLineConsole()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             terminal.StdOut.WrapLine(
                 //        1         2         3         4         5         6         7         8
                 //   5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
@@ -271,7 +271,7 @@
         [Test]
         public void WrapLineConsoleWidth40UpTo39()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -297,7 +297,7 @@
         [Test]
         public void WrapLineConsoleWidth40Is40Last()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -313,7 +313,7 @@
         [Test]
         public void WrapLineConsoleWidth40Is39Last()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -327,7 +327,7 @@
         [Test]
         public void WrapLineConsoleWidth40Is40LastWithSpaces()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -343,7 +343,7 @@
         [Test]
         public void WrapLongLineNoSpaces()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -358,7 +358,7 @@
         [Test]
         public void WrapLongLineNoSpacesThenSpace()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -377,7 +377,7 @@
         [Test]
         public void WrapLineConsoleWidth40UpTo39Indent2()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2,
@@ -406,7 +406,7 @@
         [Test]
         public void WrapLineConsoleWidth40UpTo39Indent2HangRight2()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, 2,
@@ -436,7 +436,7 @@
         [Test]
         public void WrapLineConsoleWidth40UpTo39Indent2HangLeft2()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, -2,
@@ -464,7 +464,7 @@
         [Test]
         public void WrapLineConsoleFormat()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine("Version of the software - {0}; Copyright {1} by {2}",
@@ -479,7 +479,7 @@
         [Test]
         public void WrapLineConsoleNegativeIndentError()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             Assert.That(() => {
                 terminal.StdOut.WrapLine(-1, "This is a line.");
             }, Throws.TypeOf<ArgumentOutOfRangeException>());
@@ -488,7 +488,7 @@
         [Test]
         public void WrapLineConsoleNegativeHangError()
         {
-            VirtualTerminal terminal = new VirtualTerminal();
+            VirtualTerminal terminal = new();
             Assert.That(() => {
                 terminal.StdOut.WrapLine(5, -6, "This is a line.");
             }, Throws.TypeOf<ArgumentOutOfRangeException>());
@@ -497,7 +497,7 @@
         [Test]
         public void WrapLineConsoleSmallWidth()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 10
             };
             terminal.StdOut.WrapLine("This is not a very wide console");
@@ -513,7 +513,7 @@
         [Test]
         public void WrapLineConsoleSmallWidthIndentClamp()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 10
             };
             // The indent is reset to zero for consoles less than 10 characters wide.
@@ -530,7 +530,7 @@
         [Test]
         public void WrapLineConsoleSmallWidthIndentClampRightHang1()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 10
             };
             // The indent is reset to zero for consoles less than 10 characters wide. The hang is limited to maximum 2.
@@ -549,7 +549,7 @@
         [TestCase(4)]
         public void WrapLineConsoleSmallWidthIndentClampRightHang2(int hang)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 10
             };
             // The indent is reset to zero for consoles less than 10 characters wide. The hang is limited to maximum 2.
@@ -567,7 +567,7 @@
         [Test]
         public void WrapLineConsoleSmallWidthIndentClampLeftHang2()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 10
             };
             // The indent is reset to zero for consoles less than 10 characters wide.
@@ -584,7 +584,7 @@
         [Test]
         public void WrapLineConsoleLargeIndent()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 25
             };
             // Even if the indent is 20, we use an indent of 15 so that there are 10 chars to print with.
@@ -605,7 +605,7 @@
         [Test]
         public void WrapLineConsoleLargeIndentLeftHang4()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 25
             };
             // Even if the indent is 20, we use an indent of 15 so that there are 10 chars to print with.
@@ -625,7 +625,7 @@
         [TestCase(4)]
         public void WrapLineConsoleLargeIndentRightHang2(int hang)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 25
             };
             // Even if the indent is 20, we use an indent of 15 so that there are 10 chars to print with. There is a max
@@ -649,7 +649,7 @@
         [Test]
         public void WrapLineConsoleLargeIndentLeftHang20()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 25
             };
             // Even if the indent is 20, we use an indent of 15 so that there are 10 chars to print with. The left hang
@@ -669,7 +669,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLine(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -698,7 +698,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineMultiple(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -728,7 +728,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2,
@@ -758,7 +758,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentMultiple(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2,
@@ -789,7 +789,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentLeftHang(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, -2,
@@ -818,7 +818,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentLeftHangMultiple(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, -2,
@@ -848,7 +848,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentRightHang(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, 2,
@@ -878,7 +878,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentRightHangMultiple(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, 2,
@@ -909,7 +909,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineAutoIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -939,7 +939,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineMultipleAutoIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -970,7 +970,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentRightHangAutoIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, 2,
@@ -1001,7 +1001,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentRightHangMultipleAutoIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, 2,
@@ -1033,7 +1033,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentLeftHangAutoIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, -2,
@@ -1064,7 +1064,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineIndentLeftHangMultipleAutoIndent(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(2, -2,
@@ -1096,7 +1096,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineStart(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -1125,7 +1125,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineMultipleStart(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -1155,7 +1155,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineEnd(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -1184,7 +1184,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineMultipleEnd(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -1214,7 +1214,7 @@
         [TestCase("\r\n")]
         public void WrapLineWithNewLineMultipleEndBoundary(string sep)
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine(
@@ -1242,7 +1242,7 @@
         [Test]
         public void WrapLineWithTab()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine("This is a line that\thas\ttabs. How should tabs\tlook.");
@@ -1256,7 +1256,7 @@
         [Test]
         public void WrapLineWithMultipleSpaces()
         {
-            VirtualTerminal terminal = new VirtualTerminal {
+            VirtualTerminal terminal = new() {
                 Width = 40
             };
             terminal.StdOut.WrapLine("This is a line that  has  multiple  spaces  in  it. How should  this  look.");

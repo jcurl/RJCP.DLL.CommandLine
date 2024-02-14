@@ -15,7 +15,7 @@
 
         private bool m_NewLine = true;
         private LineState m_LineState;
-        private readonly List<string> m_Lines = new List<string>();
+        private readonly List<string> m_Lines = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualOutput"/> class.
@@ -39,7 +39,7 @@
         /// <param name="line">The line to write to the terminal.</param>
         public override void Write(string line)
         {
-            if (line != null)
+            if (line is not null)
                 SplitLines(line);
         }
 
@@ -49,7 +49,7 @@
         /// <param name="line">The line to write to the terminal.</param>
         public override void WriteLine(string line)
         {
-            if (line != null)
+            if (line is not null)
                 SplitLines(line);
             NewLine();
         }

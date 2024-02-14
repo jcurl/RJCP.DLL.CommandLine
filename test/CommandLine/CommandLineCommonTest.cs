@@ -24,14 +24,14 @@
         [Test]
         public void NullArguments()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Assert.That(() => { _ = Options.Parse(myOptions, null); }, Throws.Nothing);
         }
 
         [Test]
         public void OptionsType_Windows()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, null);
             if (Platform.IsMSys() || Platform.IsUnix()) {
                 Assert.That(options.OptionsStyle, Is.EqualTo(OptionsStyle.Unix));

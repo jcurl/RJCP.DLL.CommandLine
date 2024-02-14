@@ -105,8 +105,8 @@
                     leftHang = Width - MinimumWidth + 2;
             }
 
-            StringBuilder sbLine = new StringBuilder(Width);
-            List<string> lines = new List<string>();
+            StringBuilder sbLine = new(Width);
+            List<string> lines = new();
 
             int lineIndent = indent;
             bool newLine = true;
@@ -158,7 +158,7 @@
 
         private static Token GetWord(string line, ref int offset)
         {
-            Token token = new Token() {
+            Token token = new() {
                 Type = TokenType.None,
                 Word = null
             };

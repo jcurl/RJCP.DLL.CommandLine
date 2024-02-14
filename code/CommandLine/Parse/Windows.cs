@@ -34,8 +34,8 @@
 #endif
             }
 
-            StringBuilder arg = new StringBuilder();
-            List<string> args = new List<string>();
+            StringBuilder arg = new();
+            List<string> args = new();
             bool special = false;
             bool escape = false;
             bool quote = false;
@@ -59,7 +59,7 @@
                         special = !special;
                     }
 
-                    if (c == ' ' || c == '\t') {
+                    if (c is ' ' or '\t') {
                         if (!special) {
                             if (arg.Length != 0) {
                                 args.Add(arg.ToString());
@@ -92,7 +92,7 @@
                         continue;
                     }
                     arg.Append('\\', backslashcount);
-                    if (c >= 1 && c <= 32) {
+                    if (c is >= (char)1 and <= (char)32) {
                         if (!special) {
                             if (arg.Length != 0) {
                                 args.Add(arg.ToString());
@@ -122,12 +122,12 @@
         /// <returns>A single string with all arguments joined together.</returns>
         public static string JoinCommandLine(params string[] arguments)
         {
-            StringBuilder cmdLine = new StringBuilder();
-            StringBuilder escArg = new StringBuilder();
+            StringBuilder cmdLine = new();
+            StringBuilder escArg = new();
             foreach (string arg in arguments) {
                 bool quote = false;
                 foreach (char c in arg) {
-                    if (c == ' ' || c == '\t') {
+                    if (c is ' ' or '\t') {
                         quote = true;
                     } else if (c == '\"') {
                         escArg.Append('\\');

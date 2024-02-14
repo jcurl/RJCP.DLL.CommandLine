@@ -9,15 +9,15 @@
     /// </summary>
     public sealed class VirtualTerminal : ITerminal
     {
-        private readonly VirtualFormat m_Format = new VirtualFormat();
+        private readonly VirtualFormat m_Format = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualTerminal"/> class.
         /// </summary>
         public VirtualTerminal()
         {
-            VirtualOutput stdOut = new VirtualOutput(m_Format);
-            VirtualOutput stdErr = new VirtualOutput(m_Format);
+            VirtualOutput stdOut = new(m_Format);
+            VirtualOutput stdErr = new(m_Format);
             StdOut = stdOut;
             StdErr = stdErr;
             StdOutLines = new ReadOnlyCollection<string>(stdOut.Lines);

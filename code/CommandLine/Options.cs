@@ -177,7 +177,7 @@
         /// </exception>
         public static Options Parse(object options, string[] arguments, OptionsStyle style)
         {
-            Options cmdLine = new Options(options, style);
+            Options cmdLine = new(options, style);
             cmdLine.ParseCommandLine(arguments);
             return cmdLine;
         }
@@ -211,9 +211,9 @@
         }
 
         #region Inspecting and building command line options
-        private readonly Dictionary<string, OptionMember> m_LongOptionList = new Dictionary<string, OptionMember>();
-        private readonly Dictionary<char, OptionMember> m_ShortOptionList = new Dictionary<char, OptionMember>();
-        private readonly List<OptionMember> m_OptionList = new List<OptionMember>();
+        private readonly Dictionary<string, OptionMember> m_LongOptionList = new();
+        private readonly Dictionary<char, OptionMember> m_ShortOptionList = new();
+        private readonly List<OptionMember> m_OptionList = new();
         private readonly IList<string> m_Arguments = new List<string>();
         private OptionField m_ArgumentsField;
 
@@ -221,7 +221,7 @@
         {
             Type optionsClassType = m_Options.GetType();
 
-            while (optionsClassType != null) {
+            while (optionsClassType is not null) {
                 FieldInfo[] fields = optionsClassType.GetFields(
                     BindingFlags.Instance | BindingFlags.Static |
                     BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly);
@@ -243,17 +243,17 @@
         private void ParseMember(MemberInfo memberInfo, bool longOptionCaseInsensitive)
         {
             OptionAttribute attribute = GetAttribute<OptionAttribute>(memberInfo);
-            if (attribute != null) {
+            if (attribute is not null) {
                 CheckShortOption(attribute.ShortOption);
                 CheckLongOption(attribute.LongOption);
 
-                OptionMember optionMember = new OptionMember(m_Options, attribute, memberInfo);
+                OptionMember optionMember = new(m_Options, attribute, memberInfo);
                 m_OptionList.Add(optionMember);
 
                 if (attribute.ShortOption != (char)0) {
                     m_ShortOptionList.Add(attribute.ShortOption, optionMember);
                 }
-                if (attribute.LongOption != null) {
+                if (attribute.LongOption is not null) {
                     string longOption = longOptionCaseInsensitive
                         ? attribute.LongOption.ToLowerInvariant()
                         : attribute.LongOption;
@@ -263,8 +263,8 @@
             }
 
             OptionArgumentsAttribute argAttribute = GetAttribute<OptionArgumentsAttribute>(memberInfo);
-            if (argAttribute != null) {
-                if (m_ArgumentsField != null)
+            if (argAttribute is not null) {
+                if (m_ArgumentsField is not null)
                     throw new ArgumentException(CmdLineStrings.ArgException_AssignedMultipleTimes);
                 m_ArgumentsField = new OptionField(memberInfo, true, typeof(string));
             }
@@ -286,7 +286,7 @@
 
         private void CheckLongOption(string longOption)
         {
-            if (longOption == null) return;
+            if (longOption is null) return;
 
             if (m_LongOptionList.ContainsKey(longOption)) {
                 string message = string.Format(CmdLineStrings.ArgException_OptionMultipleTimesSpecified, longOption);
@@ -341,7 +341,7 @@
         private void ParseCommandLine(string[] arguments)
         {
             // Nothing to parse.
-            if (m_Options == null) return;
+            if (m_Options is null) return;
 
             OptionToken token;
             OptionToken lastToken = null;
@@ -354,12 +354,12 @@
                 do {
                     string message;
                     token = m_Parser.GetToken(false);
-                    if (token == null) continue;
+                    if (token is null) continue;
                     switch (token.Token) {
                     case OptionTokenKind.ShortOption:
                     case OptionTokenKind.LongOption:
                         if (m_Arguments.Count > 0) {
-                            if (lastOptionToken != null) {
+                            if (lastOptionToken is not null) {
                                 message = string.Format(CmdLineStrings.UnexpectedOptionNonZeroGeneralArgsLastToken,
                                     token.ToString(m_Parser), lastOptionToken.ToString(m_Parser));
                             } else {
@@ -374,7 +374,7 @@
                         ParseArgument(token);
                         break;
                     case OptionTokenKind.Value:
-                        if (lastToken != null) {
+                        if (lastToken is not null) {
                             message = string.Format(CmdLineStrings.UnexpectedValueForOptionLastToken,
                                 lastToken.ToString(m_Parser), token);
                             throw new OptionException(message);
@@ -383,24 +383,24 @@
                         throw new OptionException(message);
                     }
                     lastToken = token;
-                } while (token != null);
+                } while (token is not null);
             } catch (OptionUnknownException e) {
-                if (options != null) options.InvalidOption(e.Option);
+                if (options is not null) options.InvalidOption(e.Option);
                 throw;
             } catch (OptionMissingArgumentException e) {
-                if (options != null) options.InvalidOption(e.Option);
+                if (options is not null) options.InvalidOption(e.Option);
                 throw;
             } catch (OptionFormatException e) {
-                if (options != null) options.InvalidOption(e.Option);
+                if (options is not null) options.InvalidOption(e.Option);
                 throw;
             } catch (OptionException) {
-                if (options != null) options.Usage();
+                if (options is not null) options.Usage();
                 throw;
             }
 
             // Check that all mandatory options were provided
-            StringBuilder sb = new StringBuilder();
-            List<string> optionList = new List<string>();
+            StringBuilder sb = new();
+            List<string> optionList = new();
             foreach (OptionMember optionMember in m_OptionList) {
                 if (optionMember.Attribute.Required && !optionMember.IsSet) {
                     MissingOption(m_Parser,
@@ -411,11 +411,11 @@
             }
 
             if (sb.Length > 0) {
-                if (options != null) options.Missing(optionList);
+                if (options is not null) options.Missing(optionList);
                 throw new OptionMissingException(sb.ToString());
             }
 
-            if (options != null) options.Check();
+            if (options is not null) options.Check();
         }
 
         private static void MissingOption(IOptionParser parser, char shortOption, string longOption, StringBuilder message, ICollection<string> missing)
@@ -424,10 +424,10 @@
 
             if (shortOption != (char)0) {
                 message.Append(parser.ShortOptionPrefix).Append(shortOption);
-                if (missing != null) missing.Add(shortOption.ToString());
-            } else if (longOption != null) {
+                if (missing is not null) missing.Add(shortOption.ToString());
+            } else if (longOption is not null) {
                 message.Append(parser.LongOptionCaseInsensitive).Append(longOption);
-                if (missing != null) missing.Add(longOption);
+                if (missing is not null) missing.Add(longOption);
             }
         }
 
@@ -463,7 +463,7 @@
         private void ParseArgument(OptionToken token)
         {
             m_Arguments.Add(token.Value);
-            if (m_ArgumentsField != null) m_ArgumentsField.Add(m_Options, token.Value);
+            if (m_ArgumentsField is not null) m_ArgumentsField.Add(m_Options, token.Value);
         }
 
         private static void ParseOptionParameter(IOptionParser parser, OptionMember optionMember, OptionToken token)
@@ -472,7 +472,7 @@
             try {
                 if (optionMember.ExpectsValue) {
                     OptionToken argumentToken = parser.GetToken(true);
-                    if (argumentToken == null) {
+                    if (argumentToken is null) {
                         OptionDefaultAttribute defaultAttribute =
                             GetAttribute<OptionDefaultAttribute>(optionMember.Member)
                                 ?? throw new OptionMissingArgumentException(token.ToString(parser));
@@ -496,7 +496,7 @@
                 throw;
             } catch (Exception ex) {
                 string message;
-                if (argument == null) {
+                if (argument is null) {
                     message = string.Format(CmdLineStrings.ErrorParsingOption, token.ToString(parser));
                     throw new OptionException(message);
                 }
@@ -514,7 +514,7 @@
 
         private static void SplitList(OptionMember optionMember, char separationChar, string value)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             char quote = (char)0;
             int schar = 0;
             bool escape = false;
@@ -527,7 +527,7 @@
 
                     // We only escape quotes, else every other character is literal. This allows
                     // Windows paths to be given without having to escape each path character.
-                    if (c == '\'' || c == '\"') continue;
+                    if (c is '\'' or '\"') continue;
                     sb.Append('\\');
                     continue;
                 }
@@ -543,7 +543,7 @@
                     schar = i + 1;
                     continue;
                 }
-                if (c == '\'' || c == '\"') {
+                if (c is '\'' or '\"') {
                     if (quote == 0) {
                         // Begin a quote
                         schar = i + 1;

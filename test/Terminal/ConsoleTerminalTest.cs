@@ -10,7 +10,7 @@
         [Test]
         public void WriteConsoleDefault()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             Assert.That(console.StdOut, Is.Not.Null);
             Assert.That(console.StdErr, Is.Not.Null);
 
@@ -37,7 +37,7 @@
             if (!TestOsColoursFirst())
                 Assert.Ignore("OS Console Colour has undefined behaviour.");
 
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             ConsoleColor foreground = console.ForegroundColor;
             ConsoleColor background = console.BackgroundColor;
             Assert.That(console.ForegroundColor, Is.EqualTo(foreground));
@@ -93,35 +93,35 @@
         [Test]
         public void WriteConsole()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             console.StdOut.Write("This is a line");
         }
 
         [Test]
         public void WriteConsoleErr()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             console.StdErr.Write("This is an error line");
         }
 
         [Test]
         public void WriteLineConsole()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             console.StdOut.WriteLine("This is a line");
         }
 
         [Test]
         public void WriteLineConsoleErr()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             console.StdErr.WriteLine("This is an error line");
         }
 
         [Test]
         public void WrapLineConsole()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
             console.StdOut.WrapLine(
                 "This is a line that should be more than eighty-characters long, so that " +
                 "it can be checked if the line is really being wrapped into multiple lines. " +
@@ -132,7 +132,7 @@
         [Test]
         public void WriteEvent()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
 
             TerminalWriteEventArgs args = null;
             console.ConsoleWriteEvent += (s, e) => {
@@ -155,7 +155,7 @@
         [Test]
         public void WriteLineEvent()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
 
             TerminalWriteEventArgs args = null;
             console.ConsoleWriteEvent += (s, e) => {
@@ -178,7 +178,7 @@
         [Test]
         public void WrapLineEvent()
         {
-            ConsoleTerminal console = new ConsoleTerminal();
+            ConsoleTerminal console = new();
 
             TerminalWriteEventArgs args = null;
             console.ConsoleWriteEvent += (s, e) => {

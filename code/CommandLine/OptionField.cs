@@ -62,7 +62,9 @@
             }
 
             if (isCollection && expectList) {
-                if (ListType != typeof(object) && listType != null && !listType.IsAssignableFrom(ListType))
+                if (ListType != typeof(object) &&
+                    listType is not null &&
+                    !listType.IsAssignableFrom(ListType))
                     throw new ArgumentException(CmdLineStrings.ArgException_GenTypeString);
             }
             Member = member;
@@ -125,7 +127,7 @@
 
         public Type Type { get; private set; }
 
-        public bool IsList { get { return ListType != null; } }
+        public bool IsList { get { return ListType is not null; } }
 
         public Type ListType { get; private set; }
 

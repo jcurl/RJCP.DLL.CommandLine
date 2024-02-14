@@ -56,22 +56,22 @@
 
         public string AssignmentSymbol { get { return "="; } }
 
-        private readonly Queue<OptionToken> m_Tokens = new Queue<OptionToken>();
-        private readonly Queue<OptionToken> m_NonOptArgs = new Queue<OptionToken>();
+        private readonly Queue<OptionToken> m_Tokens = new();
+        private readonly Queue<OptionToken> m_NonOptArgs = new();
         private bool m_ArgumentsOnly;
         private int m_ArgumentPosition;
         private int m_ArgumentCharPosition = -1;
 
         public void AddArguments(string[] arguments)
         {
-            if (m_Arguments != null)
+            if (m_Arguments is not null)
                 throw new InvalidOperationException();
             m_Arguments = arguments;
         }
 
         public OptionToken GetToken(bool expectValue)
         {
-            if (m_Arguments == null) return null;
+            if (m_Arguments is null) return null;
 
             bool haveTokens = true;
             while (haveTokens && m_Tokens.Count == 0) {

@@ -186,7 +186,7 @@ namespace RJCP.Core.CommandLine
         [Option('c', "clong", false)]
         public string OptionC;
 
-        private readonly List<string> m_Arguments = new List<string>();
+        private readonly List<string> m_Arguments = new();
 
         [OptionArguments]
         public IList<string> Arguments { get { return m_Arguments; } }
@@ -195,14 +195,14 @@ namespace RJCP.Core.CommandLine
     internal class ArgumentsListGenericStringAttributeOptions
     {
         [OptionArguments]
-        private readonly List<string> m_Arguments = new List<string>();
+        private readonly List<string> m_Arguments = new();
 
         public IList<string> Arguments { get { return m_Arguments; } }
     }
 
     internal class ArgumentsListCollGenericStringAttributeOptions
     {
-        private readonly List<string> m_Arguments = new List<string>();
+        private readonly List<string> m_Arguments = new();
 
         [OptionArguments]
         public ICollection<string> Arguments { get { return m_Arguments; } }
@@ -210,7 +210,7 @@ namespace RJCP.Core.CommandLine
 
     internal class ArgumentsListCollGenericIntAttributeOptions
     {
-        private readonly List<int> m_Arguments = new List<int>();
+        private readonly List<int> m_Arguments = new();
 
         [OptionArguments]
         public ICollection<int> Arguments { get { return m_Arguments; } }
@@ -219,14 +219,14 @@ namespace RJCP.Core.CommandLine
     internal class ArgumentsListAttributeOptions
     {
         [OptionArguments]
-        private readonly ArrayList m_Arguments = new ArrayList();
+        private readonly ArrayList m_Arguments = new();
 
         public IList Arguments { get { return m_Arguments; } }
     }
 
     internal class ArgumentsListCollAttributeOptions
     {
-        private readonly ArrayList m_Arguments = new ArrayList();
+        private readonly ArrayList m_Arguments = new();
 
         [OptionArguments]
         public ICollection Arguments { get { return m_Arguments; } }
@@ -269,7 +269,7 @@ namespace RJCP.Core.CommandLine
     internal class BaseOptionsProtectedList
     {
         [Option('a', "along")]
-        protected List<string> m_OptionA = new List<string>();
+        protected List<string> m_OptionA = new();
 
         public IList<string> OptionA { get { return m_OptionA; } }
     }
@@ -277,7 +277,7 @@ namespace RJCP.Core.CommandLine
     internal class DerivedOptionsProtectedList : BaseOptionsProtectedList
     {
         [Option('b', "blong")]
-        protected List<string> m_OptionB = new List<string>();
+        protected List<string> m_OptionB = new();
 
         public IList<string> OptionB { get { return m_OptionB; } }
     }

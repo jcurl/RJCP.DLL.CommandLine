@@ -8,7 +8,7 @@
     /// </summary>
     public sealed class ConsoleTerminal : ITerminal
     {
-        private readonly ConsoleFormat m_Format = new ConsoleFormat();
+        private readonly ConsoleFormat m_Format = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsoleTerminal"/> class.

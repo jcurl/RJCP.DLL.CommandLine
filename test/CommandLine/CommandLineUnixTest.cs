@@ -8,7 +8,7 @@
         [Test]
         public void ShortOptionsStringOneArgJoined()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, new[] { "-abcfoo" }, OptionsStyle.Unix);
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -20,7 +20,7 @@
         [Test]
         public void ShortOptionsStringTwoArgsJoined1()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, new[] { "-abc", "foo" }, OptionsStyle.Unix);
 
             Assert.That(myOptions.OptionA, Is.True);
@@ -32,7 +32,7 @@
         [Test]
         public void ShortOptionsStringTwoArgsJoined2()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, new[] { "-cab", "foo" }, OptionsStyle.Unix);
 
             Assert.That(myOptions.OptionA, Is.False);
@@ -45,7 +45,7 @@
         [Test]
         public void StopParsing()
         {
-            OptionalArguments myOptions = new OptionalArguments();
+            OptionalArguments myOptions = new();
             Options options = Options.Parse(myOptions, new[] { "-abc", "argument", "--", "-c" }, OptionsStyle.Unix);
 
             Assert.That(myOptions.OptionA, Is.True);
