@@ -88,8 +88,7 @@
 
         private static void CheckLongOption(string longOption)
         {
-            if (string.IsNullOrWhiteSpace(longOption))
-                throw new ArgumentException(CmdLineStrings.LongOptionMayNotBeEmpty, nameof(longOption));
+            ThrowHelper.ThrowIfNullOrWhiteSpaceMsg(CmdLineStrings.LongOptionMayNotBeEmpty, longOption);
 
             for (int i = 0; i < longOption.Length; i++) {
                 if (!IsValidLongOptionChar(i, longOption[i])) {
