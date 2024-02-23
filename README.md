@@ -29,6 +29,11 @@ console.
     - [3.4.2. Fixed Width on Linux with Mono](#342-fixed-width-on-linux-with-mono)
     - [3.4.3. Fixed Width on Windows MSYS2 (Git Bash)](#343-fixed-width-on-windows-msys2-git-bash)
     - [3.4.4. Mixing Write and WriteLine with WrapLine](#344-mixing-write-and-writeline-with-wrapline)
+- [4. Release History](#4-release-history)
+  - [4.1. Version 0.9.0](#41-version-090)
+  - [4.2. Version 0.8.2](#42-version-082)
+  - [4.3. Version 0.8.1](#43-version-081)
+  - [4.4. Version 0.8.0](#44-version-080)
 
 ## 1. Parsing Command Line
 
@@ -517,3 +522,60 @@ The two sets of APIs are not intended to be used with each other. The
 Use `Write()` and `WriteLine()` for more control over writing on the console.
 The latter two are calling the `Console.Write()` and `Console.WriteLine()`
 directly and are provided to allow testing with a `VirtualTerminal`.
+
+## 4. Release History
+
+### 4.1. Version 0.9.0
+
+Features:
+
+- Provide a `ConsoleTerminal` and a `VirtualTerminal` for testing, to abstract
+  writing to the console, and handle automatic wrapping of paragraphs
+  (DOTNET-911)
+- Expose strings for command line options, useful to generate help messages
+  (DOTNET-930)
+- Relax ordering of command line, that options no longer need to be first
+  (DOTNET-929)
+- Detect Cygwin and use the Unix style when run from a Cygwin terminal
+  (DOTNET-931)
+
+Bugfixes:
+
+- Disallow `-`, `+`, `_` for short options (DOTNET-919)
+- Propagate `OptionFormatException` from options class (DOTNET-913)
+- Check property and field is writable for newer language versions (DOTNET-912)
+- Don't use `OptionException` for errors on the options class (DOTNET-920)
+
+Quality:
+
+- Added README.md to the NuGet package (DOTNET-808)
+- Remove Romanian translations
+- Update .NET 4.5 to 4.6.2 (DOTNET-925) and .NET Standard 2.1 to .NET 6.0
+  (DOTNET-936, DOTNET-937, DOTNET-938, DOTNET-939, DOTNET-942, DOTNET-943,
+  DOTNET-945, DOTNET-951, DOTNET-959)
+
+### 4.2. Version 0.8.2
+
+Features:
+
+- Split and join command line strings for Windows (DOTNET-461)
+- Provide a default options style based on running platform (DOTNET-729)
+
+Quality:
+
+- Upgrade to .NET SDK project style (DOTNET-343, DOTNET-349)
+- Code clean up (DOTNET-360)
+- Add Authenticode signing to binaries (DOTNET-353)
+- Use Span for .NET Core
+- Allow OptionFormatException without an inner exception (DOTNET-623)
+- Update style for .NET Core.
+- Get platform information from Environment, instead of having the same code
+  here (DOTNET-729)
+
+### 4.3. Version 0.8.1
+
+- Minor update for documentation
+
+### 4.4. Version 0.8.0
+
+- Initial public release with the Legacy Project Style
