@@ -9,9 +9,15 @@
     [TestFixture]
     public class WindowsTest
     {
+#if NET40
+        private static readonly string[] Empty = new string[0];
+#else
+        private static readonly string[] Empty = Array.Empty<string>();
+#endif
+
         private static readonly object[] ArgumentTestList = {
-            new object[] { null, Array.Empty<string>()},
-            new object[] { "", Array.Empty<string>()},
+            new object[] { null, Empty},
+            new object[] { "", Empty},
             new object[] { "/c dir", new string[] { "/c", "dir" }},
             new object[] { "\"She said \"you can't do this!\", didn't she?\"", new string[] { "She said you", "can't", "do", "this!, didn't she?" }},
             new object[] { "test.exe \"c:\\Path With Spaces\\Ending In Backslash\\\" Arg2 Arg3", new string[] { "test.exe", "c:\\Path With Spaces\\Ending In Backslash\" Arg2 Arg3" }},
@@ -30,7 +36,7 @@
         };
 
         private static readonly object[] JoinedArguments = {
-            new object[] { "", Array.Empty<string>()},
+            new object[] { "", Empty},
             new object[] { "/c dir", new string[] { "/c", "dir" }},
             new object[] { "\"She said you\" can't do \"this!, didn't she?\"", new string[] { "She said you", "can't", "do", "this!, didn't she?" }},
             new object[] { "\"c:\\Path With Spaces\\Ending In Backslash\\\" Arg2 Arg3\"", new string[] { "c:\\Path With Spaces\\Ending In Backslash\" Arg2 Arg3" }},

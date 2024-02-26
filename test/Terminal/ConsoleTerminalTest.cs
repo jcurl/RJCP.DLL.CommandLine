@@ -1,12 +1,45 @@
 ﻿namespace RJCP.Core.Terminal
 {
     using System;
+    using System.Runtime.InteropServices;
     using NUnit.Framework;
+    using RJCP.Core.Environment;
     using RJCP.Core.Terminal.Log;
+
 
     [TestFixture]
     internal class ConsoleTerminalTest
     {
+#if NET40
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        private static extern IntPtr GetConsoleWindow();
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        private static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int lpMode);
+
+        private static bool IsOutputRedirected()
+        {
+            if (Platform.IsWinNT()) {
+                IntPtr handle = GetConsoleWindow();
+                if (handle.Equals(IntPtr.Zero) || !GetConsoleMode(handle, out int _))
+                    return true;
+            } else {
+                try {
+                    if (Console.BufferWidth == 0) return true;
+                } catch (Exception) {
+                    // Nothing to do. The console handle must be invalid to raise an exception, so it's being
+                    // redirected.
+                }
+            }
+            return false;
+        }
+#else
+        private static bool IsOutputRedirected()
+        {
+            return Console.IsOutputRedirected;
+        }
+#endif
+
         [Test]
         public void WriteConsoleDefault()
         {
@@ -14,7 +47,7 @@
             Assert.That(console.StdOut, Is.Not.Null);
             Assert.That(console.StdErr, Is.Not.Null);
 
-            if (!Console.IsOutputRedirected) {
+            if (!IsOutputRedirected()) {
                 Console.WriteLine("Using Console - Testing Console");
                 // We're in a console. So check against the terminal settings.
                 Assert.That(console.Width, Is.EqualTo(Console.BufferWidth));
