@@ -106,15 +106,6 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection identified without an Add method.
-        /// </summary>
-        internal static string ArgException_InvalidCollectionNoAdd {
-            get {
-                return ResourceManager.GetString("ArgException_InvalidCollectionNoAdd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Expected only one Generic parameter type argument.
         /// </summary>
         internal static string ArgException_InvalidTypeMultipleGenTypeParams {
@@ -138,15 +129,6 @@ namespace RJCP.Core.Resources {
         internal static string ArgException_NotPropertyOrField {
             get {
                 return ResourceManager.GetString("ArgException_NotPropertyOrField", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot set a non-writable property &apos;{0}&apos;.
-        /// </summary>
-        internal static string ArgException_NotSettableProperty {
-            get {
-                return ResourceManager.GetString("ArgException_NotSettableProperty", resourceCulture);
             }
         }
         
@@ -322,38 +304,11 @@ namespace RJCP.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indent must be positive.
-        /// </summary>
-        internal static string TerminalIndentArgOutOfRange {
-            get {
-                return ResourceManager.GetString("TerminalIndentArgOutOfRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Internal error, unknown token type.
         /// </summary>
         internal static string TerminalParseError {
             get {
                 return ResourceManager.GetString("TerminalParseError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Terminal height must be one line or greater.
-        /// </summary>
-        internal static string TerminalVirtualHeightRange {
-            get {
-                return ResourceManager.GetString("TerminalVirtualHeightRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Terminal width must be one character or greater.
-        /// </summary>
-        internal static string TerminalVirtualWidthRange {
-            get {
-                return ResourceManager.GetString("TerminalVirtualWidthRange", resourceCulture);
             }
         }
         

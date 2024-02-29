@@ -132,9 +132,6 @@
   <data name="ArgException_InvalidCollection" xml:space="preserve">
     <value>Adding a value to an option that is not a collection</value>
   </data>
-  <data name="ArgException_InvalidCollectionNoAdd" xml:space="preserve">
-    <value>Collection identified without an Add method</value>
-  </data>
   <data name="ArgException_InvalidTypeMultipleGenTypeParams" xml:space="preserve">
     <value>Expected only one Generic parameter type argument</value>
   </data>
@@ -143,9 +140,6 @@
   </data>
   <data name="ArgException_NotPropertyOrField" xml:space="preserve">
     <value>Not a property or field</value>
-  </data>
-  <data name="ArgException_NotSettableProperty" xml:space="preserve">
-    <value>Cannot set a non-writable property '{0}'</value>
   </data>
   <data name="ArgException_OptionMultipleTimesSpecified" xml:space="preserve">
     <value>Option '{0}' was specified multiple times</value>
@@ -204,17 +198,8 @@
   <data name="TerminalHangArgOutOfRange" xml:space="preserve">
     <value>Hanging indent exceeds left boundary of indent</value>
   </data>
-  <data name="TerminalIndentArgOutOfRange" xml:space="preserve">
-    <value>Indent must be positive</value>
-  </data>
   <data name="TerminalParseError" xml:space="preserve">
     <value>Internal error, unknown token type</value>
-  </data>
-  <data name="TerminalVirtualHeightRange" xml:space="preserve">
-    <value>Terminal height must be one line or greater</value>
-  </data>
-  <data name="TerminalVirtualWidthRange" xml:space="preserve">
-    <value>Terminal width must be one character or greater</value>
   </data>
   <data name="UnexpectedOptionNonZeroGeneralArgs" xml:space="preserve">
     <value>Unexpected option '{0}'</value>

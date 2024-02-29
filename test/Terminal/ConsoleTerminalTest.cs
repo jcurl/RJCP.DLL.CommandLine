@@ -1,11 +1,13 @@
 ﻿namespace RJCP.Core.Terminal
 {
     using System;
-    using System.Runtime.InteropServices;
+    using Log;
     using NUnit.Framework;
-    using RJCP.Core.Environment;
-    using RJCP.Core.Terminal.Log;
 
+#if NET40
+    using System.Runtime.InteropServices;
+    using RJCP.Core.Environment;
+#endif
 
     [TestFixture]
     internal class ConsoleTerminalTest

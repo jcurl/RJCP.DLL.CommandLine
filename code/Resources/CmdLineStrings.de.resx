@@ -120,9 +120,6 @@
   <data name="ArgException_InvalidCollection" xml:space="preserve">
     <value>Hinzufügen eines Werts zu einer Option, die keine Sammlung ist</value>
   </data>
-  <data name="ArgException_InvalidCollectionNoAdd" xml:space="preserve">
-    <value>Sammlung ohne Add-Methode identifiziert</value>
-  </data>
   <data name="ArgException_InvalidTypeMultipleGenTypeParams" xml:space="preserve">
     <value>Erwartet nur ein generisches Parametertypargument</value>
   </data>
@@ -192,9 +189,6 @@
   <data name="ArgException_ReadOnlyField" xml:space="preserve">
     <value>Das schreibgeschützte Feld '{0}' kann nicht festgelegt werden</value>
   </data>
-  <data name="ArgException_NotSettableProperty" xml:space="preserve">
-    <value>Die schreibgeschützte Eigenschaft '{0}' kann nicht gesetzt werden</value>
-  </data>
   <data name="ArgException_FieldNotPrimitive" xml:space="preserve">
     <value>Feld '{0}' muss ein primitiver Typ sein</value>
   </data>
@@ -221,14 +215,5 @@
   </data>
   <data name="TerminalHangArgOutOfRange" xml:space="preserve">
     <value>'hang' überschreitet den linken Rand von 'indent'</value>
-  </data>
-  <data name="TerminalIndentArgOutOfRange" xml:space="preserve">
-    <value>'indent' muss Null (0) oder größer sein</value>
-  </data>
-  <data name="TerminalVirtualHeightRange" xml:space="preserve">
-    <value>Die Höhe des Terminals muss mindestens eine Zeile betragen</value>
-  </data>
-  <data name="TerminalVirtualWidthRange" xml:space="preserve">
-    <value>Die Breite des Terminals muss mindestens ein Zeichen betragen</value>
   </data>
 </root>

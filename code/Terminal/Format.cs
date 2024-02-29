@@ -66,6 +66,8 @@
             return WrapLine(indent, 0, line);
         }
 
+        private static readonly string[] EmptyLine = new string[] { string.Empty };
+
         /// <summary>
         /// Writes the specified line to the terminal wrapped to the terminal width, with a newline character at the
         /// end.
@@ -76,16 +78,14 @@
         /// <returns>The formatted, wrapped lines.</returns>
         public IList WrapLine(int indent, int hang, string line)
         {
-            if (indent < 0)
-                throw new ArgumentOutOfRangeException(nameof(indent), CmdLineStrings.TerminalIndentArgOutOfRange);
-
+            ThrowHelper.ThrowIfNegative(indent);
             int leftHang = indent + hang;
             if (leftHang < 0)
                 throw new ArgumentOutOfRangeException(nameof(hang), CmdLineStrings.TerminalHangArgOutOfRange);
 
             // Special case - empty line.
             if (string.IsNullOrEmpty(line))
-                return new string[] { string.Empty };
+                return EmptyLine;
 
             if (Width <= MinimumWidth) {
                 // The console width is very narrow, so push everything to the right.

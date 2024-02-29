@@ -1,7 +1,6 @@
 ﻿namespace RJCP.Core.Terminal
 {
     using System;
-    using Resources;
 
     /// <summary>
     /// A formatter class for a virtual console.
@@ -26,8 +25,7 @@
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> must be positive.</exception>
         public void SetWidth(int width)
         {
-            if (width <= 0)
-                throw new ArgumentOutOfRangeException(nameof(width), CmdLineStrings.TerminalVirtualWidthRange);
+            ThrowHelper.ThrowIfNegativeOrZero(width);
             m_Width = width;
         }
 
@@ -49,8 +47,7 @@
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="height"/> must be positive.</exception>
         public void SetHeight(int height)
         {
-            if (height <= 0)
-                throw new ArgumentOutOfRangeException(nameof(height), CmdLineStrings.TerminalVirtualHeightRange);
+            ThrowHelper.ThrowIfNegativeOrZero(height);
             m_Height = height;
         }
     }
