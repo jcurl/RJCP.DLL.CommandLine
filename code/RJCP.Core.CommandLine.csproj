@@ -20,7 +20,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/jcurl/RJCP.DLL.CommandLine</PackageProjectUrl>
     <Description>Simplify the task of parsing the command line by specifying command line options using attributes on your class properties.</Description>
-    <Version>0.9.0</Version>
+    <Version>0.9.1</Version>
 
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
