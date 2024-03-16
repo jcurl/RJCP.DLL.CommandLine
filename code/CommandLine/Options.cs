@@ -186,6 +186,43 @@
         private readonly IOptionParser m_Parser;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Options"/> class with defaults.
+        /// </summary>
+        /// <remarks>
+        /// The default <see cref="Options"/> class contains no parsed options. It is not possible to parse any options
+        /// from this class. It is useful to get the symbols used for parsing options.
+        /// </remarks>
+        public Options() : this(DefaultOptionsStyle) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Options"/> class with defaults.
+        /// </summary>
+        /// <param name="style">The option style to use.</param>
+        /// <remarks>
+        /// The default <see cref="Options"/> class contains no parsed options. It is not possible to parse any options
+        /// from this class. It is useful to get the symbols used for parsing options.
+        /// </remarks>
+        public Options(OptionsStyle style)
+        {
+            switch (style) {
+            case OptionsStyle.Unix:
+                m_Parser = new UnixOptionParser();
+                break;
+            case OptionsStyle.Windows:
+                m_Parser = new WindowsOptionEnumerator();
+                break;
+            default:
+                throw new InvalidOperationException(CmdLineStrings.OptionsStyleUnknown);
+            }
+            m_Options = null;
+#if NET462_OR_GREATER || NETCOREAPP
+            Arguments = new ReadOnlyCollection<string>(Array.Empty<string>());
+#else
+            Arguments = new ReadOnlyCollection<string>(new string[0]);
+#endif
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Options"/> class using the Windows style.
         /// </summary>
         /// <param name="options">
