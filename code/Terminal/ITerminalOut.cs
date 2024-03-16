@@ -19,6 +19,11 @@
         void Write(string format, params object[] args);
 
         /// <summary>
+        /// Writes an empty line to the terminal with a newline character at the end.
+        /// </summary>
+        void WriteLine();
+
+        /// <summary>
         /// Writes the specified line to the terminal with a newline character at the end.
         /// </summary>
         /// <param name="line">The line to write to the terminal.</param>

@@ -36,6 +36,14 @@
         }
 
         /// <summary>
+        /// Writes an empty line to the terminal with a newline character at the end.
+        /// </summary>
+        public void WriteLine()
+        {
+            WriteLine(string.Empty);
+        }
+
+        /// <summary>
         /// Writes the specified line to the terminal with a newline character at the end.
         /// </summary>
         /// <param name="format">The format line to write to the terminal.</param>

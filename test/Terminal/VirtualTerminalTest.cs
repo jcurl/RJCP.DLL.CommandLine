@@ -1266,5 +1266,18 @@
             Assert.That(terminal.StdOutLines[0], Is.EqualTo("This is a line that has multiple spaces"));
             Assert.That(terminal.StdOutLines[1], Is.EqualTo("in it. How should this look."));
         }
+
+        [Test]
+        public void WrapLineEmptyLine()
+        {
+            VirtualTerminal terminal = new() {
+                Width = 40
+            };
+            terminal.StdOut.WriteLine("This is a test");
+            terminal.StdOut.WriteLine();
+            Assert.That(terminal.StdOutLines, Has.Count.EqualTo(2));
+            Assert.That(terminal.StdOutLines[0], Is.EqualTo("This is a test"));
+            Assert.That(terminal.StdOutLines[1], Is.Empty);
+        }
     }
 }
