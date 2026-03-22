@@ -468,12 +468,12 @@
                 Width = 40
             };
             terminal.StdOut.WrapLine("Version of the software - {0}; Copyright {1} by {2}",
-                "1.0.0", 2024, "Jason Curl");
+                "1.0.0", 2026, "Jason Curl");
             Assert.That(terminal.StdOutLines, Has.Count.EqualTo(2));
             //                                                        1         2         3         4
             //                                              0    5    0    5    0    5    0    5    0
             Assert.That(terminal.StdOutLines[0], Is.EqualTo("Version of the software - 1.0.0;"));
-            Assert.That(terminal.StdOutLines[1], Is.EqualTo("Copyright 2024 by Jason Curl"));
+            Assert.That(terminal.StdOutLines[1], Is.EqualTo("Copyright 2026 by Jason Curl"));
         }
 
         [Test]

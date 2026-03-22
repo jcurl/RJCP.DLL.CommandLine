@@ -9,6 +9,10 @@
     using RJCP.Core.Environment;
 #endif
 
+#if NETFRAMEWORK
+    using Enum = RJCP.Core.EnumExt;
+#endif
+
     [TestFixture]
     internal class ConsoleTerminalTest
     {
@@ -106,14 +110,14 @@
 
             // Mono sources have -1 as an "UnknownColor" when tracking.
             // See https://github.com/mono/mono/blob/38b0227c1ce0c53058a5d78d080923435132773a/mcs/class/corlib/System/Console.cs#L787
-            if (!Enum.IsDefined(typeof(ConsoleColor), Console.ForegroundColor)) return false;
-            if (!Enum.IsDefined(typeof(ConsoleColor), Console.BackgroundColor)) return false;
+            if (!Enum.IsDefined(Console.ForegroundColor)) return false;
+            if (!Enum.IsDefined(Console.BackgroundColor)) return false;
 
             // Just make sure we can set it and it isn't ignored when not redirecting.
             ConsoleColor foreground = Console.ForegroundColor;
             ConsoleColor background = Console.BackgroundColor;
             try {
-                foreach (ConsoleColor newFg in Enum.GetValues(typeof(ConsoleColor))) {
+                foreach (ConsoleColor newFg in Enum.GetValues<ConsoleColor>()) {
                     Console.ForegroundColor = newFg;
                     if (Console.ForegroundColor != newFg)
                         return false;
